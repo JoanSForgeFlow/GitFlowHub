@@ -43,9 +43,9 @@ const App: React.FC = () => {
   };
 
   const filteredPulls = pulls.filter(pull =>
-    pull.user.login.includes(searchUser) &&
-    pull.html_url.includes(searchRepo) &&
-    pull.title.includes(searchTitle)
+    pull.user.login.toLowerCase().includes(searchUser.toLowerCase()) &&
+    pull.html_url.toLowerCase().includes(searchRepo.toLowerCase()) &&
+    pull.title.toLowerCase().includes(searchTitle.toLowerCase())
   );
 
   return (
@@ -70,21 +70,22 @@ const App: React.FC = () => {
           onChange={(e) => setSearchTitle(e.target.value)}
         />
       </div>
-
-      {filteredPulls.map((pull: Pull) => (
-        <div key={pull.id} className="card">
-          <div className="card-header">
-            <img src={pull.user.avatar_url} alt="User avatar" className="user-info__img" />
-            <h3>{pull.title}</h3>
+      <div className="pull-cards">
+        {filteredPulls.map((pull: Pull) => (
+          <div key={pull.id} className="card">
+            <div className="card-header">
+              <img src={pull.user.avatar_url} alt="User avatar" className="user-info__img" />
+              <h3>{pull.title}</h3>
+            </div>
+            <div className="card-body">
+              <p>Submitted by: {pull.user.login}</p>
+              <p>State: {pull.state}</p>
+              <p>Created at: {pull.created_at}</p>
+              <GoIcon url={pull.html_url} />
+            </div>
           </div>
-          <div className="card-body">
-            <p>Submitted by: {pull.user.login}</p>
-            <p>State: {pull.state}</p>
-            <p>Created at: {pull.created_at}</p>
-            <GoIcon url={pull.html_url} />
-          </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };
