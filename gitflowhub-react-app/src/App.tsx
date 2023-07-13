@@ -21,6 +21,7 @@ const App: React.FC = () => {
   const [pulls, setPulls] = useState<Record<number, Pull>>({});
   const [searchUser, setSearchUser] = useState('');
   const [searchRepo, setSearchRepo] = useState('');
+  const [selectedRepo, setSelectedRepo] = useState('');
   const [searchTitle, setSearchTitle] = useState('');
 
   useEffect(() => {
@@ -48,10 +49,13 @@ const App: React.FC = () => {
     }
   };
 
+  const repos = Array.from(new Set(Object.values(pulls).map(pull => pull.repo_name)));
+
   const filteredPulls = Object.values(pulls).filter(pull =>
     pull.user.login.toLowerCase().includes(searchUser.toLowerCase()) &&
     pull.repo_name.toLowerCase().includes(searchRepo.toLowerCase()) &&
-    pull.title.toLowerCase().includes(searchTitle.toLowerCase())
+    pull.title.toLowerCase().includes(searchTitle.toLowerCase()) &&
+    (selectedRepo ? pull.repo_name === selectedRepo : true)
   );
 
   return (
@@ -69,6 +73,15 @@ const App: React.FC = () => {
           value={searchRepo}
           onChange={(e) => setSearchRepo(e.target.value)}
         />
+        <select
+          value={selectedRepo}
+          onChange={(e) => setSelectedRepo(e.target.value)}
+        >
+          <option value="">All Repositories</option>
+          {repos.map((repo, index) => (
+            <option key={index} value={repo}>{repo}</option>
+          ))}
+        </select>
         <input
           type="text"
           placeholder="Search by PR title"
