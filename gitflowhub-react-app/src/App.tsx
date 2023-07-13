@@ -21,8 +21,8 @@ const App: React.FC = () => {
   const [pulls, setPulls] = useState<Record<number, Pull>>({});
   const [searchUser, setSearchUser] = useState('');
   const [searchRepo, setSearchRepo] = useState('');
-  const [selectedRepo, setSelectedRepo] = useState('');
   const [searchTitle, setSearchTitle] = useState('');
+  const [expandedRepo, setExpandedRepo] = useState<string | null>(null);
 
   useEffect(() => {
     fetchPulls();
@@ -30,6 +30,7 @@ const App: React.FC = () => {
 
   const fetchPulls = async () => {
     const users = ['JoanSForgeFlow', 'alejandroac6', 'pauek'];
+
     for (let username of users) {
       try {
         const url = `https://api.github.com/search/issues?q=author:${username}+is:pr+is:open`;
@@ -39,8 +40,8 @@ const App: React.FC = () => {
 
         if (response.ok) {
           for (let pull of data.items) {
-            const repoName = pull.html_url.split('/')[4];
-            setPulls(pulls => ({...pulls, [pull.id]: {...pull, repo_name: repoName}}));
+            const repoName = pull.repository_url.split('/').slice(-1)[0];
+            setPulls(prevPulls => ({...prevPulls, [pull.id]: {...pull, repo_name: repoName}}));
           }
         }
       } catch (error) {
@@ -49,14 +50,26 @@ const App: React.FC = () => {
     }
   };
 
-  const repos = Array.from(new Set(Object.values(pulls).map(pull => pull.repo_name)));
+  const groupByRepository = (pulls: Record<number, Pull>) => {
+    const groups: Record<string, Pull[]> = {};
+    Object.values(pulls).forEach((pull) => {
+      if (!groups[pull.repo_name]) {
+        groups[pull.repo_name] = [];
+      }
+      groups[pull.repo_name].push(pull);
+    });
+    return groups;
+  };
 
-  const filteredPulls = Object.values(pulls).filter(pull =>
-    pull.user.login.toLowerCase().includes(searchUser.toLowerCase()) &&
-    pull.repo_name.toLowerCase().includes(searchRepo.toLowerCase()) &&
-    pull.title.toLowerCase().includes(searchTitle.toLowerCase()) &&
-    (selectedRepo ? pull.repo_name === selectedRepo : true)
-  );
+  const repoGroups = groupByRepository(pulls);
+
+  const handleRepoClick = (repoName: string) => {
+    if (expandedRepo === repoName) {
+      setExpandedRepo(null);
+    } else {
+      setExpandedRepo(repoName);
+    }
+  };
 
   return (
     <div className="github-app">
@@ -73,15 +86,6 @@ const App: React.FC = () => {
           value={searchRepo}
           onChange={(e) => setSearchRepo(e.target.value)}
         />
-        <select
-          value={selectedRepo}
-          onChange={(e) => setSelectedRepo(e.target.value)}
-        >
-          <option value="">All Repositories</option>
-          {repos.map((repo, index) => (
-            <option key={index} value={repo}>{repo}</option>
-          ))}
-        </select>
         <input
           type="text"
           placeholder="Search by PR title"
@@ -89,23 +93,36 @@ const App: React.FC = () => {
           onChange={(e) => setSearchTitle(e.target.value)}
         />
       </div>
-      <div className="pull-cards">
-        {filteredPulls.map((pull: Pull) => (
-          <div key={pull.id} className="card">
-            <div className="card-header">
-              <img src={pull.user.avatar_url} alt="User avatar" className="user-info__img" />
-              <h3>{pull.title}</h3>
-            </div>
-            <div className="card-body">
-              <p>Repository: {pull.repo_name}</p>
-              <p>Submitted by: {pull.user.login}</p>
-              <p>State: {pull.state}</p>
-              <p>Created at: {pull.created_at}</p>
-              <GoIcon url={pull.html_url} />
-            </div>
+      {Object.keys(repoGroups).filter(repoName =>
+        repoName.toLowerCase().includes(searchRepo.toLowerCase()) &&
+        repoGroups[repoName].some(pull =>
+          pull.user.login.toLowerCase().includes(searchUser.toLowerCase()) &&
+          pull.title.toLowerCase().includes(searchTitle.toLowerCase())
+        )
+      ).map((repoName) => {
+        return (
+          <div key={repoName} className="repo-group">
+            <h2 onClick={() => handleRepoClick(repoName)}>{repoName}</h2>
+            {expandedRepo === repoName && repoGroups[repoName].filter(pull =>
+              pull.user.login.toLowerCase().includes(searchUser.toLowerCase()) &&
+              pull.title.toLowerCase().includes(searchTitle.toLowerCase())
+            ).map((pull: Pull) => (
+              <div key={pull.id} className="card">
+                <div className="card-header">
+                  <img src={pull.user.avatar_url} alt="User avatar" className="user-info__img" />
+                  <h3>{pull.title}</h3>
+                </div>
+                <div className="card-body">
+                  <p>Submitted by: {pull.user.login}</p>
+                  <p>State: {pull.state}</p>
+                  <p>Created at: {pull.created_at}</p>
+                  <GoIcon url={pull.html_url} />
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        );
+      })}
     </div>
   );
 };
