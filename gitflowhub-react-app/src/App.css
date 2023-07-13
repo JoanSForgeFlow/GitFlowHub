@@ -9,19 +9,35 @@
   display: flex;
   justify-content: center;
   width: 100%;
-  margin-bottom: 20px;
+}
+
+.repo-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.repo-group h2 {
+  cursor: pointer;
+  width: 99%;
+  background-color: #ddd;
+  padding: 10px;
+  border-radius: 4px;
 }
 
 .pull-cards {
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: space-around;
   width: 100%;
 }
 
 .card {
-  width: 300px;
-  margin-bottom: 20px;
+  position: relative;
+  width: 30%;
+  margin: 0.5rem;
   border: 1px solid #ddd;
   border-radius: 4px;
   overflow: hidden;
@@ -30,6 +46,7 @@
 
 .card-header {
   display: flex;
+  justify-content: space-between;
   align-items: center;
   padding: 10px;
   background-color: #f5f5f5;
@@ -48,8 +65,7 @@
 }
 
 .go-link {
-  display: inline-block;
-  margin-top: 10px;
+  margin-left: auto;
 }
 
 .go-link img {
