@@ -22,7 +22,7 @@ const App: React.FC = () => {
   const [searchUser, setSearchUser] = useState('');
   const [searchRepo, setSearchRepo] = useState('');
   const [searchTitle, setSearchTitle] = useState('');
-  const [expandedRepo, setExpandedRepo] = useState<string | null>(null);
+  const [expandedRepos, setExpandedRepos] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     fetchPulls();
@@ -64,11 +64,15 @@ const App: React.FC = () => {
   const repoGroups = groupByRepository(pulls);
 
   const handleRepoClick = (repoName: string) => {
-    if (expandedRepo === repoName) {
-      setExpandedRepo(null);
-    } else {
-      setExpandedRepo(repoName);
-    }
+    setExpandedRepos(prevExpandedRepos => {
+      const newExpandedRepos = new Set(prevExpandedRepos);
+      if (newExpandedRepos.has(repoName)) {
+        newExpandedRepos.delete(repoName);
+      } else {
+        newExpandedRepos.add(repoName);
+      }
+      return newExpandedRepos;
+    });
   };
 
   return (
@@ -95,7 +99,7 @@ const App: React.FC = () => {
       </div>
       {Object.keys(repoGroups).filter(repoName =>
         repoName.toLowerCase().includes(searchRepo.toLowerCase()) &&
-        repoGroups[repoName].some(pull =>
+        repoGroups[repoName].some(pull => 
           pull.user.login.toLowerCase().includes(searchUser.toLowerCase()) &&
           pull.title.toLowerCase().includes(searchTitle.toLowerCase())
         )
@@ -103,7 +107,7 @@ const App: React.FC = () => {
         return (
           <div key={repoName} className="repo-group">
             <h2 onClick={() => handleRepoClick(repoName)}>{repoName}</h2>
-            {expandedRepo === repoName && repoGroups[repoName].filter(pull =>
+            {expandedRepos.has(repoName) && repoGroups[repoName].filter(pull => 
               pull.user.login.toLowerCase().includes(searchUser.toLowerCase()) &&
               pull.title.toLowerCase().includes(searchTitle.toLowerCase())
             ).map((pull: Pull) => (
