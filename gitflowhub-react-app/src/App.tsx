@@ -75,6 +75,14 @@ const App: React.FC = () => {
     });
   };
 
+  const filteredPulls = Object.values(pulls).filter(pull =>
+    pull.user.login.toLowerCase().includes(searchUser.toLowerCase()) &&
+    pull.repo_name.toLowerCase().includes(searchRepo.toLowerCase()) &&
+    pull.title.toLowerCase().includes(searchTitle.toLowerCase())
+  );
+
+  const autoExpand = filteredPulls.length <= 5;
+
   return (
     <div className="github-app">
       <div className="search-bar">
@@ -107,7 +115,7 @@ const App: React.FC = () => {
         return (
           <div key={repoName} className="repo-group">
             <h2 onClick={() => handleRepoClick(repoName)}>{repoName}</h2>
-            {expandedRepos.has(repoName) && repoGroups[repoName].filter(pull => 
+            {(autoExpand || expandedRepos.has(repoName)) && repoGroups[repoName].filter(pull => 
               pull.user.login.toLowerCase().includes(searchUser.toLowerCase()) &&
               pull.title.toLowerCase().includes(searchTitle.toLowerCase())
             ).map((pull: Pull) => (
