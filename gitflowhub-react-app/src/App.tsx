@@ -14,10 +14,11 @@ interface Pull {
   html_url: string;
   state: string;
   created_at: string;
+  repo_name: string;
 }
 
 const App: React.FC = () => {
-  const [pulls, setPulls] = useState<Pull[]>([]);
+  const [pulls, setPulls] = useState<Record<number, Pull>>({});
   const [searchUser, setSearchUser] = useState('');
   const [searchRepo, setSearchRepo] = useState('');
   const [searchTitle, setSearchTitle] = useState('');
@@ -27,24 +28,29 @@ const App: React.FC = () => {
   }, []);
 
   const fetchPulls = async () => {
-    try {
-      const username = 'JoanSForgeFlow';
-      const url = `https://api.github.com/search/issues?q=author:${username}+is:pr+is:open`;
+    const users = ['JoanSForgeFlow', 'alejandroac6', 'pauek'];
+    for (let username of users) {
+      try {
+        const url = `https://api.github.com/search/issues?q=author:${username}+is:pr+is:open`;
 
-      const response = await fetch(url);
-      const data = await response.json();
+        const response = await fetch(url);
+        const data = await response.json();
 
-      if (response.ok) {
-        setPulls(data.items);
+        if (response.ok) {
+          for (let pull of data.items) {
+            const repoName = pull.html_url.split('/')[4];
+            setPulls(pulls => ({...pulls, [pull.id]: {...pull, repo_name: repoName}}));
+          }
+        }
+      } catch (error) {
+        console.error('Error:', error);
       }
-    } catch (error) {
-      console.error('Error:', error);
     }
   };
 
-  const filteredPulls = pulls.filter(pull =>
+  const filteredPulls = Object.values(pulls).filter(pull =>
     pull.user.login.toLowerCase().includes(searchUser.toLowerCase()) &&
-    pull.html_url.toLowerCase().includes(searchRepo.toLowerCase()) &&
+    pull.repo_name.toLowerCase().includes(searchRepo.toLowerCase()) &&
     pull.title.toLowerCase().includes(searchTitle.toLowerCase())
   );
 
@@ -78,6 +84,7 @@ const App: React.FC = () => {
               <h3>{pull.title}</h3>
             </div>
             <div className="card-body">
+              <p>Repository: {pull.repo_name}</p>
               <p>Submitted by: {pull.user.login}</p>
               <p>State: {pull.state}</p>
               <p>Created at: {pull.created_at}</p>
