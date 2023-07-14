@@ -1,6 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
-import UserRoutes from "./Routes/UserRoutes"
+import UserRoutes from "./Routes/UserRoutes.js"
 
 // App delcaration
 const app= express();
@@ -17,5 +17,5 @@ app.use("/users", UserRoutes);
 const { SERVER_PORT } = process.env;
 
 app.listen(SERVER_PORT, () => {
-    console.log(`Talks API listening on port ${SERVER_PORT}`);
+    console.log(`GITFLOWHUB API listening on port ${SERVER_PORT}`);
   });

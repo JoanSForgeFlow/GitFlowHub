@@ -1,4 +1,4 @@
-import prisma from "../Middlewares/prisma-client";
+import prisma from "../Middlewares/prisma-client.js";
 
 const RegisterUser = async (req, res) => {
     const data = req.body;
