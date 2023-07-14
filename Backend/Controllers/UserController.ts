@@ -20,6 +20,13 @@ const RegisterUser = async (req, res) => {
     // Check if the user exists
     const user= await prisma.user.findUnique({where:{email}})
 
+    // If the user doesn't exist, a json will show
+    if (!user){
+      const error = new Error("User doesn't exist");
+      return res.status(404).json({ msg: error.message });
+
+    }
+
     
     const passwordMatch = await bcrypt.compare(password, user.password);
 
