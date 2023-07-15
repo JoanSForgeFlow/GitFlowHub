@@ -40,7 +40,7 @@ const PRDashboard: React.FC = () => {
 
         if (response.ok) {
           for (let pull of data.items) {
-            const repoName = pull.repository_url.split('/').slice(-1)[0];
+            const repoName = pull.repository_url.split('/').slice(-2).join('/');
             setPulls(prevPulls => ({...prevPulls, [pull.id]: {...pull, repo_name: repoName}}));
           }
         }
