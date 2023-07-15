@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import GoIcon from '../components/GoIcon';
 import '../css/PRDashboard.css';
+import SearchBar from '../components/SearchBar';
 
 interface User {
   login: string;
@@ -61,8 +62,6 @@ const PRDashboard: React.FC = () => {
     return groups;
   };
 
-  const repoGroups = groupByRepository(pulls);
-
   const handleRepoClick = (repoName: string) => {
     setExpandedRepos(prevExpandedRepos => {
       const newExpandedRepos = new Set(prevExpandedRepos);
@@ -81,30 +80,17 @@ const PRDashboard: React.FC = () => {
     pull.title.toLowerCase().includes(searchTitle.toLowerCase())
   );
 
+  const repoGroups = groupByRepository(pulls);
+
   const autoExpand = filteredPulls.length <= 5;
 
   return (
     <div className="github-app">
-      <div className="search-bar">
-        <input
-          type="text"
-          placeholder="Search by user"
-          value={searchUser}
-          onChange={(e) => setSearchUser(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Search by repository"
-          value={searchRepo}
-          onChange={(e) => setSearchRepo(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Search by PR title"
-          value={searchTitle}
-          onChange={(e) => setSearchTitle(e.target.value)}
-        />
-      </div>
+      <SearchBar
+        onUserSearchChange={(user) => setSearchUser(user)}
+        onRepoSearchChange={(repo) => setSearchRepo(repo)}
+        onTitleSearchChange={(title) => setSearchTitle(title)}
+      />
       {Object.keys(repoGroups).filter(repoName =>
         repoName.toLowerCase().includes(searchRepo.toLowerCase()) &&
         repoGroups[repoName].some(pull => 

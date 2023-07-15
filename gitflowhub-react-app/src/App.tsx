@@ -4,7 +4,7 @@ import PRDashboard from './pages/PRDashboard';
 
 const App: React.FC = () => {
   return (
-    <div className="github-app">
+    <div>
       <PRDashboard />
     </div>
   );
