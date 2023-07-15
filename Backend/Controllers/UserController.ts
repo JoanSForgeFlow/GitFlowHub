@@ -132,13 +132,21 @@ const newPassword = async (req, res) => {
     return res.status(404).json({ msg: error.message });
   }
 
+  const hashedPassword = await bcrypt.hash(password, 10);
   const updatedUser = await prisma.user.update({
     where: { id: searchedUser.id },
-    data: { password: password },
+    data: { password: hashedPassword },
   });
 
   res.status(200).json({ msg: "Password successfully changed" });
 };
+
+const userProfile=(req,res)=>{
+  //On req the user will be stored
+  const {user}=req
+  res.status(200).json({ msg: user });
+
+}
 
 export {
   RegisterUser,
@@ -147,4 +155,5 @@ export {
   forgetRequest,
   checkToken,
   newPassword,
+  userProfile
 };
