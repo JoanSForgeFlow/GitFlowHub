@@ -1,0 +1,17 @@
+version: '3'
+services:
+  educationTalksdb:
+    image: postgres
+    container_name: GitFlowHub_db
+    restart: always
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=GitFlowHubdb
+    ports:
+      - 5432:5432
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+
+volumes:
+  dbdata:
