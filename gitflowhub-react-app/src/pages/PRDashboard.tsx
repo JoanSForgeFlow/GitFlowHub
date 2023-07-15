@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import GoIcon from '../components/GoIcon';
 import '../css/PRDashboard.css';
 import SearchBar from '../components/SearchBar';
+import Repo from '../components/Repo';
 
 interface User {
   login: string;
@@ -98,30 +98,15 @@ const PRDashboard: React.FC = () => {
           pull.title.toLowerCase().includes(searchTitle.toLowerCase())
         )
       ).sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' })).map((repoName) => (
-        <div key={repoName} className="repo-group">
-          <h2 onClick={() => handleRepoClick(repoName)}>{repoName}</h2>
-          {(autoExpand || expandedRepos.has(repoName)) && (
-            <div className="pull-cards"> 
-              {repoGroups[repoName].filter(pull => 
-                pull.user.login.toLowerCase().includes(searchUser.toLowerCase()) &&
-                pull.title.toLowerCase().includes(searchTitle.toLowerCase())
-              ).map((pull: Pull) => (
-                <div key={pull.id} className="card">
-                  <div className="card-header">
-                    <img src={pull.user.avatar_url} alt="User avatar" className="user-info__img" />
-                    <h3>{pull.title}</h3>
-                    <GoIcon url={pull.html_url} />
-                  </div>
-                  <div className="card-body">
-                    <p>Submitted by: {pull.user.login}</p>
-                    <p>State: {pull.state}</p>
-                    <p>Created at: {pull.created_at}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+        <Repo 
+        repoName={repoName} 
+        pulls={repoGroups[repoName]} 
+        handleRepoClick={handleRepoClick} 
+        searchUser={searchUser}
+        searchTitle={searchTitle}
+        autoExpand={autoExpand}
+        isExpanded={expandedRepos.has(repoName)}
+        />
       ))}
     </div>
   );
