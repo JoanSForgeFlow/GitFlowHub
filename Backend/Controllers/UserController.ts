@@ -22,7 +22,7 @@ const RegisterUser = async (req, res) => {
     data: { token },
   });
 
-  res.status(200).json(createUser);
+  res.status(200).json(updatedUser);
 };
 
 const confirmUser = async (req, res) => {
@@ -47,7 +47,7 @@ const LogInUser = async (req, res) => {
   const { email, password } = data;
 
   // Check if the user exists
-  const searchedUser = await prisma.user.findUniqueOrThrow({
+  const searchedUser = await prisma.user.findUnique({
     where: { email },
   });
 
@@ -69,7 +69,7 @@ const LogInUser = async (req, res) => {
 
     const updatedUser = await prisma.user.update({
       where: { id: searchedUser.id },
-      data: { confirmed: true, token: token },
+      data: {token: token },
     });
 
     res.status(200).json({ msg: "Login success" });
@@ -95,6 +95,7 @@ const forgetRequest = async (req, res) => {
 
   //if user exists an email will be sent, token is reset
   const newToken = generarId();
+  console.log(newToken)
   const updatedUser = await prisma.user.update({
     where: { id: searchedUser.id },
     data: { token: newToken },

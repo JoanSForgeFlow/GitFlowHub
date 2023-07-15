@@ -13,7 +13,7 @@ app.use(express.json());
 dotenv.config();
 
 //Routes redirect
-app.use("/users", UserRoutes);
+app.use("/", UserRoutes);
 
 //use of the errorHandler
 app.use(errorHandlerMiddleware)
