@@ -20,8 +20,8 @@ const App: React.FC = () => {
           <Route path='forget-password' element={<ForgetPassword/>}/>
           <Route path='forget-password/:token' element={<NewPassword/>}/>
           <Route path='confirm-account/:id' element={<ConfirmAccount/>}/>
-          <Route path='main-page' element={<PRDashboard />}/>
         </Route>
+        <Route path='main-page' element={<PRDashboard />}/>
       </Routes>
     </BrowserRouter>
 
