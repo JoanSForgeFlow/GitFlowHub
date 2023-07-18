@@ -1,5 +1,6 @@
 import express from "express";
 import { errorChecked } from "../Middlewares/controllersMw.js";
+import checkAuth from "../Helpers/checkAuth.js";
 
 const router = express.Router();
 
@@ -10,6 +11,7 @@ import {
   forgetRequest,
   checkToken,
   newPassword,
+  userProfile
 } from "../Controllers/UserController.js";
 
 //Tendremos las rutas de login y de display del perfil del user
@@ -21,5 +23,6 @@ router
   .route("/forget-password/:token")
   .get(errorChecked(checkToken))
   .post(errorChecked(newPassword));
+router.get("/profile", checkAuth, errorChecked(userProfile));
 
 export default router;
