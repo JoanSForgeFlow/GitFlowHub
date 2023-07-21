@@ -40,6 +40,7 @@ const confirmUser = async (req, res) => {
   const { token } = req.params;
 
   //Search on db for this token
+  console.log('entro a checkear token')
   const searchedUser = await prisma.user.findFirstOrThrow({ where: { token } });
 
   if (searchedUser) {
