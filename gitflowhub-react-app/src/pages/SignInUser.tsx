@@ -2,11 +2,17 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Alert } from "../components/Alert";
 import { FormEvent } from "react";
+import axios, { AxiosError, AxiosResponse } from "axios";
 
+//Types of Alert component and axios response
 interface AlertType {
   msg: string;
   error: boolean;
 }
+interface ApiResponse {
+  msg: string;
+}
+
 
 const SignInUser = () => {
   const [name, setName] = useState("");
@@ -15,14 +21,17 @@ const SignInUser = () => {
   const [repeatPassword, setRepeatPassword] = useState("");
   const [alert, setAlert] = useState<AlertType>({ msg: "", error: false });
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  // Fucntion that validates the form, if all it's ok then an API request is generated
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    // Check taht all variables are not empty
     if ([name, email, password, repeatPassword].includes("")) {
       setAlert({ msg: "Please enter required information.", error: true });
       return;
     }
 
+    // check that repeated password is ok
     if (password !== repeatPassword) {
       setAlert({
         msg: "Password and repeat password are not the same",
@@ -31,6 +40,7 @@ const SignInUser = () => {
       return;
     }
 
+    // check the length of the password
     if (password.length < 6) {
       setAlert({
         msg: "Password needs to have at least 6 characters ",
@@ -39,7 +49,29 @@ const SignInUser = () => {
       return;
     }
 
+    // If all validations have passed then we generate the post request
     setAlert({ msg: "", error: false });
+    try {
+      const data: AxiosResponse<ApiResponse> = await axios.post(
+        "http://localhost:4000/sign-in",
+        { email: email, username: name, password: password }
+      );
+
+      setAlert({
+        msg: data.data.msg,
+        error: false,
+      });
+    } catch (error:any) {
+      setAlert({
+        msg: error.response?.data.type || "An error ocurred",
+        error: true,
+      });
+    }
+
+    setName('')
+    setEmail('')
+    setPassword('')
+    setRepeatPassword('')
   };
 
   const { msg } = alert;
@@ -51,6 +83,7 @@ const SignInUser = () => {
         <span className="text-slate-700">start managing your PRs</span>
       </h1>
 
+      {/* if alert exists, then the component alert shows */}
       {msg && <Alert alert={alert} />}
 
       <form

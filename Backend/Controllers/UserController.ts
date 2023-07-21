@@ -22,7 +22,9 @@ const RegisterUser = async (req, res) => {
     data: { token },
   });
 
-  res.status(200).json(updatedUser);
+  res
+    .status(200)
+    .json({ msg: "User created, check your email to confirm account" });
 };
 
 const confirmUser = async (req, res) => {
@@ -69,7 +71,7 @@ const LogInUser = async (req, res) => {
 
     const updatedUser = await prisma.user.update({
       where: { id: searchedUser.id },
-      data: {token: token },
+      data: { token: token },
     });
 
     res.status(200).json({ msg: "Login success" });
@@ -95,7 +97,7 @@ const forgetRequest = async (req, res) => {
 
   //if user exists an email will be sent, token is reset
   const newToken = generarId();
-  console.log(newToken)
+  console.log(newToken);
   const updatedUser = await prisma.user.update({
     where: { id: searchedUser.id },
     data: { token: newToken },
@@ -141,12 +143,11 @@ const newPassword = async (req, res) => {
   res.status(200).json({ msg: "Password successfully changed" });
 };
 
-const userProfile=(req,res)=>{
+const userProfile = (req, res) => {
   //On req the user will be stored
-  const {user}=req
+  const { user } = req;
   res.status(200).json({ msg: user });
-
-}
+};
 
 export {
   RegisterUser,
@@ -155,5 +156,5 @@ export {
   forgetRequest,
   checkToken,
   newPassword,
-  userProfile
+  userProfile,
 };
