@@ -2,6 +2,7 @@ import prisma from "../Middlewares/prisma-client.js";
 import bcrypt from "bcryptjs";
 import generarId from "../Helpers/generarId.js";
 import generarJWT from "../Helpers/generarJWT.js";
+import { signInEmail } from "../Helpers/emails.js";
 
 const RegisterUser = async (req, res) => {
   const data = req.body;
@@ -20,6 +21,13 @@ const RegisterUser = async (req, res) => {
   const updatedUser = await prisma.user.update({
     where: { id: createUser.id },
     data: { token },
+  });
+
+  // Insert send email command
+  signInEmail({
+    email: updatedUser.email,
+    username: updatedUser.username,
+    token: updatedUser.token,
   });
 
   res
