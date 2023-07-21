@@ -1,6 +1,11 @@
+import { useState } from "react"
 import { Link } from "react-router-dom"
 
 const SignInUser = () => {
+  const [name,setName]=useState('')
+  const [email,setEmail]=useState('')
+  const [password,setPassword]=useState('')
+  const [repeatPassword,setRepeatPassword]=useState('')
   return (
     <>
       <h1 className="text-sky-600 font-black text-4xl">
@@ -14,13 +19,15 @@ const SignInUser = () => {
             className="uppercase text-gray-600 font-bold block text-xl"
             htmlFor="name"
           >
-            Nombre
+            Name
           </label>
           <input
             id="name"
             type="text"
             placeholder="Your name"
             className="w-full my-2 p-3 border rounded-xl bg-gray-50"
+            value={name}
+            onChange={e=> setName(e.target.value)}
           />
         </div>
 
@@ -36,6 +43,8 @@ const SignInUser = () => {
             type="email"
             placeholder="User email"
             className="w-full my-2 p-3 border rounded-xl bg-gray-50"
+            value={email}
+            onChange={e=> setEmail(e.target.value)}
           />
         </div>
         <div className="my-5">
@@ -50,6 +59,8 @@ const SignInUser = () => {
             type="password"
             placeholder="User Password"
             className="w-full my-2 p-3 border rounded-xl bg-gray-50"
+            value={password}
+            onChange={e=> setPassword(e.target.value)}
           />
         </div>
 
@@ -65,6 +76,8 @@ const SignInUser = () => {
             type="password"
             placeholder="Repeat your password"
             className="w-full my-2 p-3 border rounded-xl bg-gray-50"
+            value={repeatPassword}
+            onChange={e=> setRepeatPassword(e.target.value)}
           />
 
           <input
