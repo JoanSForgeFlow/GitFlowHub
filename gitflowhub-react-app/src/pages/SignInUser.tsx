@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { Alert } from "../components/Alert";
 import { FormEvent } from "react";
 import axios, { AxiosError, AxiosResponse } from "axios";
+// import dotenv from "dotenv"
+
 
 //Types of Alert component and axios response
 interface AlertType {
@@ -53,7 +55,7 @@ const SignInUser = () => {
     setAlert({ msg: "", error: false });
     try {
       const data: AxiosResponse<ApiResponse> = await axios.post(
-        "http://localhost:4000/sign-in",
+        `${process.env.REACT_APP_BACKEND_URL}/sign-in`,
         { email: email, username: name, password: password }
       );
 

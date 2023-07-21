@@ -14,7 +14,7 @@ app.use(express.json());
 dotenv.config();
 
 //Enable CORS
-const whitlelist=["http://localhost:3000"]
+const whitlelist=[process.env.FRONTEND_URL]
 
 const corsOptions={
   origin: function(origin,callback){
