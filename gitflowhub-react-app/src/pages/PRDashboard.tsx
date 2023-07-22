@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import '../css/PRDashboard.css';
 import SearchBar from '../components/SearchBar';
 import Repo from '../components/Repo';
+import axios from 'axios';
+
 
 interface User {
   login: string;
@@ -30,26 +32,33 @@ const PRDashboard: React.FC = () => {
   }, []);
 
   const fetchPulls = async () => {
-    const users = ['JoanSForgeFlow', 'alejandroac6', 'pauek'];
-
-    for (let username of users) {
-      try {
-        const url = `https://api.github.com/search/issues?q=author:${username}+is:pr+is:open`;
-
-        const response = await fetch(url);
-        const data = await response.json();
-
-        if (response.ok) {
-          for (let pull of data.items) {
-            const repoName = pull.repository_url.split('/').slice(-2).join('/');
-            setPulls(prevPulls => ({...prevPulls, [pull.id]: {...pull, repo_name: repoName}}));
-          }
+    console.log('fetchPulls is running');
+    try {
+      const url = `${process.env.REACT_APP_BACKEND_URL}/prs?github_user=JoanSForgeFlow`;
+  
+      const { data: prs } = await axios.get(url);
+      
+      // Registro de seguimiento
+      console.log('Data received from API:', prs);
+  
+      if (prs && prs.length > 0) {
+        for (let pull of prs) {
+          const repoName = pull.repository_url.split('/').slice(-2).join('/');
+          setPulls(prevPulls => {
+            // Registro de seguimiento
+            const newPulls = {...prevPulls, [pull.id]: {...pull, repo_name: repoName}};
+            console.log('Updated pulls:', newPulls);
+            return newPulls;
+          });
         }
-      } catch (error) {
-        console.error('Error:', error);
       }
+  
+    } catch (error: any) {
+      console.error('Error:', error.message);
+      console.error('Error response:', error.response);
     }
-  };
+  }  
+  
 
   const groupByRepository = (pulls: Record<number, Pull>) => {
     const groups: Record<string, Pull[]> = {};

@@ -10,16 +10,37 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User{
-  id Int @id @default(autoincrement())
-  email String @unique
-  username String? @unique
-  password String
-  token String?
-  confirmed Boolean @default(false)
-  location String?
-  language String?
-  timeZone String?
-  image String?
+model User {
+  id          Int       @id @default(autoincrement())
+  email       String    @unique
+  username    String?   @unique
+  password    String
+  token       String?
+  confirmed   Boolean   @default(false)
+  location    String?
+  language    String?
+  timeZone    String?
+  image       String?
+  github_user String    @unique
+  company_id  Int       
+  Company     Company   @relation(fields: [company_id], references: [id]) //Company relation
+  PRs         PullRequest[]
+}
 
+model Company {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  Users User[]
+}
+
+model PullRequest {
+  id           Int    @id @default(autoincrement())
+  title        String
+  description  String
+  state        String
+  created_at   DateTime @default(now())
+  html_url     String
+  repo_name    String
+  user_id      Int
+  User         User   @relation(fields: [user_id], references: [id])
 }
