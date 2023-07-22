@@ -41,7 +41,7 @@ const confirmUser = async (req, res) => {
 
   //Search on db for this token
   console.log('entro a checkear token')
-  const searchedUser = await prisma.user.findFirstOrThrow({ where: { token } });
+  const searchedUser = await prisma.user.findFirst({ where: { token } });
 
   if (searchedUser) {
     //If the user exists, account is confirmed and token is removed
@@ -49,7 +49,10 @@ const confirmUser = async (req, res) => {
       where: { id: searchedUser.id },
       data: { confirmed: true, token: "" },
     });
-    res.status(200).json({ msg: "User confirmation sucess" });
+    res.status(200).json({ msg: "User confirmation success" });
+  } else {
+    // If the user does not exist, send an error response
+    res.status(404).json({ msg: "Token not found" });
   }
 };
 
