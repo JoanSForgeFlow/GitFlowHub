@@ -2,6 +2,7 @@ import prisma from "../Middlewares/prisma-client.js";
 import bcrypt from "bcryptjs";
 import generarId from "../Helpers/generarId.js";
 import generarJWT from "../Helpers/generarJWT.js";
+import { signInEmail } from "../Helpers/emails.js";
 
 const RegisterUser = async (req, res) => {
   const data = req.body;
@@ -22,7 +23,16 @@ const RegisterUser = async (req, res) => {
     data: { token },
   });
 
-  res.status(200).json(updatedUser);
+  // Insert send email command
+  signInEmail({
+    email: updatedUser.email,
+    username: updatedUser.username,
+    token: updatedUser.token,
+  });
+
+  res
+    .status(200)
+    .json({ msg: "User created, check your email to confirm account" });
 };
 
 const confirmUser = async (req, res) => {
@@ -30,6 +40,7 @@ const confirmUser = async (req, res) => {
   const { token } = req.params;
 
   //Search on db for this token
+  console.log('entro a checkear token')
   const searchedUser = await prisma.user.findFirstOrThrow({ where: { token } });
 
   if (searchedUser) {
@@ -69,7 +80,7 @@ const LogInUser = async (req, res) => {
 
     const updatedUser = await prisma.user.update({
       where: { id: searchedUser.id },
-      data: {token: token },
+      data: { token: token },
     });
 
     res.status(200).json({ msg: "Login success" });
@@ -95,7 +106,7 @@ const forgetRequest = async (req, res) => {
 
   //if user exists an email will be sent, token is reset
   const newToken = generarId();
-  console.log(newToken)
+  console.log(newToken);
   const updatedUser = await prisma.user.update({
     where: { id: searchedUser.id },
     data: { token: newToken },
@@ -141,12 +152,11 @@ const newPassword = async (req, res) => {
   res.status(200).json({ msg: "Password successfully changed" });
 };
 
-const userProfile=(req,res)=>{
+const userProfile = (req, res) => {
   //On req the user will be stored
-  const {user}=req
+  const { user } = req;
   res.status(200).json({ msg: user });
-
-}
+};
 
 export {
   RegisterUser,
@@ -155,5 +165,5 @@ export {
   forgetRequest,
   checkToken,
   newPassword,
-  userProfile
+  userProfile,
 };
