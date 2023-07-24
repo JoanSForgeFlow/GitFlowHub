@@ -62,7 +62,7 @@ const NewPassword = () => {
         msg: data.data.msg,
         error: false,
       });
-      setChangedPassword(true)
+      setChangedPassword(true);
     } catch (error: any) {
       setAlert({
         msg: error.response?.data.type || "An error ocurred",

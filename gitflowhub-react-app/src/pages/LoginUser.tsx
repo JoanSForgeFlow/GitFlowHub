@@ -1,7 +1,59 @@
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useState, FormEvent } from "react";
+import { Alert } from "../components/Alert";
+import axiosClient from "../config/axiosClient";
+import { AxiosResponse } from "axios";
+
+interface AlertType {
+  msg: string;
+  error: boolean;
+}
+interface ApiResponse {
+  msg: string;
+  token: string;
+}
 
 const LoginUser = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [alert, setAlert] = useState<AlertType>({ msg: "", error: false });
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    //Check that all fields are not empty
+
+    if ([email, password].includes("")) {
+      setAlert({
+        msg: "All fields are needed to login",
+        error: true,
+      });
+      return;
+    }
+
+    try {
+      const response: AxiosResponse<ApiResponse> = await axiosClient.post(
+        "/login",
+        {
+          email,
+          password,
+        }
+      );
+
+      const data: ApiResponse = response.data;
+
+      localStorage.setItem("token", data.token);
+    } catch (error: any) {
+      console.log(error);
+      setAlert({
+        msg: error.response?.data?.msg || "Unvalid credentials",
+        error: true,
+      });
+    }
+
+    //axios request to validate user
+  };
+
+  const { msg } = alert;
 
   return (
     <>
@@ -9,7 +61,11 @@ const LoginUser = () => {
         Log In,{" "}
         <span className="text-slate-700">PR are waiting to be managed</span>
       </h1>
-      <form className="my-10 bg-white shadow rounded-lg p-5">
+      {msg && <Alert alert={alert} />}
+      <form
+        className="my-10 bg-white shadow rounded-lg p-5"
+        onSubmit={handleSubmit}
+      >
         <div className="my-5">
           <label
             className="uppercase text-gray-600 font-bold block text-xl"
@@ -22,6 +78,8 @@ const LoginUser = () => {
             type="email"
             placeholder="User email"
             className="w-full my-2 p-3 border rounded-xl bg-gray-50"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </div>
         <div className="my-5">
@@ -36,6 +94,8 @@ const LoginUser = () => {
             type="password"
             placeholder="User password"
             className="w-full my-2 p-3 border rounded-xl bg-gray-50"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
 
           <input
