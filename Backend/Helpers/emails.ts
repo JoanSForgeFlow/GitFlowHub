@@ -5,11 +5,17 @@ const signInEmail = async (data) => {
   const { email, username, token } = data;
 
   //   obtain env variables
-  const { USER_NODEMAILER, PASSWORD_NODEMAILER, FRONTEND_URL } = process.env;
+  const {
+    USER_NODEMAILER,
+    PASSWORD_NODEMAILER,
+    FRONTEND_URL,
+    PORT_NODEMAILER,
+    HOST_NODEMAILER,
+  } = process.env;
   //nodemailer configuration
   const transport = nodemailer.createTransport({
-    host: "sandbox.smtp.mailtrap.io",
-    port: 2525,
+    host: HOST_NODEMAILER,
+    port: PORT_NODEMAILER,
     auth: {
       user: USER_NODEMAILER,
       pass: PASSWORD_NODEMAILER,
@@ -79,11 +85,17 @@ const newPasswordEmail = async (data) => {
   const { email, username, token } = data;
 
   //   obtain env variables
-  const { USER_NODEMAILER, PASSWORD_NODEMAILER, FRONTEND_URL } = process.env;
+  const {
+    USER_NODEMAILER,
+    PASSWORD_NODEMAILER,
+    FRONTEND_URL,
+    PORT_NODEMAILER,
+    HOST_NODEMAILER,
+  } = process.env;
   //nodemailer configuration
   const transport = nodemailer.createTransport({
-    host: "sandbox.smtp.mailtrap.io",
-    port: 2525,
+    host: HOST_NODEMAILER,
+    port: PORT_NODEMAILER,
     auth: {
       user: USER_NODEMAILER,
       pass: PASSWORD_NODEMAILER,
@@ -92,8 +104,8 @@ const newPasswordEmail = async (data) => {
   const info = await transport.sendMail({
     from: '"GitFlowHub <account@gitflowhub.com>"',
     to: email,
-    subject: "GitFlowHub - Confirm account",
-    text: "Confirm your GitFlowHub account ",
+    subject: "GitFlowHub - Reset your password",
+    text: "Reset your GitFlowHub password ",
     html: `
     <!DOCTYPE html>
     <html>
@@ -137,7 +149,7 @@ const newPasswordEmail = async (data) => {
             
             <a href="${FRONTEND_URL}/forget-password/${token}">Reset your password</a>
             
-            <p>If you don't need to reset your password, please ignore this email.</p>
+            <p>If you don't request to reset your password, please ignore this email.</p>
             
             <p>Thank you,</p>
             <p>The GitFlowHub Team</p>
@@ -148,4 +160,4 @@ const newPasswordEmail = async (data) => {
   });
 };
 
-export { signInEmail,newPasswordEmail };
+export { signInEmail, newPasswordEmail };

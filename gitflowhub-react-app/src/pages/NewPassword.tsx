@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { FormEvent } from "react";
-import axios from "axios";
+import axiosClient from "../config/axiosClient";
 import { AxiosResponse } from "axios";
 import { useParams } from "react-router-dom";
 import { Alert } from "../components/Alert";
@@ -19,6 +19,7 @@ const NewPassword = () => {
   const [repeatPassword, setRepeatPassword] = useState("");
   const [validatedToken, setValidatedToken] = useState(false);
   const [alert, setAlert] = useState<AlertType>({ msg: "", error: false });
+  const [changedPassword, setChangedPassword] = useState(false);
 
   const params = useParams();
   const { token } = params;
@@ -52,8 +53,8 @@ const NewPassword = () => {
     // If all validations have passed then we generate the post request
     setAlert({ msg: "", error: false });
     try {
-      const data: AxiosResponse<ApiResponse> = await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}/forget-password/${token}`,
+      const data: AxiosResponse<ApiResponse> = await axiosClient.post(
+        `/forget-password/${token}`,
         { password: password }
       );
 
@@ -61,6 +62,7 @@ const NewPassword = () => {
         msg: data.data.msg,
         error: false,
       });
+      setChangedPassword(true)
     } catch (error: any) {
       setAlert({
         msg: error.response?.data.type || "An error ocurred",
@@ -72,8 +74,8 @@ const NewPassword = () => {
   useEffect(() => {
     const checkToken = async () => {
       try {
-        const response: AxiosResponse<ApiResponse> = await axios.get(
-          `${process.env.REACT_APP_BACKEND_URL}/forget-password/${token}`
+        const response: AxiosResponse<ApiResponse> = await axiosClient.get(
+          `/forget-password/${token}`
         );
         setValidatedToken(true);
       } catch (error: any) {
@@ -147,20 +149,31 @@ const NewPassword = () => {
         <Alert alert={alert} />
       )}
 
-      <nav className="lg:flex lg:justify-between">
-        <Link
-          className="block text-center my-5 text-slate-500 uppercase text-sm"
-          to="/sign-in"
-        >
-          You don't have an account? Sign in
-        </Link>
-        <Link
-          className="block text-center my-5 text-slate-500 uppercase text-sm "
-          to="/forget-password"
-        >
-          I forgot my password
-        </Link>
-      </nav>
+      {changedPassword ? (
+        <nav className="lg:flex lg:justify-between">
+          <Link
+            className="block text-center my-5 text-slate-500 uppercase text-sm"
+            to="/"
+          >
+            LOG IN
+          </Link>
+        </nav>
+      ) : (
+        <nav className="lg:flex lg:justify-between">
+          <Link
+            className="block text-center my-5 text-slate-500 uppercase text-sm"
+            to="/sign-in"
+          >
+            You don't have an account? Sign in
+          </Link>
+          <Link
+            className="block text-center my-5 text-slate-500 uppercase text-sm "
+            to="/forget-password"
+          >
+            I forgot my password
+          </Link>
+        </nav>
+      )}
     </>
   );
 };

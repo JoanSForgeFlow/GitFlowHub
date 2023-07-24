@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Alert } from "../components/Alert";
 import { FormEvent } from "react";
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
+import axiosClient from "../config/axiosClient";
 // import dotenv from "dotenv"
 
 
@@ -54,8 +55,8 @@ const SignInUser = () => {
     // If all validations have passed then we generate the post request
     setAlert({ msg: "", error: false });
     try {
-      const data: AxiosResponse<ApiResponse> = await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}/sign-in`,
+      const data: AxiosResponse<ApiResponse> = await axiosClient.post(
+        `/sign-in`,
         { email: email, username: name, password: password }
       );
 

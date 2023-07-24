@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useState, FormEvent } from "react";
 import axios from "axios";
 import { Alert } from "../components/Alert";
-
+import axiosClient from "../config/axiosClient";
 interface AlertType {
   msg: string;
   error: boolean;
@@ -14,9 +14,18 @@ const ForgetPassword = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (email === "") {
+      setAlert({
+        msg: "You have to write an email",
+        error: true,
+      });
+      return;
+    }
+
     try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}/forget-password`,
+      const response = await axiosClient.post(
+        `/forget-password`,
         { email: email }
       );
       setAlert({
@@ -37,12 +46,11 @@ const ForgetPassword = () => {
         Recover your acess,{" "}
         <span className="text-slate-700">we are waiting for you</span>
       </h1>
+        <div>{msg && <Alert alert={alert} />}</div>
       <form
         className="my-10 bg-white shadow rounded-lg p-5"
         onSubmit={handleSubmit}
       >
-        <div>{msg && <Alert alert={alert} />}</div>
-
         <div className="my-5">
           <label
             className="uppercase text-gray-600 font-bold block text-xl"

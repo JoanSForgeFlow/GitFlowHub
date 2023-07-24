@@ -110,7 +110,7 @@ const forgetRequest = async (req, res) => {
   //if user exists an email will be sent, token is reset
 
   const newToken = generarId();
-  console.log(newToken);
+
   const updatedUser = await prisma.user.update({
     where: { id: searchedUser.id },
     data: { token: newToken },
@@ -155,9 +155,10 @@ const newPassword = async (req, res) => {
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
+  const newToken=""
   const updatedUser = await prisma.user.update({
     where: { id: searchedUser.id },
-    data: { password: hashedPassword },
+    data: { password: hashedPassword, token: newToken },
   });
 
   res.status(200).json({ msg: "Password successfully changed" });
