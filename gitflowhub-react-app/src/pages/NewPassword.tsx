@@ -21,7 +21,7 @@ const NewPassword = () => {
   const [alert, setAlert] = useState<AlertType>({ msg: "", error: false });
 
   const params = useParams();
-  const { id } = params;
+  const { token } = params;
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -53,7 +53,7 @@ const NewPassword = () => {
     setAlert({ msg: "", error: false });
     try {
       const data: AxiosResponse<ApiResponse> = await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}/forget-password(${id})`,
+        `${process.env.REACT_APP_BACKEND_URL}/forget-password/${token}`,
         { password: password }
       );
 
@@ -62,6 +62,7 @@ const NewPassword = () => {
         error: false,
       });
     } catch (error: any) {
+      console.log("unvalid token");
       setAlert({
         msg: error.response?.data.type || "An error ocurred",
         error: true,
@@ -70,22 +71,28 @@ const NewPassword = () => {
   };
 
   useEffect(() => {
-    const checkToken = () => {
-      const validatedToken = async () => {
-        try {
-          const response: AxiosResponse<ApiResponse> = await axios.get(
-            `${process.env.REACT_APP_BACKEND_URL}/forget-password(${id})`
-          );
-          setValidatedToken(true);
-        } catch (error: any) {
-          setAlert({
-            msg: error.response?.data?.message || "Unvalid token",
-            error: true,
-          });
-        }
-      };
+    const checkToken = async () => {
+      try {
+        console.log(token);
+        const response: AxiosResponse<ApiResponse> = await axios.get(
+          `${process.env.REACT_APP_BACKEND_URL}/forget-password/${token}`
+        );
+        console.log(response);
+        setValidatedToken(true);
+
+      } catch (error: any) {
+
+        setAlert({
+          msg: error.response?.data?.message || "Unvalid token",
+          error: true,
+        });
+      }
     };
+
+    checkToken();
   }, []);
+
+  const {msg}=alert
 
   return (
     <>
@@ -95,10 +102,15 @@ const NewPassword = () => {
       </h1>
 
       {validatedToken ? (
+      
         <form
           className="my-10 bg-white shadow rounded-lg p-5"
           onSubmit={handleSubmit}
         >
+          <div>
+          {msg && <Alert alert={alert} />}
+          </div>
+          
           <div className="my-5">
             <label
               className="uppercase text-gray-600 font-bold block text-xl"
@@ -139,6 +151,7 @@ const NewPassword = () => {
             className="bg-sky-700 w-full py-3 text-white uppercase rounded-lg font-bold mt-5 hover:cursor-pointer hover:bg-sky-950 transition-colors"
           />
         </form>
+        
       ) : (
         <Alert alert={alert} />
       )}
