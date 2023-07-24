@@ -62,7 +62,6 @@ const NewPassword = () => {
         error: false,
       });
     } catch (error: any) {
-      console.log("unvalid token");
       setAlert({
         msg: error.response?.data.type || "An error ocurred",
         error: true,
@@ -73,15 +72,11 @@ const NewPassword = () => {
   useEffect(() => {
     const checkToken = async () => {
       try {
-        console.log(token);
         const response: AxiosResponse<ApiResponse> = await axios.get(
           `${process.env.REACT_APP_BACKEND_URL}/forget-password/${token}`
         );
-        console.log(response);
         setValidatedToken(true);
-
       } catch (error: any) {
-
         setAlert({
           msg: error.response?.data?.message || "Unvalid token",
           error: true,
@@ -92,7 +87,7 @@ const NewPassword = () => {
     checkToken();
   }, []);
 
-  const {msg}=alert
+  const { msg } = alert;
 
   return (
     <>
@@ -102,15 +97,12 @@ const NewPassword = () => {
       </h1>
 
       {validatedToken ? (
-      
         <form
           className="my-10 bg-white shadow rounded-lg p-5"
           onSubmit={handleSubmit}
         >
-          <div>
-          {msg && <Alert alert={alert} />}
-          </div>
-          
+          <div>{msg && <Alert alert={alert} />}</div>
+
           <div className="my-5">
             <label
               className="uppercase text-gray-600 font-bold block text-xl"
@@ -151,10 +143,24 @@ const NewPassword = () => {
             className="bg-sky-700 w-full py-3 text-white uppercase rounded-lg font-bold mt-5 hover:cursor-pointer hover:bg-sky-950 transition-colors"
           />
         </form>
-        
       ) : (
         <Alert alert={alert} />
       )}
+
+      <nav className="lg:flex lg:justify-between">
+        <Link
+          className="block text-center my-5 text-slate-500 uppercase text-sm"
+          to="/sign-in"
+        >
+          You don't have an account? Sign in
+        </Link>
+        <Link
+          className="block text-center my-5 text-slate-500 uppercase text-sm "
+          to="/forget-password"
+        >
+          I forgot my password
+        </Link>
+      </nav>
     </>
   );
 };

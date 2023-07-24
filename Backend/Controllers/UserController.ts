@@ -40,7 +40,7 @@ const confirmUser = async (req, res) => {
   const { token } = req.params;
 
   //Search on db for this token
-  console.log('entro a checkear token')
+  console.log("entro a checkear token");
   const searchedUser = await prisma.user.findFirst({ where: { token } });
 
   if (searchedUser) {
@@ -108,11 +108,19 @@ const forgetRequest = async (req, res) => {
   }
 
   //if user exists an email will be sent, token is reset
+
   const newToken = generarId();
   console.log(newToken);
   const updatedUser = await prisma.user.update({
     where: { id: searchedUser.id },
     data: { token: newToken },
+  });
+
+  // Insert send email command
+  newPasswordEmail({
+    email: updatedUser.email,
+    username: updatedUser.username,
+    token: updatedUser.token,
   });
 
   res.json({
