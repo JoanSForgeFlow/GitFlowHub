@@ -168,7 +168,9 @@ const newPassword = async (req, res) => {
 
 const userProfile = (req, res) => {
   //On req the user will be stored
+  console.log('estoy en user')
   const { user } = req;
+  console.log(user)
   res.status(200).json({ msg: user });
 };
 
