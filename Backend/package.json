@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon index.ts"
+    "dev": "nodemon index.ts",
+    "seed": "ts-node-esm ./prisma/seed.ts"
   },
   "keywords": [],
   "author": "Joansis and AlejandroA",

@@ -4,20 +4,34 @@ import SearchBar from '../components/SearchBar';
 import Repo from '../components/Repo';
 import axios from 'axios';
 
-
 interface User {
-  login: string;
-  avatar_url: string;
+  id: number;
+  email: string;
+  username: string | null;
+  password: string;
+  token: string | null;
+  confirmed: boolean;
+  location: string | null;
+  language: string | null;
+  timeZone: string | null;
+  image: string | null;
+  github_user: string;
+  login: string;       // New field
+  avatar_url: string;  // New field
+  company_id: number;
 }
 
 interface Pull {
   id: number;
   title: string;
-  user: User;
-  html_url: string;
+  description: string;
   state: string;
   created_at: string;
+  html_url: string;
   repo_name: string;
+  user_id: number;
+  User: User;
+  number: number;      // New field
 }
 
 const PRDashboard: React.FC = () => {
@@ -28,13 +42,14 @@ const PRDashboard: React.FC = () => {
   const [expandedRepos, setExpandedRepos] = useState<Set<string>>(new Set());
 
   useEffect(() => {
+    console.log('Running useEffect');
     fetchPulls();
   }, []);
 
   const fetchPulls = async () => {
     console.log('fetchPulls is running');
     try {
-      const url = `${process.env.REACT_APP_BACKEND_URL}/prs?github_user=JoanSForgeFlow`;
+      const url = `${process.env.REACT_APP_BACKEND_URL}/prs?github_user=usuario1`;
   
       const { data: prs } = await axios.get(url);
       
@@ -42,22 +57,22 @@ const PRDashboard: React.FC = () => {
       console.log('Data received from API:', prs);
   
       if (prs && prs.length > 0) {
+        const newPulls: Record<number, Pull> = {};
         for (let pull of prs) {
-          const repoName = pull.repository_url.split('/').slice(-2).join('/');
-          setPulls(prevPulls => {
-            // Registro de seguimiento
-            const newPulls = {...prevPulls, [pull.id]: {...pull, repo_name: repoName}};
-            console.log('Updated pulls:', newPulls);
-            return newPulls;
-          });
+          const repoName = pull.html_url.split('/').slice(-2).join('/');
+          newPulls[pull.id] = {...pull, repo_name: repoName};
         }
+        setPulls(newPulls);
+  
+        // Registro de seguimiento
+        console.log('Updated pulls:', newPulls);
       }
   
     } catch (error: any) {
       console.error('Error:', error.message);
       console.error('Error response:', error.response);
     }
-  }  
+  }    
   
 
   const groupByRepository = (pulls: Record<number, Pull>) => {
@@ -84,10 +99,10 @@ const PRDashboard: React.FC = () => {
   };
 
   const filteredPulls = Object.values(pulls).filter(pull =>
-    pull.user.login.toLowerCase().includes(searchUser.toLowerCase()) &&
+    pull.User.github_user.toLowerCase().includes(searchUser.toLowerCase()) &&
     pull.repo_name.toLowerCase().includes(searchRepo.toLowerCase()) &&
     pull.title.toLowerCase().includes(searchTitle.toLowerCase())
-  );
+  );  
 
   const repoGroups = groupByRepository(pulls);
 
@@ -103,7 +118,7 @@ const PRDashboard: React.FC = () => {
       {Object.keys(repoGroups).filter(repoName =>
         repoName.toLowerCase().includes(searchRepo.toLowerCase()) &&
         repoGroups[repoName].some(pull => 
-          pull.user.login.toLowerCase().includes(searchUser.toLowerCase()) &&
+          pull.User.github_user.toLowerCase().includes(searchUser.toLowerCase()) &&
           pull.title.toLowerCase().includes(searchTitle.toLowerCase())
         )
       ).sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' })).map((repoName) => (

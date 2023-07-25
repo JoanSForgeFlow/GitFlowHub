@@ -22,6 +22,8 @@ model User {
   timeZone    String?
   image       String?
   github_user String    @unique
+  login       String    @unique
+  avatar_url  String?
   company_id  Int       
   Company     Company   @relation(fields: [company_id], references: [id]) //Company relation
   PRs         PullRequest[]
@@ -35,6 +37,7 @@ model Company {
 
 model PullRequest {
   id           Int    @id @default(autoincrement())
+  number       Int
   title        String
   description  String
   state        String
