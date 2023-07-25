@@ -12,19 +12,17 @@ interface AlertType {
 interface ApiResponse {
   msg: string;
   token: string;
-  email:string;
-  username:string;
+  email: string;
+  username: string;
 }
 
-interface setAuth{
-
-}
+interface setAuth {}
 
 const LoginUser = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [alert, setAlert] = useState<AlertType>({ msg: "", error: false });
-  const{setAuth}=useAuth()
+  const { setAuth } = useAuth();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -49,9 +47,10 @@ const LoginUser = () => {
       );
 
       const data: ApiResponse = response.data;
+      const { username, token } = data;
 
       localStorage.setItem("token", data.token);
-      setAuth(data)
+      setAuth({ email, username, token });
     } catch (error: any) {
       console.log(error);
       setAlert({
