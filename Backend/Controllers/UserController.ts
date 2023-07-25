@@ -86,7 +86,9 @@ const LogInUser = async (req, res) => {
       data: { token: token },
     });
 
-    res.status(200).json({ msg: "Login success",token });
+    const { username } = updatedUser;
+
+    res.status(200).json({ msg: "Login success", email, username, token });
   } else {
     const error = new Error("Incorrect Password");
     return res.status(404).json({ msg: error.message });
@@ -155,7 +157,7 @@ const newPassword = async (req, res) => {
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
-  const newToken=""
+  const newToken = "";
   const updatedUser = await prisma.user.update({
     where: { id: searchedUser.id },
     data: { password: hashedPassword, token: newToken },
