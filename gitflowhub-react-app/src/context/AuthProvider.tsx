@@ -7,58 +7,75 @@ import {
   SetStateAction,
 } from "react";
 
+import { useNavigate } from "react-router-dom";
 import axiosClient from "../config/axiosClient";
 
 interface AuthContextType {
+  auth: AuthData;
   setAuth: Dispatch<SetStateAction<AuthData>>;
+  loading: Boolean;
 }
 
 interface AuthData {
   username: string;
-  email:string;
+  email: string;
   token: string;
 }
 
-const AuthContext = createContext<AuthContextType>({ setAuth: () => {} });
-
+const AuthContext = createContext<AuthContextType>({
+  auth: {
+    username: "",
+    email: "",
+    token: "",
+  },
+  setAuth: () => {},
+  loading: true,
+});
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [auth, setAuth] = useState<AuthData>({ username: "", email:"",token: "" });
+  const [auth, setAuth] = useState<AuthData>({
+    username: "",
+    email: "",
+    token: "",
+  });
 
-  useEffect(()=>{
+  const [loading, setLoading] = useState(true);
+  const navigate=useNavigate()
 
-    const authenticateUser=async ()=>{
-      const token=localStorage.getItem('token')
+  useEffect(() => {
+    const authenticateUser = async () => {
+      const token = localStorage.getItem("token");
       if (!token) {
-        return       
+        setLoading(false);
+        return;
       }
 
       const config = {
-        headers:{
-          "Content-Type":"application/json",
-          Authorization : `Bearer ${token}`
-
-        }
-      }
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
       try {
-
-        const {data} =await axiosClient("/profile",config)
-        setAuth(data)
+        const { data } = await axiosClient("/profile", config);
+        setAuth(data);
+        navigate('/main-page')
       } catch (error) {
-        
+        setAuth({ username: "", email: "", token: "" });
       }
-  
 
-    }
+      setLoading(false);
+    };
 
-    authenticateUser()
-
-  },[])
+    authenticateUser();
+  }, []);
 
   return (
     <AuthContext.Provider
       value={{
+        auth,
         setAuth,
+        loading,
       }}
     >
       {children}

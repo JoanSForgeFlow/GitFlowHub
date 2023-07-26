@@ -16,13 +16,13 @@ interface ApiResponse {
   username: string;
 }
 
-interface setAuth {}
 
 const LoginUser = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [alert, setAlert] = useState<AlertType>({ msg: "", error: false });
-  const { setAuth } = useAuth();
+  const {auth, setAuth,loading } = useAuth();
+  const navigate=useNavigate()
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -51,6 +51,7 @@ const LoginUser = () => {
 
       localStorage.setItem("token", data.token);
       setAuth({ email, username, token });
+      navigate('/main-page')
     } catch (error: any) {
       console.log(error);
       setAlert({

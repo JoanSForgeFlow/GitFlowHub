@@ -10,6 +10,7 @@ import ForgetPassword from "./pages/ForgetPassword";
 import NewPassword from "./pages/NewPassword";
 import ConfirmAccount from "./pages/ConfirmAccount";
 import { AuthProvider } from "./context/AuthProvider";
+import ProtectedRoute from "./layouts/ProtectedRoute";
 
 const App: React.FC = () => {
   return (
@@ -23,7 +24,9 @@ const App: React.FC = () => {
             <Route path="forget-password/:token" element={<NewPassword />} />
             <Route path="confirm-account/:id" element={<ConfirmAccount />} />
           </Route>
-          <Route path="main-page" element={<PRDashboard />} />
+          <Route path="/main-page" element={<ProtectedRoute/>}>
+            <Route index element={<PRDashboard />} />
+          </Route>
         </Routes>
       </AuthProvider>
     </BrowserRouter>
