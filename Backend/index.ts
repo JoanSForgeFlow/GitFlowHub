@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import UserRoutes from "./Routes/UserRoutes.js"
 import { errorHandlerMiddleware } from "./Middlewares/controllersMw.js";
 import cors from 'cors'
+import updatePullRequests from "./Crons/cronJobs.js";
 
 // App delcaration
 const app= express();
@@ -39,4 +40,5 @@ const { SERVER_PORT } = process.env;
 
 app.listen(SERVER_PORT, () => {
     console.log(`GITFLOWHUB API listening on port ${SERVER_PORT}`);
-  });
+    updatePullRequests.start();
+});

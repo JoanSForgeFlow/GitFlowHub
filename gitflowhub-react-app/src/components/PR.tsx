@@ -14,7 +14,7 @@ interface Pull {
   state: string;
   created_at: string;
   repo_name: string;
-  number: number;      // New field
+  number: number; 
 }
 
 interface PRProps {
@@ -32,7 +32,7 @@ const PR: React.FC<PRProps> = ({ pull }) => (
       <p>Submitted by: {pull.User.login}</p>
       <p>State: {pull.state}</p>
       <p>Created at: {pull.created_at}</p>
-      <p>PR number: {pull.number}</p>   // New line
+      <p>PR number: {pull.number}</p>
     </div>
   </div>
 );

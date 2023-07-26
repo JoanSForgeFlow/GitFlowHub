@@ -49,7 +49,7 @@ const PRDashboard: React.FC = () => {
   const fetchPulls = async () => {
     console.log('fetchPulls is running');
     try {
-      const url = `${process.env.REACT_APP_BACKEND_URL}/prs?github_user=usuario1`;
+      const url = `${process.env.REACT_APP_BACKEND_URL}/prs?github_user=JoanSForgeFlow`;
   
       const { data: prs } = await axios.get(url);
       
@@ -59,7 +59,8 @@ const PRDashboard: React.FC = () => {
       if (prs && prs.length > 0) {
         const newPulls: Record<number, Pull> = {};
         for (let pull of prs) {
-          const repoName = pull.html_url.split('/').slice(-2).join('/');
+          const urlSegments = pull.html_url.split('/');
+          const repoName = urlSegments.slice(urlSegments.length - 4, urlSegments.length - 2).join('/');
           newPulls[pull.id] = {...pull, repo_name: repoName};
         }
         setPulls(newPulls);
@@ -72,7 +73,7 @@ const PRDashboard: React.FC = () => {
       console.error('Error:', error.message);
       console.error('Error response:', error.response);
     }
-  }    
+  }
   
 
   const groupByRepository = (pulls: Record<number, Pull>) => {

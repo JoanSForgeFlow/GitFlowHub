@@ -36,14 +36,13 @@ model Company {
 }
 
 model PullRequest {
-  id           Int    @id @default(autoincrement())
-  number       Int
-  title        String
-  description  String
-  state        String
-  created_at   DateTime @default(now())
-  html_url     String
-  repo_name    String
-  user_id      Int
-  User         User   @relation(fields: [user_id], references: [id])
+  id        Int      @id @default(autoincrement())
+  number    Int
+  title     String
+  state     String
+  created_at DateTime
+  html_url  String   @unique
+  repo_name String
+  user_id   Int
+  User      User     @relation(fields: [user_id], references: [id])
 }

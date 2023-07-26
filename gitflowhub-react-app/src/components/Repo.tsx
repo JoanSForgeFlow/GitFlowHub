@@ -16,7 +16,7 @@ interface Pull {
   repo_name: string;
   user_id: number;
   User: User;
-  number: number;      // New field
+  number: number;
 }
 
 interface RepoProps {
