@@ -15,9 +15,21 @@ const updatePullRequests = cron.schedule('0 * * * *', async () => {
     for (let user of users) {
       console.log('Updating PRs for user:', user.github_user);
 
-      const url = `https://api.github.com/search/issues?q=author:${user.github_user}+is:pr+is:open`;
+      let page = 1;
+      let prsFromGithub = [];
 
-      const { data: { items: prsFromGithub } } = await axios.get(url);
+      while (true) {
+        const url = `https://api.github.com/search/issues?q=author:${user.github_user}+is:pr+is:open&per_page=100&page=${page}`;
+
+        const { data: { items: prs } } = await axios.get(url);
+
+        if (prs.length === 0) {
+          break;
+        }
+
+        prsFromGithub = [...prsFromGithub, ...prs];
+        page++;
+      }
 
       // Get all PRs of this user from the database
       const prsFromDb = await prisma.pullRequest.findMany({
@@ -41,7 +53,7 @@ const updatePullRequests = cron.schedule('0 * * * *', async () => {
       // Iterate over all PRs from Github and upsert (create or update) them in the database
       for (let prFromGithub of prsFromGithub) {
         const repoName = prFromGithub.repository_url.split('/').pop();
-        
+
         // Find if PR already exists in DB
         const existingPr = await prisma.pullRequest.findUnique({
           where: {

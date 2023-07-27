@@ -14,15 +14,11 @@ const getPRsByCompany = async (req, res) => {
       Company: true,
     }
   });
-  
-  // Registro de seguimiento
-  console.log('User found:', user);
 
   if (!user) {
     return res.status(404).send('User not found');
   }
 
-  // Get all PRs for the company
   const prs = await prisma.pullRequest.findMany({
     where: {
       User: {
@@ -30,12 +26,9 @@ const getPRsByCompany = async (req, res) => {
       },
     },
     include: {
-      User: true,  // include User data in the response
+      User: true, 
     },
   });
-
-  // Registro de seguimiento
-  console.log('PRs found:', prs);
 
   return res.json(prs);
 };

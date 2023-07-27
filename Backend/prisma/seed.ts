@@ -41,7 +41,47 @@ async function main() {
         login: "pauek",
         company_id: company1.id,
     },
-})
+  })
+
+  const user4 = await prisma.user.create({
+    data: {
+        email: "usuario4@forgeflow.com",
+        password: "contraseñasegura4",
+        github_user: "LoisRForgeFLow",
+        login: "LoisRForgeFLow",
+        company_id: company1.id,
+    },
+  })
+
+  const user5 = await prisma.user.create({
+    data: {
+        email: "usuario5@forgeflow.com",
+        password: "contraseñasegura5",
+        github_user: "JordiMForgeFlow",
+        login: "JordiMForgeFlow",
+        company_id: company1.id,
+    },
+  })
+
+  const user6 = await prisma.user.create({
+    data: {
+        email: "usuario6@forgeflow.com",
+        password: "contraseñasegura6",
+        github_user: "MateuGForgeFlow",
+        login: "MateuMForgeFlow",
+        company_id: company1.id,
+    },
+  })
+
+  const user7 = await prisma.user.create({
+    data: {
+        email: "usuario7@forgeflow.com",
+        password: "contraseñasegura7",
+        github_user: "mariadforgeflow",
+        login: "mariadforgeflow",
+        company_id: company1.id,
+    },
+  })
 }
 
 main()
