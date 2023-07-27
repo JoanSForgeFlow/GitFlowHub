@@ -124,7 +124,7 @@ const PRDashboard: React.FC = () => {
         onRepoSearchChange={(repo) => setSearchRepo(repo)}
         onTitleSearchChange={(title) => setSearchTitle(title)}
       />
-      {Object.keys(repoGroups).filter(repoName =>
+    {Object.keys(repoGroups).filter(repoName =>
         repoName.toLowerCase().includes(searchRepo.toLowerCase()) &&
         repoGroups[repoName].some(pull => 
           pull.User.github_user.toLowerCase().includes(searchUser.toLowerCase()) &&
@@ -132,6 +132,7 @@ const PRDashboard: React.FC = () => {
         )
       ).sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' })).map((repoName) => (
         <Repo 
+        key={repoName}
         repoName={repoName} 
         pulls={repoGroups[repoName]} 
         handleRepoClick={handleRepoClick} 

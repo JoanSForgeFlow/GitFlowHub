@@ -38,7 +38,7 @@ interface RepoProps {
             pull.User.login.toLowerCase().includes(searchUser.toLowerCase()) &&
             pull.title.toLowerCase().includes(searchTitle.toLowerCase())
           ).map((pull: Pull) => (
-            <PR pull={pull} />
+            <PR key={pull.id} pull={pull} />
           ))}
         </div>
       )}
