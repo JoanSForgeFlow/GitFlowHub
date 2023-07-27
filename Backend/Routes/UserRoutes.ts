@@ -14,7 +14,10 @@ import {
   userProfile
 } from "../Controllers/UserController.js";
 
-import { getPRsByCompany } from '../Controllers/PRDashboardController.js';
+import {
+  getPRsByCompany,
+  getAndUpdateAvatarUrl,
+} from '../Controllers/PRDashboardController.js';
 
 //Tendremos las rutas de login y de display del perfil del user
 router.post("/sign-in", errorChecked(RegisterUser));
@@ -28,5 +31,6 @@ router
 router.get("/profile", checkAuth, errorChecked(userProfile));
 
 router.get('/prs', errorChecked(getPRsByCompany));
+router.get('/update-avatar/:githubUser', errorChecked(getAndUpdateAvatarUrl));
 
 export default router;

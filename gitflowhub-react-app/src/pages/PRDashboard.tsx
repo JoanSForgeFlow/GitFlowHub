@@ -16,8 +16,8 @@ interface User {
   timeZone: string | null;
   image: string | null;
   github_user: string;
-  login: string;       // New field
-  avatar_url: string;  // New field
+  login: string;
+  avatar_url: string;
   company_id: number;
 }
 
@@ -31,7 +31,7 @@ interface Pull {
   repo_name: string;
   user_id: number;
   User: User;
-  number: number;      // New field
+  number: number;
 }
 
 const PRDashboard: React.FC = () => {
@@ -48,8 +48,16 @@ const PRDashboard: React.FC = () => {
 
   const fetchPulls = async () => {
     console.log('fetchPulls is running');
+    const githubUser = "JoanSForgeFlow";
     try {
-      const url = `${process.env.REACT_APP_BACKEND_URL}/prs?github_user=JoanSForgeFlow`;
+      try {
+        await axios.get(`${process.env.REACT_APP_BACKEND_URL}/update-avatar/${githubUser}`);
+        console.log('Attempted to update avatar URL for user', githubUser);
+      } catch (error) {
+        console.error('Failed to update avatar URL for user', githubUser);
+      }
+
+      const url = `${process.env.REACT_APP_BACKEND_URL}/prs?github_user=${githubUser}`;
   
       const { data: prs } = await axios.get(url);
       
@@ -73,7 +81,7 @@ const PRDashboard: React.FC = () => {
       console.error('Error:', error.message);
       console.error('Error response:', error.response);
     }
-  }
+  };
   
 
   const groupByRepository = (pulls: Record<number, Pull>) => {
