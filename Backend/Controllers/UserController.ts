@@ -2,7 +2,7 @@ import prisma from "../Middlewares/prisma-client.js";
 import bcrypt from "bcryptjs";
 import generarId from "../Helpers/generarId.js";
 import generarJWT from "../Helpers/generarJWT.js";
-import { signInEmail } from "../Helpers/emails.js";
+import { signInEmail, newPasswordEmail } from "../Helpers/emails.js";
 
 const RegisterUser = async (req, res) => {
   const data = req.body;
@@ -40,7 +40,7 @@ const confirmUser = async (req, res) => {
   const { token } = req.params;
 
   //Search on db for this token
-  console.log('entro a checkear token')
+  console.log("entro a checkear token");
   const searchedUser = await prisma.user.findFirst({ where: { token } });
 
   if (searchedUser) {
@@ -86,7 +86,9 @@ const LogInUser = async (req, res) => {
       data: { token: token },
     });
 
-    res.status(200).json({ msg: "Login success" });
+    const { username } = updatedUser;
+
+    res.status(200).json({ msg: "Login success", email, username, token });
   } else {
     const error = new Error("Incorrect Password");
     return res.status(404).json({ msg: error.message });
@@ -108,11 +110,19 @@ const forgetRequest = async (req, res) => {
   }
 
   //if user exists an email will be sent, token is reset
+
   const newToken = generarId();
-  console.log(newToken);
+
   const updatedUser = await prisma.user.update({
     where: { id: searchedUser.id },
     data: { token: newToken },
+  });
+
+  // Insert send email command
+  newPasswordEmail({
+    email: updatedUser.email,
+    username: updatedUser.username,
+    token: updatedUser.token,
   });
 
   res.json({
@@ -147,9 +157,10 @@ const newPassword = async (req, res) => {
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
+  const newToken = "";
   const updatedUser = await prisma.user.update({
     where: { id: searchedUser.id },
-    data: { password: hashedPassword },
+    data: { password: hashedPassword, token: newToken },
   });
 
   res.status(200).json({ msg: "Password successfully changed" });
@@ -157,7 +168,9 @@ const newPassword = async (req, res) => {
 
 const userProfile = (req, res) => {
   //On req the user will be stored
+  console.log('estoy en user')
   const { user } = req;
+  console.log(user)
   res.status(200).json({ msg: user });
 };
 
