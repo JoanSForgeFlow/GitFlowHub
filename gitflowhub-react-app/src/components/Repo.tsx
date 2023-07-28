@@ -9,11 +9,14 @@ interface User {
 interface Pull {
   id: number;
   title: string;
-  user: User;
-  html_url: string;
+  description: string;
   state: string;
   created_at: string;
+  html_url: string;
   repo_name: string;
+  user_id: number;
+  User: User;
+  number: number;
 }
 
 interface RepoProps {
@@ -32,10 +35,10 @@ interface RepoProps {
       {(autoExpand || isExpanded) && (
         <div className="pull-cards"> 
           {pulls.filter(pull => 
-            pull.user.login.toLowerCase().includes(searchUser.toLowerCase()) &&
+            pull.User.login.toLowerCase().includes(searchUser.toLowerCase()) &&
             pull.title.toLowerCase().includes(searchTitle.toLowerCase())
           ).map((pull: Pull) => (
-            <PR pull={pull} />
+            <PR key={pull.id} pull={pull} />
           ))}
         </div>
       )}
