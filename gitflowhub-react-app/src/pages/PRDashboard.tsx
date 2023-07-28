@@ -3,6 +3,7 @@ import '../css/PRDashboard.css';
 import SearchBar from '../components/SearchBar';
 import Repo from '../components/Repo';
 import axios from 'axios';
+import useAuth from '../hooks/useAuth';
 
 interface User {
   id: number;

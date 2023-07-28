@@ -28,7 +28,8 @@ const checkAuth = async (req, res, next) => {
           location:true,
           language:true,
           timeZone:true,
-          image:true
+          image:true,
+          github_user: true,
         },
       });
 

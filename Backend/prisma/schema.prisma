@@ -21,11 +21,11 @@ model User {
   language    String?
   timeZone    String?
   image       String?
-  github_user String    @unique
-  login       String    @unique
+  github_user String?    @unique
+  login       String?    @unique
   avatar_url  String?
-  company_id  Int       
-  Company     Company   @relation(fields: [company_id], references: [id]) //Company relation
+  company_id  Int?
+  Company     Company?   @relation(fields: [company_id], references: [id])
   PRs         PullRequest[]
 }
 
