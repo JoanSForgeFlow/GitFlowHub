@@ -6,7 +6,6 @@ import axios, { AxiosResponse } from "axios";
 import axiosClient from "../config/axiosClient";
 // import dotenv from "dotenv"
 
-
 //Types of Alert component and axios response
 interface AlertType {
   msg: string;
@@ -16,10 +15,10 @@ interface ApiResponse {
   msg: string;
 }
 
-
 const SignInUser = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [gitHubUser, setGitHubUser] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
   const [alert, setAlert] = useState<AlertType>({ msg: "", error: false });
@@ -29,7 +28,7 @@ const SignInUser = () => {
     e.preventDefault();
 
     // Check taht all variables are not empty
-    if ([name, email, password, repeatPassword].includes("")) {
+    if ([name, email, -gitHubUser, password, repeatPassword].includes("")) {
       setAlert({ msg: "Please enter required information.", error: true });
       return;
     }
@@ -52,29 +51,51 @@ const SignInUser = () => {
       return;
     }
 
+    //TODO: check that the github user exists
+    try {
+      const searchedGitHubUser = await axios.get(
+        `https://api.github.com/users/${gitHubUser}`
+      );
+
+      if (!searchedGitHubUser) {
+        setAlert({
+          msg: "GitHubUser doesn not exist",
+          error: true,
+        });
+      }
+
+    } catch (error) {
+      setAlert({
+        msg: "GitHubUser does not exist ",
+        error: true,
+      });
+      return
+    }
+
     // If all validations have passed then we generate the post request
     setAlert({ msg: "", error: false });
     try {
       const data: AxiosResponse<ApiResponse> = await axiosClient.post(
         `/sign-in`,
-        { email: email, username: name, password: password }
+        { email: email, username: name, password: password, github_user:gitHubUser }
       );
 
       setAlert({
         msg: data.data.msg,
         error: false,
       });
-    } catch (error:any) {
+    } catch (error: any) {
       setAlert({
         msg: error.response?.data.type || "An error ocurred",
         error: true,
       });
     }
 
-    setName('')
-    setEmail('')
-    setPassword('')
-    setRepeatPassword('')
+    setName("");
+    setEmail("");
+    setGitHubUser("");
+    setPassword("");
+    setRepeatPassword("");
   };
 
   const { msg } = alert;
@@ -107,6 +128,22 @@ const SignInUser = () => {
             className="w-full my-2 p-3 border rounded-xl bg-gray-50"
             value={name}
             onChange={(e) => setName(e.target.value)}
+          />
+        </div>
+        <div className="my-5">
+          <label
+            className="uppercase text-gray-600 font-bold block text-xl"
+            htmlFor="name"
+          >
+            GitHub user
+          </label>
+          <input
+            id="github_user"
+            type="text"
+            placeholder="Your GitHub user name"
+            className="w-full my-2 p-3 border rounded-xl bg-gray-50"
+            value={gitHubUser}
+            onChange={(e) => setGitHubUser(e.target.value)}
           />
         </div>
 
