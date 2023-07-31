@@ -42,13 +42,13 @@ const confirmUser = async (req, res) => {
   //Search on db for this token
   const searchedUser = await prisma.user.findFirst({ where: { token } });
 
-  console.log(searchedUser)
+  console.log(searchedUser);
 
   if (searchedUser) {
     //If the user exists, account is confirmed and token is removed
     const updatedUser = await prisma.user.update({
       where: { id: searchedUser.id },
-      data: { confirmed: true},
+      data: { confirmed: true },
     });
 
     return res.status(200).json({ msg: "User confirmation success" });
@@ -83,14 +83,16 @@ const LogInUser = async (req, res) => {
     //Create the JWT, that is going to be used on the auth check inside the application
     const token = generarJWT(searchedUser.id);
 
-    const updatedUser = await prisma.user.update({ 
+    const updatedUser = await prisma.user.update({
       where: { id: searchedUser.id },
       data: { token: token },
     });
 
-    const { username,github_user } = updatedUser;
+    const { username, github_user } = updatedUser;
 
-    res.status(200).json({ msg: "Login success", email, username, token, github_user });
+    res
+      .status(200)
+      .json({ msg: "Login success", email, username, token, github_user });
   } else {
     const error = new Error("Incorrect Password");
     return res.status(404).json({ msg: error.message });
@@ -170,10 +172,32 @@ const newPassword = async (req, res) => {
 
 const userProfile = (req, res) => {
   //On req the user will be stored
-  console.log('estoy en user')
   const { user } = req;
-  console.log(user)
-  res.status(200).json({ msg: user });
+  const {
+    email,
+    github_user,
+    id,
+    image,
+    language,
+    location,
+    timezone,
+    username,
+    company_id
+  } = user;
+
+  res
+    .status(200)
+    .json({
+      email,
+      github_user,
+      id,
+      image,
+      language,
+      location,
+      timezone,
+      username,
+      company_id
+    });
 };
 
 export {

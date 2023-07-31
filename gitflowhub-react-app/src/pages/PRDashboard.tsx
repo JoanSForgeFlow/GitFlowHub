@@ -42,9 +42,8 @@ const PRDashboard: React.FC = () => {
   const [searchTitle, setSearchTitle] = useState('');
   const [expandedRepos, setExpandedRepos] = useState<Set<string>>(new Set());
   const {auth, setAuth } = useAuth();
-
   const{github_user}=auth
-
+  
   useEffect(() => {
     console.log('Running useEffect');
     fetchPulls();
@@ -53,6 +52,7 @@ const PRDashboard: React.FC = () => {
   const fetchPulls = async () => {
     console.log('fetchPulls is running');
     const githubUser = github_user;
+    console.log(githubUser)
     try {
       try {
         await axios.get(`${process.env.REACT_APP_BACKEND_URL}/update-avatar/${githubUser}`);

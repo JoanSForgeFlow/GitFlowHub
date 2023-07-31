@@ -17,13 +17,12 @@ interface ApiResponse {
   github_user: string;
 }
 
-
 const LoginUser = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [alert, setAlert] = useState<AlertType>({ msg: "", error: false });
-  const {auth, setAuth,loading } = useAuth();
-  const navigate=useNavigate()
+  const { auth, setAuth, loading } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -48,11 +47,11 @@ const LoginUser = () => {
       );
 
       const data: ApiResponse = response.data;
-      const { username, token, github_user} = data;
+      const { username, token, github_user } = data;
 
       localStorage.setItem("token", data.token);
-      setAuth({ email, username, token, github_user});
-      navigate('/main-page')
+      setAuth({ email, username, token, github_user });
+      navigate("/main-page");
     } catch (error: any) {
       console.log(error);
       setAlert({

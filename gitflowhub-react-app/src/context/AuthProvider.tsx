@@ -43,7 +43,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   });
 
   const [loading, setLoading] = useState(true);
-  const navigate=useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     const authenticateUser = async () => {
@@ -62,9 +62,14 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
       try {
         const { data } = await axiosClient("/profile", config);
         setAuth(data);
-        navigate('/main-page')
+        navigate("/main-page");
       } catch (error) {
-        setAuth({ username: "", email: "", token: "" , github_user: "",});
+        setAuth({
+          username: "",
+          email: "",
+          token: "",
+          github_user: "",
+        });
       }
 
       setLoading(false);
