@@ -20,7 +20,7 @@ interface AuthData {
   username: string;
   email: string;
   token: string;
-  githubUser: string;
+  github_user: string;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -28,7 +28,7 @@ const AuthContext = createContext<AuthContextType>({
     username: "",
     email: "",
     token: "",
-    githubUser: "",
+    github_user: "",
   },
   setAuth: () => {},
   loading: true,
@@ -39,7 +39,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     username: "",
     email: "",
     token: "",
-    githubUser: "",
+    github_user: "",
   });
 
   const [loading, setLoading] = useState(true);
@@ -64,7 +64,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         setAuth(data);
         navigate('/main-page')
       } catch (error) {
-        setAuth({ username: "", email: "", token: "" , githubUser: "",});
+        setAuth({ username: "", email: "", token: "" , github_user: "",});
       }
 
       setLoading(false);

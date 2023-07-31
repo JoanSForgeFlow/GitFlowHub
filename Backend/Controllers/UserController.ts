@@ -83,14 +83,14 @@ const LogInUser = async (req, res) => {
     //Create the JWT, that is going to be used on the auth check inside the application
     const token = generarJWT(searchedUser.id);
 
-    const updatedUser = await prisma.user.update({
+    const updatedUser = await prisma.user.update({ 
       where: { id: searchedUser.id },
       data: { token: token },
     });
 
-    const { username } = updatedUser;
+    const { username,github_user } = updatedUser;
 
-    res.status(200).json({ msg: "Login success", email, username, token });
+    res.status(200).json({ msg: "Login success", email, username, token, github_user });
   } else {
     const error = new Error("Incorrect Password");
     return res.status(404).json({ msg: error.message });
