@@ -10,27 +10,41 @@ const getPRsByCompany = async (req, res) => {
     where: {
       github_user: githubUser,
     },
-    include: {
-      Company: true,
-    },
   });
 
   if (!user) {
     return res.status(404).send("User not found");
   }
-
-  const prs = await prisma.pullRequest.findMany({
-    where: {
-      User: {
-        company_id: user.company_id,
+  // Check if the user's company_id is false
+  if (!user.company_id) {
+    // If the company_id is false, find all PRs from users with a false company_id
+    const prs = await prisma.pullRequest.findMany({
+      where: {
+        User: {
+          company_id: null,
+        },
       },
-    },
-    include: {
-      User: true,
-    },
-  });
+      include: {
+        User: true,
+      },
+    });
 
-  return res.json(prs);
+    return res.json(prs);
+  } else {
+    // If the company_id is not false, find all PRs from users with the same company_id
+    const prs = await prisma.pullRequest.findMany({
+      where: {
+        User: {
+          company_id: user.company_id,
+        },
+      },
+      include: {
+        User: true,
+      },
+    });
+
+    return res.json(prs);
+  }
 };
 
 const getAndUpdateAvatarUrl = async (req, res) => {
