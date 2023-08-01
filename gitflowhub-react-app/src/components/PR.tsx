@@ -42,7 +42,7 @@ const PR: React.FC<PRProps> = ({ pull }) => (
       <GoIcon url={pull.html_url} />
     </div>
     <div className="card-body">
-      <p>Submitted by: {pull.User.login}</p>
+      <p>Submitted by: {pull.User.github_user}</p>
       <p>State: {pull.state}</p>
       <p>Created at: {pull.created_at}</p>
       <p>PR number: {pull.number}</p>
