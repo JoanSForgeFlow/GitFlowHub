@@ -6,6 +6,8 @@ const ProtectedRoute = () => {
 
     const{email}=auth
 
+    console.log(auth)
+
     //TODO: añadir un spinner de carga
 
   return (

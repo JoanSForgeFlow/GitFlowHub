@@ -3,16 +3,14 @@ import {useState, useEffect } from "react";
 import axiosClient from "../config/axiosClient";
 import React from "react";
 import { AxiosResponse } from "axios";
+import useAuth from "../hooks/useAuth";
 
 interface Option {
   label: string;
   value: string;
 }
 
-interface User {
-  id: number;
-  name: string;
-}
+
 
 const DragList = () => {
   const [userOptions, setUserOptions] = useState<Option[]>([]);
@@ -27,26 +25,13 @@ const DragList = () => {
     getOptionLabel: (option) => option.label,
   });
 
-  useEffect(() => {
-    const optionUsers = async () => {
-      try {
-        //Find users of the same company in db
-        const response: AxiosResponse<User[]> = await axiosClient("/prs/users");
+  const {optionUsers}=useAuth()
 
-        const users: User[] = response.data;
+  useEffect(()=>{
+    const usersList=optionUsers()
+    setUserOptions(usersList)
+},[])
 
-        //transform data according to component
-        const userOptions = users.map((user) => ({
-          label: user.name,
-          value: user.id,
-        }));
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    optionUsers();
-  }, []);
 
   return (
     <React.Fragment>

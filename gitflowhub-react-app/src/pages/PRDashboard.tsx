@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import '../css/PRDashboard.css';
-import SearchBar from '../components/SearchBar';
-import Repo from '../components/Repo';
-import axios from 'axios';
-import useAuth from '../hooks/useAuth';
+import React, { useState, useEffect } from "react";
+import "../css/PRDashboard.css";
+import SearchBar from "../components/SearchBar";
+import Repo from "../components/Repo";
+import axios from "axios";
+import useAuth from "../hooks/useAuth";
 
 interface User {
   id: number;
@@ -37,56 +37,23 @@ interface Pull {
 
 const PRDashboard: React.FC = () => {
   const [pulls, setPulls] = useState<Record<number, Pull>>({});
-  const [searchUser, setSearchUser] = useState('');
-  const [searchRepo, setSearchRepo] = useState('');
-  const [searchTitle, setSearchTitle] = useState('');
+  const [searchUser, setSearchUser] = useState("");
+  const [searchRepo, setSearchRepo] = useState("");
+  const [searchTitle, setSearchTitle] = useState("");
   const [expandedRepos, setExpandedRepos] = useState<Set<string>>(new Set());
-  const {auth, setAuth } = useAuth();
-  const{github_user}=auth
-  
+  const { fetchPulls } = useAuth();
+
   useEffect(() => {
-    console.log('Running useEffect');
-    fetchPulls();
+    console.log("Running useEffect");
+    const getNewPulls = async () => {
+      const newPulls=await fetchPulls();
+      setPulls(newPulls)
+
+    };
+
+    getNewPulls()
+    
   }, []);
-
-  const fetchPulls = async () => {
-    console.log('fetchPulls is running');
-    const githubUser = github_user;
-    console.log(githubUser)
-    try {
-      try {
-        await axios.get(`${process.env.REACT_APP_BACKEND_URL}/update-avatar/${githubUser}`);
-        console.log('Attempted to update avatar URL for user', githubUser);
-      } catch (error) {
-        console.error('Failed to update avatar URL for user', githubUser);
-      }
-
-      const url = `${process.env.REACT_APP_BACKEND_URL}/prs?github_user=${githubUser}`;
-  
-      const { data: prs } = await axios.get(url);
-      
-      // Registro de seguimiento
-      console.log('Data received from API:', prs);
-  
-      if (prs && prs.length > 0) {
-        const newPulls: Record<number, Pull> = {};
-        for (let pull of prs) {
-          const urlSegments = pull.html_url.split('/');
-          const repoName = urlSegments.slice(urlSegments.length - 4, urlSegments.length - 2).join('/');
-          newPulls[pull.id] = {...pull, repo_name: repoName};
-        }
-        setPulls(newPulls);
-  
-        // Registro de seguimiento
-        console.log('Updated pulls:', newPulls);
-      }
-  
-    } catch (error: any) {
-      console.error('Error:', error.message);
-      console.error('Error response:', error.response);
-    }
-  };
-  
 
   const groupByRepository = (pulls: Record<number, Pull>) => {
     const groups: Record<string, Pull[]> = {};
@@ -100,7 +67,7 @@ const PRDashboard: React.FC = () => {
   };
 
   const handleRepoClick = (repoName: string) => {
-    setExpandedRepos(prevExpandedRepos => {
+    setExpandedRepos((prevExpandedRepos) => {
       const newExpandedRepos = new Set(prevExpandedRepos);
       if (newExpandedRepos.has(repoName)) {
         newExpandedRepos.delete(repoName);
@@ -111,11 +78,12 @@ const PRDashboard: React.FC = () => {
     });
   };
 
-  const filteredPulls = Object.values(pulls).filter(pull =>
-    pull.User.github_user.toLowerCase().includes(searchUser.toLowerCase()) &&
-    pull.repo_name.toLowerCase().includes(searchRepo.toLowerCase()) &&
-    pull.title.toLowerCase().includes(searchTitle.toLowerCase())
-  );  
+  const filteredPulls = Object.values(pulls).filter(
+    (pull) =>
+      pull.User.github_user.toLowerCase().includes(searchUser.toLowerCase()) &&
+      pull.repo_name.toLowerCase().includes(searchRepo.toLowerCase()) &&
+      pull.title.toLowerCase().includes(searchTitle.toLowerCase())
+  );
 
   const repoGroups = groupByRepository(pulls);
 
@@ -128,24 +96,31 @@ const PRDashboard: React.FC = () => {
         onRepoSearchChange={(repo) => setSearchRepo(repo)}
         onTitleSearchChange={(title) => setSearchTitle(title)}
       />
-    {Object.keys(repoGroups).filter(repoName =>
-        repoName.toLowerCase().includes(searchRepo.toLowerCase()) &&
-        repoGroups[repoName].some(pull => 
-          pull.User.github_user.toLowerCase().includes(searchUser.toLowerCase()) &&
-          pull.title.toLowerCase().includes(searchTitle.toLowerCase())
+      {Object.keys(repoGroups)
+        .filter(
+          (repoName) =>
+            repoName.toLowerCase().includes(searchRepo.toLowerCase()) &&
+            repoGroups[repoName].some(
+              (pull) =>
+                pull.User.github_user
+                  .toLowerCase()
+                  .includes(searchUser.toLowerCase()) &&
+                pull.title.toLowerCase().includes(searchTitle.toLowerCase())
+            )
         )
-      ).sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' })).map((repoName) => (
-        <Repo 
-        key={repoName}
-        repoName={repoName} 
-        pulls={repoGroups[repoName]} 
-        handleRepoClick={handleRepoClick} 
-        searchUser={searchUser}
-        searchTitle={searchTitle}
-        autoExpand={autoExpand}
-        isExpanded={expandedRepos.has(repoName)}
-        />
-      ))}
+        .sort((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" }))
+        .map((repoName) => (
+          <Repo
+            key={repoName}
+            repoName={repoName}
+            pulls={repoGroups[repoName]}
+            handleRepoClick={handleRepoClick}
+            searchUser={searchUser}
+            searchTitle={searchTitle}
+            autoExpand={autoExpand}
+            isExpanded={expandedRepos.has(repoName)}
+          />
+        ))}
     </div>
   );
 };
