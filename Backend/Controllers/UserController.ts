@@ -40,19 +40,21 @@ const confirmUser = async (req, res) => {
   const { token } = req.params;
 
   //Search on db for this token
-  console.log("entro a checkear token");
   const searchedUser = await prisma.user.findFirst({ where: { token } });
+
+  console.log(searchedUser);
 
   if (searchedUser) {
     //If the user exists, account is confirmed and token is removed
     const updatedUser = await prisma.user.update({
       where: { id: searchedUser.id },
-      data: { confirmed: true, token: "" },
+      data: { confirmed: true },
     });
-    res.status(200).json({ msg: "User confirmation success" });
+
+    return res.status(200).json({ msg: "User confirmation success" });
   } else {
     // If the user does not exist, send an error response
-    res.status(404).json({ msg: "Token not found" });
+    return res.status(404).json({ msg: "Token not found" });
   }
 };
 
@@ -86,9 +88,11 @@ const LogInUser = async (req, res) => {
       data: { token: token },
     });
 
-    const { username } = updatedUser;
+    const { username, github_user } = updatedUser;
 
-    res.status(200).json({ msg: "Login success", email, username, token });
+    res
+      .status(200)
+      .json({ msg: "Login success", email, username, token, github_user });
   } else {
     const error = new Error("Incorrect Password");
     return res.status(404).json({ msg: error.message });
@@ -168,10 +172,32 @@ const newPassword = async (req, res) => {
 
 const userProfile = (req, res) => {
   //On req the user will be stored
-  console.log('estoy en user')
   const { user } = req;
-  console.log(user)
-  res.status(200).json({ msg: user });
+  const {
+    email,
+    github_user,
+    id,
+    image,
+    language,
+    location,
+    timezone,
+    username,
+    company_id
+  } = user;
+
+  res
+    .status(200)
+    .json({
+      email,
+      github_user,
+      id,
+      image,
+      language,
+      location,
+      timezone,
+      username,
+      company_id
+    });
 };
 
 export {

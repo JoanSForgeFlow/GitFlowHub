@@ -1,5 +1,6 @@
 import React from 'react';
 import GoIcon from './GoIcon';
+import DragList from './DragList';
 
 interface User {
   login: string;
@@ -33,6 +34,7 @@ const PR: React.FC<PRProps> = ({ pull }) => (
       <p>State: {pull.state}</p>
       <p>Created at: {pull.created_at}</p>
       <p>PR number: {pull.number}</p>
+      <DragList/>
     </div>
   </div>
 );
