@@ -2,8 +2,20 @@ import React, { useState } from 'react';
 import PR from './PR';
 
 interface User {
+  id: number;
+  email: string;
+  username: string | null;
+  password: string;
+  token: string | null;
+  confirmed: boolean;
+  location: string | null;
+  language: string | null;
+  timeZone: string | null;
+  image: string | null;
+  github_user: string;
   login: string;
   avatar_url: string;
+  company_id: number;
 }
 
 interface Pull {
@@ -35,7 +47,7 @@ interface RepoProps {
       {(autoExpand || isExpanded) && (
         <div className="pull-cards"> 
           {pulls.filter(pull => 
-            pull.User.login.toLowerCase().includes(searchUser.toLowerCase()) &&
+            pull.User.github_user.toLowerCase().includes(searchUser.toLowerCase()) &&
             pull.title.toLowerCase().includes(searchTitle.toLowerCase())
           ).map((pull: Pull) => (
             <PR key={pull.id} pull={pull} />
