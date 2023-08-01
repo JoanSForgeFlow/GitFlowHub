@@ -21,7 +21,11 @@ const updatePullRequests = cron.schedule('* * * * *', async () => {
       while (true) {
         const url = `https://api.github.com/search/issues?q=author:${user.github_user}+is:pr+is:open&per_page=100&page=${page}`;
 
-        const { data: { items: prs } } = await axios.get(url);
+        const { data: { items: prs } } = await axios.get(url, {
+          headers: {
+            'Authorization': `token ${process.env.GITHUB_TOKEN}`
+          }
+        });
 
         if (prs.length === 0) {
           break;
