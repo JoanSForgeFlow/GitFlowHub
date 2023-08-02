@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import AuthContext from '../context/AuthProvider';
 import axiosClient from '../config/axiosClient';
+import '../css/UserProfile.css';
 
 interface Company {
   id: number;
@@ -107,27 +108,24 @@ const UserProfile: React.FC = () => {
   }
 
   return (
-    <div>
-      <h1>User Profile</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Email:
+    <div className="profile-container">
+      <h1 className="header">User Profile</h1>
+      <img src={user.avatar_url} alt="User avatar" className="avatar" />
+      <form onSubmit={handleSubmit} className="profile-form">
+        <label className="readonly-field">
+          <span>Email:</span>
           <input type="email" name="email" value={user.email} readOnly />
         </label>
-        <label>
-          Username:
+        <label className="editable-field">
+          <span>Username:</span>
           <input type="text" name="username" value={user.username} onChange={handleUsernameChange} />
         </label>
-        <label>
-          Avatar URL:
-          <img src={user.avatar_url} alt="User avatar" style={{ width: '100px', height: '100px' }} />
-        </label>
-        <label>
-          Github User:
+        <label className="readonly-field">
+        <span>Github user:</span>
           <input type="text" name="github_user" value={user.github_user} readOnly />
         </label>
-        <label>
-          Company:
+        <label className="editable-field">
+          <span>Company:</span>
           <select value={selectedCompanyId ?? ''} onChange={handleCompanyChange}>
             <option value="">Select company</option>
             {companies.map(company => (
@@ -135,7 +133,7 @@ const UserProfile: React.FC = () => {
             ))}
           </select>
         </label>
-        <button type="submit">Update Profile</button>
+        <button type="submit" className="submit-button">Update Profile</button>
       </form>
     </div>
   );
