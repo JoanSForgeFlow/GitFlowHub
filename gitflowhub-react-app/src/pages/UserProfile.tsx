@@ -65,11 +65,11 @@ const UserProfile: React.FC = () => {
     fetchUserDataAndCompanies();
   }, [auth.github_user]);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(`handleChange called with name: ${event.target.name}, value: ${event.target.value}`);
+  const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(`handleUsernameChange called with value: ${event.target.value}`);
     setUser({
       ...user!,
-      [event.target.name]: event.target.value,
+      username: event.target.value,
     });
   };
 
@@ -90,7 +90,7 @@ const UserProfile: React.FC = () => {
     };
 
     try {
-      const response = await axiosClient.put(`/${user?.github_user}`, { company_id: selectedCompanyId }, config);
+      const response = await axiosClient.put(`/${user?.github_user}`, { company_id: selectedCompanyId, username: user?.username }, config);
       console.log(`Update Profile Response: ${JSON.stringify(response.data)}`);
       setUser(response.data);
     } catch (error) {
@@ -112,19 +112,19 @@ const UserProfile: React.FC = () => {
       <form onSubmit={handleSubmit}>
         <label>
           Email:
-          <input type="email" name="email" value={user.email} onChange={handleChange} />
+          <input type="email" name="email" value={user.email} readOnly />
         </label>
         <label>
           Username:
-          <input type="text" name="username" value={user.username} onChange={handleChange} />
+          <input type="text" name="username" value={user.username} onChange={handleUsernameChange} />
         </label>
         <label>
           Avatar URL:
-          <input type="text" name="avatar_url" value={user.avatar_url} onChange={handleChange} />
+          <img src={user.avatar_url} alt="User avatar" style={{ width: '100px', height: '100px' }} />
         </label>
         <label>
           Github User:
-          <input type="text" name="github_user" value={user.github_user} onChange={handleChange} disabled />
+          <input type="text" name="github_user" value={user.github_user} readOnly />
         </label>
         <label>
           Company:

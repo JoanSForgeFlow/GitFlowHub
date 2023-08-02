@@ -38,7 +38,7 @@ const getAllCompanies = async (req, res) => {
 
 const updateUser = async (req, res) => {
   const { github_user } = req.params;
-  const { company_id } = req.body;
+  const { company_id, username } = req.body;
 
   const user = await prisma.user.findUnique({
     where: { github_user: github_user }
@@ -50,7 +50,7 @@ const updateUser = async (req, res) => {
 
   const updatedUser = await prisma.user.update({
     where: { github_user: github_user },
-    data: { company_id },
+    data: { company_id, username },
     select: {
       id: true,
       email: true,
