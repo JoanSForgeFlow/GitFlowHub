@@ -7,13 +7,31 @@ interface Company {
   name: string;
 }
 
+interface User {
+  id: number;
+  email: string;
+  username: string;
+  token: string;
+  confirmed: boolean;
+  location: string;
+  language: string;
+  timeZone: string;
+  image: string;
+  github_user: string;
+  login: string;
+  avatar_url: string;
+  company_id: number | null;
+  Company?: Company;
+}
+
 const UserProfile: React.FC = () => {
   const { auth, setAuth } = useContext(AuthContext);
+  const [user, setUser] = useState<User | null>(null);
   const [companies, setCompanies] = useState<Company[]>([]);
   const [selectedCompanyId, setSelectedCompanyId] = useState<number | null>(null);
 
   useEffect(() => {
-    const fetchCompanies = async () => {
+    const fetchUserDataAndCompanies = async () => {
       const token = localStorage.getItem("token");
       const config = {
         headers: {
@@ -21,13 +39,22 @@ const UserProfile: React.FC = () => {
           Authorization: `Bearer ${token}`,
         },
       };
-      
+
       try {
-        const response = await axiosClient.get('/companies', config);
-        console.log(`Fetch Companies Response: ${JSON.stringify(response.data)}`);
-        setCompanies(response.data);
+        const [userDataResponse, companiesResponse] = await Promise.all([
+          axiosClient.get<User>(`/${auth.github_user}`, config),
+          axiosClient.get<Company[]>('/companies', config),
+        ]);
+
+        console.log(`Fetch User Data Response: ${JSON.stringify(userDataResponse.data)}`);
+        console.log(`Fetch Companies Response: ${JSON.stringify(companiesResponse.data)}`);
+
+        setUser(userDataResponse.data);
+        setSelectedCompanyId(userDataResponse.data.company_id);
+        setCompanies(companiesResponse.data);
+
       } catch (error) {
-        console.error(`Error fetching companies: ${error.message}`);
+        console.error(`Error fetching user data and companies: ${error.message}`);
         if (error.response) {
           console.error(`Response status: ${error.response.status}`);
           console.error(`Response data: ${JSON.stringify(error.response.data)}`);
@@ -35,13 +62,13 @@ const UserProfile: React.FC = () => {
       }
     };
 
-    fetchCompanies();
-  }, []);
+    fetchUserDataAndCompanies();
+  }, [auth.github_user]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log(`handleChange called with name: ${event.target.name}, value: ${event.target.value}`);
-    setAuth({
-      ...auth,
+    setUser({
+      ...user!,
       [event.target.name]: event.target.value,
     });
   };
@@ -53,7 +80,7 @@ const UserProfile: React.FC = () => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    console.log(`handleSubmit called with github_user: ${auth.github_user}, selectedCompanyId: ${selectedCompanyId}`);
+    console.log(`handleSubmit called with github_user: ${user?.github_user}, selectedCompanyId: ${selectedCompanyId}`);
     const token = localStorage.getItem("token");
     const config = {
       headers: {
@@ -63,9 +90,9 @@ const UserProfile: React.FC = () => {
     };
 
     try {
-      const response = await axiosClient.put(`/${auth.github_user}`, { company_id: selectedCompanyId }, config);
+      const response = await axiosClient.put(`/${user?.github_user}`, { company_id: selectedCompanyId }, config);
       console.log(`Update Profile Response: ${JSON.stringify(response.data)}`);
-      setAuth(response.data);
+      setUser(response.data);
     } catch (error) {
       console.error(`Error updating profile: ${error.message}`);
       if (error.response) {
@@ -75,21 +102,29 @@ const UserProfile: React.FC = () => {
     }
   };
 
+  if (!user) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div>
       <h1>User Profile</h1>
       <form onSubmit={handleSubmit}>
         <label>
-          Username:
-          <input type="text" name="username" value={auth.username} onChange={handleChange} />
+          Email:
+          <input type="email" name="email" value={user.email} onChange={handleChange} />
         </label>
         <label>
-          Email:
-          <input type="email" name="email" value={auth.email} onChange={handleChange} />
+          Username:
+          <input type="text" name="username" value={user.username} onChange={handleChange} />
+        </label>
+        <label>
+          Avatar URL:
+          <input type="text" name="avatar_url" value={user.avatar_url} onChange={handleChange} />
         </label>
         <label>
           Github User:
-          <input type="text" name="github_user" value={auth.github_user} onChange={handleChange} />
+          <input type="text" name="github_user" value={user.github_user} onChange={handleChange} disabled />
         </label>
         <label>
           Company:
