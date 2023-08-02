@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 interface SearchBarProps {
   onUserSearchChange: (user: string) => void;
@@ -40,6 +41,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onUserSearchChange, onRepoSearchC
           onTitleSearchChange(e.target.value);
         }}
       />
+      <Link to="/my-profile" className="my-profile-button">My Profile</Link>
     </div>
   );
 };
