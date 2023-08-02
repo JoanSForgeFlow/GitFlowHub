@@ -14,10 +14,11 @@ const UserProfile: React.FC = () => {
 
   useEffect(() => {
     const fetchCompanies = async () => {
+      const token = localStorage.getItem("token");
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${auth.token}`,
+          Authorization: `Bearer ${token}`,
         },
       };
       
@@ -53,11 +54,11 @@ const UserProfile: React.FC = () => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     console.log(`handleSubmit called with github_user: ${auth.github_user}, selectedCompanyId: ${selectedCompanyId}`);
-
+    const token = localStorage.getItem("token");
     const config = {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${auth.token}`,
+        Authorization: `Bearer ${token}`,
       },
     };
 

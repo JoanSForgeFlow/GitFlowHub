@@ -42,8 +42,8 @@ router.get('/update-avatar/:githubUser', checkAuth,errorChecked(getAndUpdateAvat
 router.get('/prs/users',checkAuth,errorChecked(getCompanyUsers))
 router.put('/pr/assign',checkAuth,errorChecked(assignPR))
 
-router.get('/:github_user', checkAuth, getUser);
 router.get('/companies', checkAuth, getAllCompanies);
+router.get('/:github_user', checkAuth, getUser);
 router.put('/:github_user', checkAuth, updateUser);
 
 export default router;
