@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import "../css/PRDashboard.css";
 import SearchBar from "../components/SearchBar";
 import Repo from "../components/Repo";
-import axios from "axios";
+import axiosClient from '../config/axiosClient';
 import useAuth from "../hooks/useAuth";
 import AuthContext from '../context/AuthProvider';
 
@@ -60,7 +60,7 @@ const PRDashboard: React.FC = () => {
       };
 
       try {
-        const response = await axios.get<User>(`/${auth.github_user}`, config);
+        const response = await axiosClient.get<User>(`/${auth.github_user}`, config);
         console.log(`Fetch User Data Response: ${JSON.stringify(response.data)}`);
         setUserInfo(response.data);
       } catch (error) {

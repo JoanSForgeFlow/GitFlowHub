@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import ProfileButton from './ProfileButton';
+import ProfileButton from "./ProfileButton";
 
 interface SearchBarProps {
   onUserSearchChange: (user: string) => void;
