@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaTimes } from 'react-icons/fa';
 import AuthContext from '../context/AuthProvider';
 import axiosClient from '../config/axiosClient';
+import { Alert } from '../components/Alert';
 import '../css/UserProfile.css';
 
 interface Company {
@@ -27,11 +28,17 @@ interface User {
   Company?: Company;
 }
 
+interface AlertType {
+  msg: string;
+  error: boolean;
+}
+
 const UserProfile: React.FC = () => {
   const { auth, setAuth } = useContext(AuthContext);
   const [user, setUser] = useState<User | null>(null);
   const [companies, setCompanies] = useState<Company[]>([]);
   const [selectedCompanyId, setSelectedCompanyId] = useState<number | null>(null);
+  const [alert, setAlert] = useState<AlertType>({ msg: "", error: false });
   const navigate = useNavigate();
 
   const handleCloseClick = () => {
@@ -54,9 +61,6 @@ const UserProfile: React.FC = () => {
           axiosClient.get<Company[]>('/companies', config),
         ]);
 
-        console.log(`Fetch User Data Response: ${JSON.stringify(userDataResponse.data)}`);
-        console.log(`Fetch Companies Response: ${JSON.stringify(companiesResponse.data)}`);
-
         setUser(userDataResponse.data);
         setSelectedCompanyId(userDataResponse.data.company_id);
         setCompanies(companiesResponse.data);
@@ -73,8 +77,17 @@ const UserProfile: React.FC = () => {
     fetchUserDataAndCompanies();
   }, [auth.github_user]);
 
+  useEffect(() => {
+    if (alert.msg !== "") {
+      const timer = setTimeout(() => {
+        setAlert({ msg: "", error: false });
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [alert]);
+
   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(`handleUsernameChange called with value: ${event.target.value}`);
     setUser({
       ...user!,
       username: event.target.value,
@@ -82,13 +95,11 @@ const UserProfile: React.FC = () => {
   };
 
   const handleCompanyChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    console.log(`handleCompanyChange called with value: ${event.target.value}`);
     setSelectedCompanyId(Number(event.target.value));
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    console.log(`handleSubmit called with github_user: ${user?.github_user}, selectedCompanyId: ${selectedCompanyId}`);
     const token = localStorage.getItem("token");
     const config = {
       headers: {
@@ -101,8 +112,9 @@ const UserProfile: React.FC = () => {
       const response = await axiosClient.put(`/${user?.github_user}`, { company_id: selectedCompanyId, username: user?.username }, config);
       console.log(`Update Profile Response: ${JSON.stringify(response.data)}`);
       setUser(response.data);
+      setAlert({ msg: 'User successfully updated', error: false });
     } catch (error) {
-      console.error(`Error updating profile: ${error.message}`);
+      setAlert({ msg: 'Error updating profile', error: true });
       if (error.response) {
         console.error(`Response status: ${error.response.status}`);
         console.error(`Response data: ${JSON.stringify(error.response.data)}`);
@@ -119,6 +131,7 @@ const UserProfile: React.FC = () => {
       <FaTimes className="close-icon" size={30} onClick={handleCloseClick} />
       <h1 className="header">User Profile</h1>
       <img src={user.avatar_url} alt="User avatar" className="avatar" />
+      {alert.msg && <Alert alert={alert} />}
       <form onSubmit={handleSubmit} className="profile-form">
         <label className="readonly-field">
           <span>Email:</span>
@@ -130,7 +143,7 @@ const UserProfile: React.FC = () => {
         </label>
         <label className="readonly-field">
         <span>Github user:</span>
-          <input type="text" name="github_user" value={user.github_user} readOnly />
+        <input type="text" name="github_user" value={user.github_user} readOnly />
         </label>
         <label className="editable-field">
           <span>Company:</span>
