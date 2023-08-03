@@ -1,13 +1,21 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import ProfileButton from './ProfileButton';
 
 interface SearchBarProps {
   onUserSearchChange: (user: string) => void;
   onRepoSearchChange: (repo: string) => void;
   onTitleSearchChange: (title: string) => void;
+  username: string;
+  avatar_url: string;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ onUserSearchChange, onRepoSearchChange, onTitleSearchChange }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ 
+  onUserSearchChange, 
+  onRepoSearchChange, 
+  onTitleSearchChange,
+  username,
+  avatar_url 
+}) => {
   const [searchUser, setSearchUser] = useState('');
   const [searchRepo, setSearchRepo] = useState('');
   const [searchTitle, setSearchTitle] = useState('');
@@ -15,6 +23,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onUserSearchChange, onRepoSearchC
   return (
     <div className="search-bar">
       <input
+        className="input-field"
         type="text"
         placeholder="Search by user"
         value={searchUser}
@@ -24,6 +33,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onUserSearchChange, onRepoSearchC
         }}
       />
       <input
+        className="input-field"
         type="text"
         placeholder="Search by repository"
         value={searchRepo}
@@ -33,6 +43,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onUserSearchChange, onRepoSearchC
         }}
       />
       <input
+        className="input-field"
         type="text"
         placeholder="Search by PR title"
         value={searchTitle}
@@ -41,7 +52,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onUserSearchChange, onRepoSearchC
           onTitleSearchChange(e.target.value);
         }}
       />
-      <Link to="/my-profile" className="my-profile-button">My Profile</Link>
+      <ProfileButton username={username} avatar_url={avatar_url} />
     </div>
   );
 };

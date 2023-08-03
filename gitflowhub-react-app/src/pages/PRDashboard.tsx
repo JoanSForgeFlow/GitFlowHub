@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "../css/PRDashboard.css";
 import SearchBar from "../components/SearchBar";
 import Repo from "../components/Repo";
 import axios from "axios";
 import useAuth from "../hooks/useAuth";
+import AuthContext from '../context/AuthProvider';
 
 interface User {
   id: number;
@@ -43,17 +44,43 @@ const PRDashboard: React.FC = () => {
   const [searchTitle, setSearchTitle] = useState("");
   const [expandedRepos, setExpandedRepos] = useState<Set<string>>(new Set());
   const { fetchPulls } = useAuth();
+  const { auth } = useContext(AuthContext);
+  const [userInfo, setUserInfo] = useState<User | null>(null);
 
   useEffect(() => {
     console.log("Running useEffect");
-    const getNewPulls = async () => {
-      const newPulls=await fetchPulls();
-      setPulls(newPulls)
 
+    const fetchUserInfo = async () => {
+      const token = localStorage.getItem("token");
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      try {
+        const response = await axios.get<User>(`/${auth.github_user}`, config);
+        console.log(`Fetch User Data Response: ${JSON.stringify(response.data)}`);
+        setUserInfo(response.data);
+      } catch (error) {
+        console.error(`Error fetching user data: ${error.message}`);
+        if (error.response) {
+          console.error(`Response status: ${error.response.status}`);
+          console.error(`Response data: ${JSON.stringify(error.response.data)}`);
+        }
+      }
     };
 
-    getNewPulls()
-    
+    fetchUserInfo();
+
+    const getNewPulls = async () => {
+      const newPulls=await fetchPulls();
+      setPulls(newPulls);
+    };
+
+    getNewPulls();
+
   }, []);
 
   const groupByRepository = (pulls: Record<number, Pull>) => {
@@ -93,6 +120,8 @@ const PRDashboard: React.FC = () => {
   return (
     <div className="github-app">
       <SearchBar
+        username={userInfo?.username ?? ''}
+        avatar_url={userInfo?.avatar_url ?? ''}
         onUserSearchChange={(user) => setSearchUser(user)}
         onRepoSearchChange={(repo) => setSearchRepo(repo)}
         onTitleSearchChange={(title) => setSearchTitle(title)}
