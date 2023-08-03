@@ -27,8 +27,8 @@ interface AuthData {
 }
 
 interface User {
-  id: number;
-  name: string;
+  user_id: number;
+  username: string;
 }
 
 interface Pull {
@@ -127,8 +127,8 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       //transform data according to component
       const userOptions = users.map((user) => ({
-        label: user.name,
-        value: user.id,
+        label: user.username,
+        value: user.user_id,
       }));
       return userOptions;
     } catch (error) {
@@ -145,7 +145,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     console.log("fetchPulls is running");
     const githubUser = github_user;
-    console.log(githubUser);
+
     try {
       const config = {
         headers: {
