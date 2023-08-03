@@ -1,4 +1,5 @@
 .profile-container {
+position: relative;
 display: flex;
 flex-direction: column;
 align-items: center;
@@ -78,4 +79,11 @@ transition: all 0.3s ease-in-out;
 .submit-button:hover {
 background-color: #00796b;
 transform: scale(1.05);
+}
+
+.close-icon {
+position: absolute;
+top: 10px;
+right: 10px;
+cursor: pointer;
 }

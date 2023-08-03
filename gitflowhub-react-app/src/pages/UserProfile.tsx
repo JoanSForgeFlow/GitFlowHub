@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { FaTimes } from 'react-icons/fa';
 import AuthContext from '../context/AuthProvider';
 import axiosClient from '../config/axiosClient';
 import '../css/UserProfile.css';
@@ -30,6 +32,11 @@ const UserProfile: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [companies, setCompanies] = useState<Company[]>([]);
   const [selectedCompanyId, setSelectedCompanyId] = useState<number | null>(null);
+  const navigate = useNavigate();
+
+  const handleCloseClick = () => {
+    navigate('/main-page');
+  };
 
   useEffect(() => {
     const fetchUserDataAndCompanies = async () => {
@@ -109,6 +116,7 @@ const UserProfile: React.FC = () => {
 
   return (
     <div className="profile-container">
+      <FaTimes className="close-icon" size={30} onClick={handleCloseClick} />
       <h1 className="header">User Profile</h1>
       <img src={user.avatar_url} alt="User avatar" className="avatar" />
       <form onSubmit={handleSubmit} className="profile-form">
