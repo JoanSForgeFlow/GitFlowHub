@@ -40,7 +40,7 @@ const DragList = () => {
 
   return (
     <div className="flex w-full">
-      <div onClick={handleMouse} className="w-2rem mr-3 mt-4">
+      <div onClick={handleMouse} className="w-2rem mr-3 mt-4 font-bold cursor-pointer">
         Asignee:
       </div>
 

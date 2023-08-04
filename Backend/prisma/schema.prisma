@@ -11,22 +11,23 @@ datasource db {
 }
 
 model User {
-  id          Int       @id @default(autoincrement())
-  email       String    @unique
-  username    String?   @unique
+  id          Int           @id @default(autoincrement())
+  email       String        @unique
+  username    String?       @unique
   password    String
   token       String?
-  confirmed   Boolean   @default(false)
+  confirmed   Boolean       @default(false)
   location    String?
   language    String?
   timeZone    String?
   image       String?
-  github_user String?    @unique
-  login       String?    @unique
+  github_user String?       @unique
+  login       String?       @unique
   avatar_url  String?
   company_id  Int?
-  Company     Company?   @relation(fields: [company_id], references: [id])
+  Company     Company?      @relation(fields: [company_id], references: [id])
   PRs         PullRequest[]
+  asignedPRs  PullRequest[] @relation("UserAsignedPRs")
 }
 
 model Company {
@@ -36,13 +37,15 @@ model Company {
 }
 
 model PullRequest {
-  id        Int      @id @default(autoincrement())
-  number    Int
-  title     String
-  state     String
-  created_at DateTime
-  html_url  String   @unique
-  repo_name String
-  user_id   Int
-  User      User     @relation(fields: [user_id], references: [id])
+  id           Int      @id @default(autoincrement())
+  number       Int
+  title        String
+  state        String
+  created_at   DateTime
+  html_url     String   @unique
+  repo_name    String
+  user_id      Int
+  asigned_id   Int?
+  User         User     @relation(fields: [user_id], references: [id])
+  asigned_user User?    @relation("UserAsignedPRs", fields: [asigned_id], references: [id])
 }
