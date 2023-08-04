@@ -19,6 +19,7 @@ interface AuthContextType {
   fetchPulls: Function;
   assignUser: Function;
   getPR: Function;
+  fetchUserInfo: Function;
 }
 
 interface AuthData {
@@ -58,7 +59,8 @@ const AuthContext = createContext<AuthContextType>({
   optionUsers: () => {},
   fetchPulls: () => {},
   assignUser: () => {},
-  getPR: ()=>{}
+  getPR: ()=>{},
+  fetchUserInfo: () => {},
 });
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -238,6 +240,28 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const fetchUserInfo = async () => {
+    const token = localStorage.getItem("token");
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    try {
+      const response = await axiosClient.get<User>(`/${auth.github_user}`, config);
+      console.log(`Fetch User Data Response: ${JSON.stringify(response.data)}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error fetching user data: ${error.message}`);
+      if (error.response) {
+        console.error(`Response status: ${error.response.status}`);
+        console.error(`Response data: ${JSON.stringify(error.response.data)}`);
+      }
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -247,7 +271,8 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         optionUsers,
         fetchPulls,
         assignUser,
-        getPR
+        getPR,
+        fetchUserInfo,
       }}
     >
       {children}

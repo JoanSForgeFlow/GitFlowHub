@@ -43,44 +43,22 @@ const PRDashboard: React.FC = () => {
   const [searchRepo, setSearchRepo] = useState("");
   const [searchTitle, setSearchTitle] = useState("");
   const [expandedRepos, setExpandedRepos] = useState<Set<string>>(new Set());
-  const { fetchPulls } = useAuth();
+  const { fetchPulls, fetchUserInfo } = useAuth();
   const { auth } = useContext(AuthContext);
   const [userInfo, setUserInfo] = useState<User | null>(null);
+
 
   useEffect(() => {
     console.log("Running useEffect");
 
-    const fetchUserInfo = async () => {
-      const token = localStorage.getItem("token");
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      };
-
-      try {
-        const response = await axiosClient.get<User>(`/${auth.github_user}`, config);
-        console.log(`Fetch User Data Response: ${JSON.stringify(response.data)}`);
-        setUserInfo(response.data);
-      } catch (error) {
-        console.error(`Error fetching user data: ${error.message}`);
-        if (error.response) {
-          console.error(`Response status: ${error.response.status}`);
-          console.error(`Response data: ${JSON.stringify(error.response.data)}`);
-        }
-      }
-    };
-
-    fetchUserInfo();
-
-    const getNewPulls = async () => {
-      const newPulls=await fetchPulls();
+    const getUserInfoAndPulls = async () => {
+      const userData = await fetchUserInfo();
+      setUserInfo(userData);
+      const newPulls = await fetchPulls();
       setPulls(newPulls);
     };
 
-    getNewPulls();
-
+    getUserInfoAndPulls();
   }, []);
 
   const groupByRepository = (pulls: Record<number, Pull>) => {
