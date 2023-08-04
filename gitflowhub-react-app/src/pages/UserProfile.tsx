@@ -5,6 +5,7 @@ import AuthContext from '../context/AuthProvider';
 import axiosClient from '../config/axiosClient';
 import { Alert } from '../components/Alert';
 import '../css/UserProfile.css';
+import useAuth from "../hooks/useAuth";
 
 interface Company {
   id: number;
@@ -34,7 +35,7 @@ interface AlertType {
 }
 
 const UserProfile: React.FC = () => {
-  const { auth, setAuth } = useContext(AuthContext);
+  const { auth, updateUserProfile } = useContext(AuthContext);
   const [user, setUser] = useState<User | null>(null);
   const [companies, setCompanies] = useState<Company[]>([]);
   const [selectedCompanyId, setSelectedCompanyId] = useState<number | null>(null);
@@ -45,37 +46,20 @@ const UserProfile: React.FC = () => {
     navigate('/main-page');
   };
 
+  const { fetchCompanies, fetchUserInfo } = useAuth();
+
   useEffect(() => {
-    const fetchUserDataAndCompanies = async () => {
-      const token = localStorage.getItem("token");
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      };
+    const fetchUserInfoAndCompanies = async () => {
+      const userData = await fetchUserInfo();
+      const companies = await fetchCompanies();
 
-      try {
-        const [userDataResponse, companiesResponse] = await Promise.all([
-          axiosClient.get<User>(`/${auth.github_user}`, config),
-          axiosClient.get<Company[]>('/companies', config),
-        ]);
-
-        setUser(userDataResponse.data);
-        setSelectedCompanyId(userDataResponse.data.company_id);
-        setCompanies(companiesResponse.data);
-
-      } catch (error) {
-        console.error(`Error fetching user data and companies: ${error.message}`);
-        if (error.response) {
-          console.error(`Response status: ${error.response.status}`);
-          console.error(`Response data: ${JSON.stringify(error.response.data)}`);
-        }
-      }
+      setUser(userData);
+      setSelectedCompanyId(userData?.company_id);
+      setCompanies(companies);
     };
 
-    fetchUserDataAndCompanies();
-  }, [auth.github_user]);
+    fetchUserInfoAndCompanies();
+  }, []);
 
   useEffect(() => {
     if (alert.msg !== "") {
@@ -100,25 +84,13 @@ const UserProfile: React.FC = () => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    const token = localStorage.getItem("token");
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    };
 
     try {
-      const response = await axiosClient.put(`/${user?.github_user}`, { company_id: selectedCompanyId, username: user?.username }, config);
-      console.log(`Update Profile Response: ${JSON.stringify(response.data)}`);
-      setUser(response.data);
+      const updatedUser = await updateUserProfile(auth.github_user, { company_id: selectedCompanyId, username: user?.username });
+      setUser(updatedUser);
       setAlert({ msg: 'User successfully updated', error: false });
     } catch (error) {
       setAlert({ msg: 'Error updating profile', error: true });
-      if (error.response) {
-        console.error(`Response status: ${error.response.status}`);
-        console.error(`Response data: ${JSON.stringify(error.response.data)}`);
-      }
     }
   };
 
