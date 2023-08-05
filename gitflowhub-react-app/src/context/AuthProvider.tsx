@@ -17,6 +17,8 @@ interface AuthContextType {
   loading: Boolean;
   optionUsers: Function;
   fetchPulls: Function;
+  assignUser: Function;
+  getPR: Function;
 }
 
 interface AuthData {
@@ -55,6 +57,8 @@ const AuthContext = createContext<AuthContextType>({
   loading: true,
   optionUsers: () => {},
   fetchPulls: () => {},
+  assignUser: () => {},
+  getPR: ()=>{}
 });
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -123,6 +127,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         "/prs/users",
         config
       );
+
       const users: User[] = response.data;
 
       //transform data according to component
@@ -133,6 +138,52 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
       return userOptions;
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const assignUser = async (data) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setLoading(false);
+      return;
+    }
+    console.log(data);
+
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      await axiosClient.put("/pr/assign", data, config);
+    } catch (error) {
+      console.error("Error:", error.message);
+    }
+  };
+
+  const getPR = async (id) => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const response = await axiosClient(`/pr/${id}`, config);
+
+      return response.data
+    } catch (error) {
+      console.error("Error:", error.message);
     }
   };
 
@@ -195,6 +246,8 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         loading,
         optionUsers,
         fetchPulls,
+        assignUser,
+        getPR
       }}
     >
       {children}

@@ -45,7 +45,7 @@ model PullRequest {
   html_url     String   @unique
   repo_name    String
   user_id      Int
-  asigned_id   Int?
+  asigned_id   Int?     
   User         User     @relation(fields: [user_id], references: [id])
   asigned_user User?    @relation("UserAsignedPRs", fields: [asigned_id], references: [id])
 }

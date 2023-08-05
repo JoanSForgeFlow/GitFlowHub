@@ -11,14 +11,15 @@ import {
   forgetRequest,
   checkToken,
   newPassword,
-  userProfile
+  userProfile,
 } from "../Controllers/UserController.js";
 
 import {
   getPRsByCompany,
   getAndUpdateAvatarUrl,
   getCompanyUsers,
-  assignPR
+  assignPR,
+  getPR
 } from '../Controllers/PRDashboardController.js';
 
 //Tendremos las rutas de login y de display del perfil del user
@@ -33,8 +34,9 @@ router
 router.get("/profile", checkAuth, errorChecked(userProfile));
 
 router.get('/prs',checkAuth, errorChecked(getPRsByCompany));
+router.get('/pr/:id',checkAuth, errorChecked(getPR));
 router.get('/update-avatar/:githubUser', checkAuth,errorChecked(getAndUpdateAvatarUrl));
 router.get('/prs/users',checkAuth,errorChecked(getCompanyUsers))
-router.get('/pr/assign',checkAuth,errorChecked(assignPR))
+router.put('/pr/assign',checkAuth,errorChecked(assignPR))
 
 export default router;

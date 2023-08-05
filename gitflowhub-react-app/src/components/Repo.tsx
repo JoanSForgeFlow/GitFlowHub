@@ -16,6 +16,7 @@ interface User {
   login: string;
   avatar_url: string;
   company_id: number;
+
 }
 
 interface Pull {
@@ -29,6 +30,7 @@ interface Pull {
   user_id: number;
   User: User;
   number: number;
+  asigned_user:User;
 }
 
 interface RepoProps {

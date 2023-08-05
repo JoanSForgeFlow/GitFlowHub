@@ -27,6 +27,7 @@ const getPRsByCompany = async (req, res) => {
       },
       include: {
         User: true,
+        asigned_user: true,
       },
     });
 
@@ -41,6 +42,7 @@ const getPRsByCompany = async (req, res) => {
       },
       include: {
         User: true,
+        asigned_user: true,
       },
     });
 
@@ -104,12 +106,12 @@ const assignPR = async (req, res) => {
   //Function that receives a username and a PR id, it asigns the PR to the userid
   const { username, id_PR } = req.body;
 
-  console.log(username,id_PR)
+  console.log(username, id_PR);
 
   try {
     //Find user and Pull request asigned to user on db
     const searchedUser = await prisma.user.findFirstOrThrow({
-      where: { username }
+      where: { username },
     });
 
     const pullRequest = await prisma.pullRequest.findFirstOrThrow({
@@ -125,6 +127,7 @@ const assignPR = async (req, res) => {
           asigned_id: Number(searchedUser.id),
         },
       });
+      console.log(pullRequest);
       return res.status(200).json(updatedPullRequest);
     }
   } catch (error) {
@@ -136,4 +139,31 @@ const assignPR = async (req, res) => {
   }
 };
 
-export { getPRsByCompany, getAndUpdateAvatarUrl, getCompanyUsers, assignPR };
+const getPR = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const pullRequest = await prisma.pullRequest.findFirstOrThrow({
+      where: { id: parseInt(id) },
+      include: {
+        User: true,
+        asigned_user: true,
+      },
+    });
+
+    console.log(pullRequest);
+    return res.status(200).json(pullRequest);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ error: "An error ocurred while consulting PR" });
+  }
+};
+
+export {
+  getPRsByCompany,
+  getAndUpdateAvatarUrl,
+  getCompanyUsers,
+  assignPR,
+  getPR,
+};

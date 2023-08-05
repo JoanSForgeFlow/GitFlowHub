@@ -12,30 +12,71 @@ interface Option {
   value: string;
 }
 
-const DragList = () => {
+interface User {
+  id: number;
+  email: string;
+  username: string | null;
+  password: string;
+  token: string | null;
+  confirmed: boolean;
+  location: string | null;
+  language: string | null;
+  timeZone: string | null;
+  image: string | null;
+  github_user: string;
+  login: string;
+  avatar_url: string;
+  company_id: number;
+}
+
+const DragList = ({id_PR,asigned_user}) => {
+
+  //TODO: asignee has to be checked in db
+
   const [userOptions, setUserOptions] = useState<Option[]>([]);
   const [isMouseOver, setIsMouseOver] = useState(false);
   const [displayEdit, setDisplayEdit] = useState(false);
 
-  //TODO Poner en asignee el que nos sale en la db
-  const [asignee, setAsignee] = React.useState<string | null>("");
+  const [asignee, setAsignee] = React.useState<string | null>(asigned_user);
   const [inputValue, setInputValue] = React.useState("");
-  const { optionUsers } = useAuth();
-
-  console.log(userOptions);
+  const { optionUsers,assignUser,getPR} = useAuth();
 
   useEffect(() => {
     const usersList = async () => {
       const list = await optionUsers();
       setUserOptions(list);
+      
     };
 
+    const loadAsignee= async()=>{
+      const PR = await getPR(id_PR)
+      const loadedAsignee=PR.asigned_user.username
+
+      if (loadAsignee) {
+        setAsignee(loadedAsignee)
+        
+      }
+
+    }
     usersList();
+    loadAsignee()
+
   }, []);
 
   //Function that sets the value to false when leving the asignee div
   const handleMouse = () => {
     setDisplayEdit(!displayEdit);
+  };
+
+  const handleAssign=()=>{
+    setDisplayEdit(false)
+    
+    const assignAction= async()=>{
+      await assignUser({username:asignee,id_PR:id_PR})
+    }
+
+    assignAction()
+    
   };
 
   return (
@@ -47,11 +88,12 @@ const DragList = () => {
       {displayEdit ? (
         <div className="flex flex-grow justify-center items-center">
           <Autocomplete
-            value={inputValue}
+            value={asignee}
             onChange={(event, newValue) => {
               setAsignee(newValue);
+              setInputValue(newValue)
             }}
-            inputValue={inputValue}
+            inputValue={asignee}
             onInputChange={(event, newInputValue) => {
               setInputValue(newInputValue);
             }}
@@ -64,7 +106,7 @@ const DragList = () => {
           <button
             value="Asign"
             className="bg-sky-700 w-400 py-1 px-2 ml-1  text-white uppercase rounded-lg hover:cursor-pointer hover:bg-sky-950 transition-colors"
-            onClick={() => setDisplayEdit(false)}
+            onClick={handleAssign}
           >
             Asign
           </button>
