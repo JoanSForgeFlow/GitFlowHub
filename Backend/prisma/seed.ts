@@ -20,6 +20,7 @@ async function main() {
       github_user: "JoanSForgeFlow",
       login: "JoanSForgeFlow",
       company_id: company1.id,
+      username: "Joan",
     },
   })
 
@@ -30,6 +31,7 @@ async function main() {
       github_user: "alejandroac6",
       login: "alejandroac6",
       company_id: company1.id,
+      username: "Alex",
     },
   })
 
@@ -40,6 +42,7 @@ async function main() {
         github_user: "pauek",
         login: "pauek",
         company_id: company1.id,
+        username: "Pau",
     },
   })
 
@@ -50,6 +53,7 @@ async function main() {
         github_user: "LoisRForgeFLow",
         login: "LoisRForgeFLow",
         company_id: company1.id,
+        username: "Lois",
     },
   })
 
@@ -60,26 +64,7 @@ async function main() {
         github_user: "JordiMForgeFlow",
         login: "JordiMForgeFlow",
         company_id: company1.id,
-    },
-  })
-
-  const user6 = await prisma.user.create({
-    data: {
-        email: "usuario6@forgeflow.com",
-        password: "contraseñasegura6",
-        github_user: "MateuGForgeFlow",
-        login: "MateuMForgeFlow",
-        company_id: company1.id,
-    },
-  })
-
-  const user7 = await prisma.user.create({
-    data: {
-        email: "usuario7@forgeflow.com",
-        password: "contraseñasegura7",
-        github_user: "mariadforgeflow",
-        login: "mariadforgeflow",
-        company_id: company1.id,
+        username: "Masvi",
     },
   })
 }
