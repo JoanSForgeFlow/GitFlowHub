@@ -33,6 +33,7 @@ interface Pull {
   user_id: number;
   User: User;
   number: number;
+  asigned_user:User;
 }
 
 const PRDashboard: React.FC = () => {

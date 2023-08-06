@@ -1,11 +1,11 @@
-import { PrismaClient } from '@prisma/client';
-import axios from 'axios';
-import cron from 'node-cron';
+import { PrismaClient } from "@prisma/client";
+import axios from "axios";
+import cron from "node-cron";
 
 const prisma = new PrismaClient();
 
-const updatePullRequests = cron.schedule('* * * * *', async () => {
-  console.log('Running the update PRs cron job');
+const updatePullRequests = cron.schedule("* * * * *", async () => {
+  console.log("Running the update PRs cron job");
 
   try {
     // Retrieve all users from the database
@@ -13,7 +13,7 @@ const updatePullRequests = cron.schedule('* * * * *', async () => {
 
     // Iterate over all users and update their PRs
     for (let user of users) {
-      console.log('Updating PRs for user:', user.github_user);
+      console.log("Updating PRs for user:", user.github_user);
 
       let page = 1;
       let prsFromGithub = [];
@@ -21,10 +21,12 @@ const updatePullRequests = cron.schedule('* * * * *', async () => {
       while (true) {
         const url = `https://api.github.com/search/issues?q=author:${user.github_user}+is:pr+is:open&per_page=100&page=${page}`;
 
-        const { data: { items: prs } } = await axios.get(url, {
+        const {
+          data: { items: prs },
+        } = await axios.get(url, {
           headers: {
-            'Authorization': `token ${process.env.GITHUB_TOKEN}`
-          }
+            Authorization: `token ${process.env.GITHUB_TOKEN}`,
+          },
         });
 
         if (prs.length === 0) {
@@ -38,25 +40,30 @@ const updatePullRequests = cron.schedule('* * * * *', async () => {
       // Get all PRs of this user from the database
       const prsFromDb = await prisma.pullRequest.findMany({
         where: {
-          user_id: user.id
+          user_id: user.id,
         },
       });
 
       // Find the PRs that are in the DB but not on Github
-      const prsToBeDeleted = prsFromDb.filter(prFromDb => !prsFromGithub.some(prFromGithub => prFromGithub.html_url === prFromDb.html_url));
+      const prsToBeDeleted = prsFromDb.filter(
+        (prFromDb) =>
+          !prsFromGithub.some(
+            (prFromGithub) => prFromGithub.html_url === prFromDb.html_url
+          )
+      );
 
       // Delete these PRs
       for (let prToBeDeleted of prsToBeDeleted) {
         await prisma.pullRequest.delete({
           where: {
-            id: prToBeDeleted.id
-          }
+            id: prToBeDeleted.id,
+          },
         });
       }
 
       // Iterate over all PRs from Github and upsert (create or update) them in the database
       for (let prFromGithub of prsFromGithub) {
-        const repoName = prFromGithub.repository_url.split('/').pop();
+        const repoName = prFromGithub.repository_url.split("/").pop();
 
         // Find if PR already exists in DB
         const existingPr = await prisma.pullRequest.findUnique({
@@ -67,7 +74,10 @@ const updatePullRequests = cron.schedule('* * * * *', async () => {
 
         if (existingPr) {
           // Check if state or title has changed before updating
-          if (existingPr.state !== prFromGithub.state || existingPr.title !== prFromGithub.title) {
+          if (
+            existingPr.state !== prFromGithub.state ||
+            existingPr.title !== prFromGithub.title
+          ) {
             await prisma.pullRequest.update({
               where: {
                 html_url: prFromGithub.html_url,
@@ -95,13 +105,19 @@ const updatePullRequests = cron.schedule('* * * * *', async () => {
                   id: user.id,
                 },
               },
+
+              // asigned_user: {
+              //   connect: {
+              //     id: user.id,
+              //   },
+              // },
             },
           });
         }
       }
     }
   } catch (error) {
-    console.error('Error updating PRs:', error.message);
+    console.error("Error updating PRs:", error.message);
   }
 });
 

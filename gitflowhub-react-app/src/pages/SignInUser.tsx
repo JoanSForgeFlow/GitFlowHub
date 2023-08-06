@@ -51,7 +51,7 @@ const SignInUser = () => {
       return;
     }
 
-    //TODO: check that the github user exists
+    //check that the github user exists
     try {
       const searchedGitHubUser = await axios.get(
         `https://api.github.com/users/${gitHubUser}`

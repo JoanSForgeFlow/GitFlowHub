@@ -17,6 +17,8 @@ interface AuthContextType {
   loading: Boolean;
   optionUsers: Function;
   fetchPulls: Function;
+  assignUser: Function;
+  getPR: Function;
 }
 
 interface AuthData {
@@ -27,8 +29,8 @@ interface AuthData {
 }
 
 interface User {
-  id: number;
-  name: string;
+  user_id: number;
+  username: string;
 }
 
 interface Pull {
@@ -55,6 +57,8 @@ const AuthContext = createContext<AuthContextType>({
   loading: true,
   optionUsers: () => {},
   fetchPulls: () => {},
+  assignUser: () => {},
+  getPR: ()=>{}
 });
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -123,16 +127,63 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         "/prs/users",
         config
       );
+
       const users: User[] = response.data;
 
       //transform data according to component
       const userOptions = users.map((user) => ({
-        label: user.name,
-        value: user.id,
+        label: user.username,
+        value: user.user_id,
       }));
       return userOptions;
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const assignUser = async (data) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setLoading(false);
+      return;
+    }
+    console.log(data);
+
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      await axiosClient.put("/pr/assign", data, config);
+    } catch (error) {
+      console.error("Error:", error.message);
+    }
+  };
+
+  const getPR = async (id) => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const response = await axiosClient(`/pr/${id}`, config);
+
+      return response.data
+    } catch (error) {
+      console.error("Error:", error.message);
     }
   };
 
@@ -145,7 +196,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     console.log("fetchPulls is running");
     const githubUser = github_user;
-    console.log(githubUser);
+
     try {
       const config = {
         headers: {
@@ -195,6 +246,8 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         loading,
         optionUsers,
         fetchPulls,
+        assignUser,
+        getPR
       }}
     >
       {children}
