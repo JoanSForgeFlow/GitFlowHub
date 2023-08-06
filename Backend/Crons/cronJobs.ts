@@ -4,7 +4,7 @@ import cron from "node-cron";
 
 const prisma = new PrismaClient();
 
-const updatePullRequests = cron.schedule("* * * * *", async () => {
+const updatePullRequests = cron.schedule("*/10 * * * *", async () => {
   console.log("Running the update PRs cron job");
 
   try {
@@ -105,12 +105,6 @@ const updatePullRequests = cron.schedule("* * * * *", async () => {
                   id: user.id,
                 },
               },
-
-              // asigned_user: {
-              //   connect: {
-              //     id: user.id,
-              //   },
-              // },
             },
           });
         }

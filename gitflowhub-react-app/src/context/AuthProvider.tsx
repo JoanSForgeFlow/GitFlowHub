@@ -19,6 +19,9 @@ interface AuthContextType {
   fetchPulls: Function;
   assignUser: Function;
   getPR: Function;
+  fetchUserInfo: Function;
+  fetchCompanies: Function;
+  updateUserProfile: Function;
 }
 
 interface AuthData {
@@ -46,6 +49,11 @@ interface Pull {
   number: number;
 }
 
+interface Company {
+  id: number;
+  name: string;
+}
+
 const AuthContext = createContext<AuthContextType>({
   auth: {
     username: "",
@@ -58,7 +66,10 @@ const AuthContext = createContext<AuthContextType>({
   optionUsers: () => {},
   fetchPulls: () => {},
   assignUser: () => {},
-  getPR: ()=>{}
+  getPR: ()=>{},
+  fetchUserInfo: () => {},
+  fetchCompanies: () => {},
+  updateUserProfile: () => {},
 });
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -238,6 +249,70 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const fetchUserInfo = async () => {
+    const token = localStorage.getItem("token");
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    try {
+      const response = await axiosClient.get<User>(`/${auth.github_user}`, config);
+      console.log(`Fetch User Data Response: ${JSON.stringify(response.data)}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error fetching user data: ${error.message}`);
+      if (error.response) {
+        console.error(`Response status: ${error.response.status}`);
+      }
+    }
+  };
+
+  const fetchCompanies = async () => {
+    const token = localStorage.getItem("token");
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+  
+    try {
+      const response = await axiosClient.get<Company[]>('/companies', config);
+      return response.data;
+    } catch (error) {
+      console.error(`Error fetching companies: ${error.message}`);
+      if (error.response) {
+        console.error(`Response status: ${error.response.status}`);
+      }
+    }
+  };
+
+  const updateUserProfile = async (github_user: string, updateData: { company_id: number | null, username: string }) => {
+    const token = localStorage.getItem("token");
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    try {
+      const response = await axiosClient.put(`/${github_user}`, updateData, config);
+      console.log(`Update Profile Response: ${JSON.stringify(response.data)}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error updating profile: ${error.message}`);
+      if (error.response) {
+        console.error(`Response status: ${error.response.status}`);
+        console.error(`Response data: ${JSON.stringify(error.response.data)}`);
+      }
+      throw error;
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -247,7 +322,10 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         optionUsers,
         fetchPulls,
         assignUser,
-        getPR
+        getPR,
+        fetchUserInfo,
+        fetchCompanies,
+        updateUserProfile,
       }}
     >
       {children}

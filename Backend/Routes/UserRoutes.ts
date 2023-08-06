@@ -2,6 +2,7 @@ import express from "express";
 import { errorChecked } from "../Middlewares/controllersMw.js";
 import checkAuth from "../Helpers/checkAuth.js";
 
+
 const router = express.Router();
 
 import {
@@ -22,6 +23,8 @@ import {
   getPR
 } from '../Controllers/PRDashboardController.js';
 
+import { getUser, getAllCompanies, updateUser } from "../Controllers/UserProfileController.js";
+
 //Tendremos las rutas de login y de display del perfil del user
 router.post("/sign-in", errorChecked(RegisterUser));
 router.post("/login", errorChecked(LogInUser));
@@ -38,5 +41,9 @@ router.get('/pr/:id',checkAuth, errorChecked(getPR));
 router.get('/update-avatar/:githubUser', checkAuth,errorChecked(getAndUpdateAvatarUrl));
 router.get('/prs/users',checkAuth,errorChecked(getCompanyUsers))
 router.put('/pr/assign',checkAuth,errorChecked(assignPR))
+
+router.get('/companies', checkAuth, getAllCompanies);
+router.get('/:github_user', checkAuth, getUser);
+router.put('/:github_user', checkAuth, updateUser);
 
 export default router;

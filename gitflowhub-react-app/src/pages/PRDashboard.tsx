@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "../css/PRDashboard.css";
 import SearchBar from "../components/SearchBar";
 import Repo from "../components/Repo";
-import axios from "axios";
+import axiosClient from '../config/axiosClient';
 import useAuth from "../hooks/useAuth";
+import AuthContext from '../context/AuthProvider';
 
 interface User {
   id: number;
@@ -42,18 +43,22 @@ const PRDashboard: React.FC = () => {
   const [searchRepo, setSearchRepo] = useState("");
   const [searchTitle, setSearchTitle] = useState("");
   const [expandedRepos, setExpandedRepos] = useState<Set<string>>(new Set());
-  const { fetchPulls } = useAuth();
+  const { fetchPulls, fetchUserInfo } = useAuth();
+  const { auth } = useContext(AuthContext);
+  const [userInfo, setUserInfo] = useState<User | null>(null);
+
 
   useEffect(() => {
     console.log("Running useEffect");
-    const getNewPulls = async () => {
-      const newPulls=await fetchPulls();
-      setPulls(newPulls)
 
+    const getUserInfoAndPulls = async () => {
+      const userData = await fetchUserInfo();
+      setUserInfo(userData);
+      const newPulls = await fetchPulls();
+      setPulls(newPulls);
     };
 
-    getNewPulls()
-    
+    getUserInfoAndPulls();
   }, []);
 
   const groupByRepository = (pulls: Record<number, Pull>) => {
@@ -93,6 +98,8 @@ const PRDashboard: React.FC = () => {
   return (
     <div className="github-app">
       <SearchBar
+        username={userInfo?.username ?? ''}
+        avatar_url={userInfo?.avatar_url ?? ''}
         onUserSearchChange={(user) => setSearchUser(user)}
         onRepoSearchChange={(repo) => setSearchRepo(repo)}
         onTitleSearchChange={(title) => setSearchTitle(title)}

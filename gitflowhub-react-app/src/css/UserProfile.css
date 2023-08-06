@@ -1,0 +1,89 @@
+.profile-container {
+position: relative;
+display: flex;
+flex-direction: column;
+align-items: center;
+padding: 20px;
+width: 500px;
+margin: auto;
+box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+border-radius: 5px;
+background-color: #f9f9f9;
+}
+
+.header {
+text-align: center;
+color: #444;
+font-size: 2.5em;
+margin-bottom: 20px;
+border-bottom: 2px solid #444;
+padding-bottom: 10px;
+}
+
+.avatar {
+width: 200px;
+height: 200px;
+border-radius: 50%;
+object-fit: cover;
+align-self: center;
+margin-bottom: 20px;
+}
+
+.profile-form {
+display: flex;
+flex-direction: column;
+}
+
+.profile-form label {
+margin: 10px 0;
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+.profile-form span {
+min-width: 120px;
+}
+
+.readonly-field input {
+border: none;
+padding: 10px;
+margin: 5px 0;
+border-radius: 5px;
+background-color: inherit;
+opacity: 0.5;
+width: 100%;
+}
+
+.editable-field input,
+.editable-field select {
+border: 1px solid #ddd;
+padding: 10px;
+margin: 5px 0;
+border-radius: 5px;
+width: 100%;
+}
+
+.submit-button {
+background-color: #009688;
+color: white;
+padding: 10px 20px;
+border-radius: 20px;
+margin-top: 20px;
+cursor: pointer;
+border: none;
+font-size: 1.2em;
+transition: all 0.3s ease-in-out;
+}
+
+.submit-button:hover {
+background-color: #00796b;
+transform: scale(1.05);
+}
+
+.close-icon {
+position: absolute;
+top: 10px;
+right: 10px;
+cursor: pointer;
+}

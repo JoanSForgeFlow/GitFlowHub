@@ -1,0 +1,28 @@
+.profile-button {
+position: fixed;
+right: 20px;
+top: 20px;
+display: flex;
+align-items: center;
+justify-content: space-evenly;
+padding: 10px 20px;
+background-color: #009688;
+color: white;
+border-radius: 50px;
+border: 2px solid #00796b;
+cursor: pointer;
+transition: all 0.3s ease-in-out;
+margin-right: 20px;
+}
+
+.profile-button:hover {
+transform: scale(1.05);
+background-color: #00796b;
+}
+
+.profile-button img {
+width: 24px;
+height: 24px;
+border-radius: 50%;
+margin-left: 10px;
+}
