@@ -37,7 +37,7 @@ const DragList = ({id_PR,asigned_user}) => {
   const [isMouseOver, setIsMouseOver] = useState(false);
   const [displayEdit, setDisplayEdit] = useState(false);
 
-  const [asignee, setAsignee] = React.useState<string | null>(asigned_user);
+  const [asignee, setAsignee] = React.useState<string | null>("");
   const [inputValue, setInputValue] = React.useState("");
   const { optionUsers,assignUser,getPR} = useAuth();
 
@@ -50,11 +50,14 @@ const DragList = ({id_PR,asigned_user}) => {
 
     const loadAsignee= async()=>{
       const PR = await getPR(id_PR)
-      const loadedAsignee=PR.asigned_user.username
+      const loadedAsignee=PR.asigned_user?.username
 
       if (loadAsignee) {
         setAsignee(loadedAsignee)
         
+      } else{
+        setAsignee("")
+
       }
 
     }
@@ -93,7 +96,7 @@ const DragList = ({id_PR,asigned_user}) => {
               setAsignee(newValue);
               setInputValue(newValue)
             }}
-            inputValue={asignee}
+            inputValue={inputValue}
             onInputChange={(event, newInputValue) => {
               setInputValue(newInputValue);
             }}
