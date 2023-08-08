@@ -35,6 +35,7 @@ interface Pull {
   User: User;
   number: number;
   asigned_user:User;
+  review_status: string;
 }
 
 const PRDashboard: React.FC = () => {

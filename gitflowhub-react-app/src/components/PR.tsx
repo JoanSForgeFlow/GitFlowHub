@@ -29,6 +29,7 @@ interface Pull {
   repo_name: string;
   number: number;
   asigned_user: User;
+  review_status: string;
 }
 
 interface PRProps {
@@ -36,6 +37,16 @@ interface PRProps {
 }
 
 const PR: React.FC<PRProps> = ({ pull }) => {
+  const reviewLabel = () => {
+    switch (pull.review_status) {
+      case "approved":
+        return <span className="review-label approved">Approved</span>;
+      case "reviews_welcomed":
+        return <span className="review-label needs-review">Needs Review</span>;
+      default:
+        return null;
+    }
+  };
 
   return (
     
@@ -52,6 +63,7 @@ const PR: React.FC<PRProps> = ({ pull }) => {
       <div className="card-body">
         <p>Submitted by: {pull.User.github_user}</p>
         <p>State: {pull.state}</p>
+        {reviewLabel()}
         <p>Created at: {pull.created_at}</p>
         <p>PR number: {pull.number}</p>
         <DragList

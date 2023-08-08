@@ -112,3 +112,22 @@
   'GRAD' 0,
   'opsz' 24
 }
+
+.review-label {
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.9em;
+  font-weight: bold;
+  display: inline-block;
+  margin: 5px 0;
+}
+
+.review-label.approved {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.review-label.needs-review {
+  background-color: #FFA726;
+  color: white;
+}

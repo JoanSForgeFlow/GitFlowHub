@@ -63,7 +63,9 @@ export const updateUserPullRequests = async () => {
 
       // Iterate over all PRs from Github and upsert (create or update) them in the database
       for (let prFromGithub of prsFromGithub) {
-        const repoName = prFromGithub.repository_url.split("/").pop();
+        const parts = prFromGithub.html_url.split('/');
+        const githubOrgOrUser = parts[parts.length - 4];
+        const repoName = parts[parts.length - 3];
 
         // Find if PR already exists in DB
         const existingPr = await prisma.pullRequest.findUnique({
@@ -87,6 +89,7 @@ export const updateUserPullRequests = async () => {
                 title: prFromGithub.title,
                 state: prFromGithub.state,
                 repo_name: repoName,
+                github_org_or_user: githubOrgOrUser
               },
             });
           }
@@ -100,6 +103,7 @@ export const updateUserPullRequests = async () => {
               created_at: new Date(prFromGithub.created_at),
               html_url: prFromGithub.html_url,
               repo_name: repoName,
+              github_org_or_user: githubOrgOrUser,
               User: {
                 connect: {
                   id: user.id,
@@ -114,6 +118,53 @@ export const updateUserPullRequests = async () => {
     console.error("Error updating PRs:", error.message);
   }
 };
+
+export const updatePRReviewStatus = async () => {
+  console.log("Running the update PR review status cron job");
+
+  try {
+    // Retrieve all open PRs from the database
+    const openPRs = await prisma.pullRequest.findMany({
+      where: {
+        state: 'open'  // Only consider open PRs
+      }
+    });
+
+    for (let pr of openPRs) {
+      // Call GitHub API to get PR reviews
+      const url = `https://api.github.com/repos/${pr.github_org_or_user}/${pr.repo_name}/pulls/${pr.number}/reviews`;
+
+      const { data: reviews } = await axios.get(url, {
+        headers: {
+          Authorization: `token ${process.env.GITHUB_TOKEN}`,
+        },
+      });
+
+      const approvedReviewsCount = reviews.filter(review => review.state === "APPROVED").length;
+
+      let review_state = "reviews_welcomed";
+      if (approvedReviewsCount >= 2) {
+        review_state = "approved";
+      }
+
+      // Update PR review status in the database if it has changed
+      if (pr.review_status !== review_state) {
+        await prisma.pullRequest.update({
+          where: {
+            id: pr.id,
+          },
+          data: {
+            review_status: review_state,
+          },
+        });
+      }
+    }
+  } catch (error) {
+    console.error("Error updating PR review status:", error.message);
+  }
+};
+
+const updatePRReviewStatusJob = cron.schedule("0 */6 * * *", updatePRReviewStatus);
 
 const updatePullRequests = cron.schedule("*/10 * * * *", updateUserPullRequests);
 
