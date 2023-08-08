@@ -17,7 +17,6 @@ const checkAuth = async (req, res, next) => {
 
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-      console.log(parseInt(decoded.id));
 
       const searchedUser = await prisma.user.findUniqueOrThrow({
         where: { id: parseInt(decoded.id) },
