@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import generarId from "../Helpers/generarId.js";
 import generarJWT from "../Helpers/generarJWT.js";
 import { signInEmail, newPasswordEmail } from "../Helpers/emails.js";
+import { updateUserPullRequests } from "../Crons/cronJobs.js";
 
 const RegisterUser = async (req, res) => {
   const data = req.body;
@@ -49,13 +50,20 @@ const confirmUser = async (req, res) => {
       data: { confirmed: true },
     });
 
-    console.log(updatedUser)
+    console.log(updatedUser);
+
+    // Start updating PRs in the background
+    updateUserPullRequests().catch((error) => {
+      console.error('Error updating PRs in the background:', error);
+    });
+
     return res.status(200).json({ msg: "User confirmation success" });
   } else {
     // If the user does not exist, send an error response
     return res.status(404).json({ msg: "Token not found" });
   }
 };
+
 
 const LogInUser = async (req, res) => {
   const data = req.body;

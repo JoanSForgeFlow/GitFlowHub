@@ -50,6 +50,16 @@
 
 .card {
   position: relative;
+  width: 30%;
+  margin: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.card-draggable {
+  position: relative;
   width: 80%;
   margin: 0.5rem;
   border: 1px solid #ddd;
@@ -111,4 +121,23 @@
   'wght' 400,
   'GRAD' 0,
   'opsz' 24
+}
+
+.review-label {
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.9em;
+  font-weight: bold;
+  display: inline-block;
+  margin: 5px 0;
+}
+
+.review-label.approved {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.review-label.needs-review {
+  background-color: #FFA726;
+  color: white;
 }

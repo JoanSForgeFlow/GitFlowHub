@@ -49,4 +49,6 @@ model PullRequest {
   User         User     @relation(fields: [user_id], references: [id])
   asigned_user User?    @relation("UserAsignedPRs", fields: [asigned_id], references: [id])
   gitflowHubStatus String @default("Not Started")
+  review_status String  @default("reviews_welcomed")
+  github_org_or_user String?
 }
