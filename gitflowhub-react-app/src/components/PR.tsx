@@ -48,6 +48,14 @@ const PR: React.FC<PRProps> = ({ pull }) => {
     }
   };
 
+  function formatDate(isoDate: string): string {
+    const date = new Date(isoDate);
+    const day = String(date.getUTCDate()).padStart(2, '0');
+    const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+    const year = date.getUTCFullYear();
+    return `${year}-${month}-${day}`;
+  }
+
   return (
     
     <div key={pull.id} className="card w-full card-animation">
@@ -64,7 +72,7 @@ const PR: React.FC<PRProps> = ({ pull }) => {
         <p>Submitted by: {pull.User.github_user}</p>
         <p>State: {pull.state}</p>
         {reviewLabel()}
-        <p>Created at: {pull.created_at}</p>
+        <p>Created at: {formatDate(pull.created_at)}</p>
         <p>PR number: {pull.number}</p>
         <DragList
           id_PR={pull.id}
