@@ -169,7 +169,7 @@ const getUserPR = async (req, res) => {
       where: { user_id: id },
       include: {
         User: true,
-        asigned_user: true
+        asigned_user: true,
       },
     });
 
@@ -213,6 +213,38 @@ const getUserAssignedPR = async (req, res) => {
   return;
 };
 
+const ChangePRStatus = async (req, res) => {
+  const { id, status } = req.body;
+
+  try {
+    const PullRequest = await prisma.pullRequest.findFirstOrThrow({
+      where: { id },
+    });
+    
+    console.log(PullRequest)
+    if (PullRequest) {
+      try {
+        const updatedPullRequest = await prisma.pullRequest.update({
+          where: { id },
+          data: {
+            gitflowHubStatus: status,
+          },
+        });
+
+        return res.status(200).json(updatedPullRequest);
+      } catch (error) {
+        return res
+          .status(500)
+          .json({ error: "An error ocurred while changing PR status" });
+      }
+    }
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ error: "An error ocurred while changing PR status" });
+  }
+};
+
 export {
   getPRsByCompany,
   getAndUpdateAvatarUrl,
@@ -221,4 +253,5 @@ export {
   getPR,
   getUserPR,
   getUserAssignedPR,
+  ChangePRStatus
 };

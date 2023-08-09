@@ -48,4 +48,5 @@ model PullRequest {
   asigned_id   Int?     
   User         User     @relation(fields: [user_id], references: [id])
   asigned_user User?    @relation("UserAsignedPRs", fields: [asigned_id], references: [id])
+  gitflowHubStatus String @default("Not Started")
 }

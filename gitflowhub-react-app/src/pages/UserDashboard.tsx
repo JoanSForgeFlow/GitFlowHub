@@ -10,9 +10,9 @@ const UserDashboard = () => {
   const [userPrs, setUserPrs] = useState([]);
   const [userAssignedPrs, setUserAssignedPrs] = useState([]);
 
-  const [notStarted,setNotStarted]=useState([])
-  const [iceBox,setIceBox]=useState([])
-  const [reviewed,setReviewed]=useState([])
+  const [notStarted, setNotStarted] = useState([]);
+  const [iceBox, setIceBox] = useState([]);
+  const [reviewed, setReviewed] = useState([]);
 
   const onDragEnd = (result: DropResult) => {
     const { source, destination } = result;
@@ -30,9 +30,35 @@ const UserDashboard = () => {
       return;
     }
 
-    let add,active =userAssignedPrs
+    let add,
+      notStartedPr = notStarted,
+      reviewedPr = reviewed,
+      iceBoxPr = iceBox;
 
+      //put PR into the destination position
+    if (source.droppableId === "Not Started") {
+      add = notStartedPr[source.index];
+      notStartedPr.splice(source.index, 1);
+    } else if (source.droppableId === "IceBox") {
+      add = iceBoxPr[source.index];
+      iceBoxPr.splice(source.index, 1);
+    } else {
+      add = reviewedPr[source.index];
+      reviewedPr.splice(source.index, 1);
+    }
+        console.log(destination.droppableId)
+    if (destination.droppableId === "Not Started") {
+      notStartedPr.splice(destination.index, 0,add);
+    } else if (destination.droppableId === "IceBox") {
+        console.log("entro aqui")
+      iceBoxPr.splice(destination.index, 0,add);
+    } else {
+      reviewedPr.splice(destination.index, 0,add);
+    }
 
+    setNotStarted(notStartedPr)
+    setIceBox(iceBoxPr)
+    setReviewed(reviewedPr)
   };
 
   useEffect(() => {
@@ -43,12 +69,31 @@ const UserDashboard = () => {
 
     const getUserAssignedPR = async () => {
       const searchAssigedUserPrs = await getAssignedPRs();
+      //Obtain User Not started PRs
+      const userNotStarted = searchAssigedUserPrs.filter(
+        (PR) => PR.gitflowHubStatus === "Not Started"
+      );
+      setNotStarted(userNotStarted);
+
+      //Obtain User Icebox PRs
+      const userIceBox = searchAssigedUserPrs.filter(
+        (PR) => PR.gitflowHubStatus === "IceBox"
+      );
+      setIceBox(userIceBox);
+
+      //Obtain User Reviewed PRs
+      const userReviewed = searchAssigedUserPrs.filter(
+        (PR) => PR.gitflowHubStatus === "Reviewed"
+      );
+      setReviewed(userReviewed);
+
       setUserAssignedPrs(searchAssigedUserPrs);
     };
 
     getUserPR();
     getUserAssignedPR();
   }, []);
+
 
   return (
     <div>
@@ -63,7 +108,7 @@ const UserDashboard = () => {
                 {...provided.droppableProps}
               >
                 <span> NOT STARTED</span>
-                {userAssignedPrs?.map((pull, index) => (
+                {notStarted?.map((pull, index) => (
                   <PRDraggable key={pull.id} pull={pull} index={index} />
                 ))}
 
@@ -72,7 +117,7 @@ const UserDashboard = () => {
             )}
           </Droppable>
 
-          <Droppable droppableId="Icebox">
+          <Droppable droppableId="IceBox">
             {(provided) => (
               <div
                 className="w-1/3 bg-slate-200"
@@ -80,6 +125,9 @@ const UserDashboard = () => {
                 {...provided.droppableProps}
               >
                 <span> ICEBOX</span>
+                {iceBox?.map((pull, index) => (
+                  <PRDraggable key={pull.id} pull={pull} index={index} />
+                ))}
                 {provided.placeholder}
               </div>
             )}
@@ -93,6 +141,9 @@ const UserDashboard = () => {
                 {...provided.droppableProps}
               >
                 <span>REVIEWED</span>
+                {reviewed?.map((pull, index) => (
+                  <PRDraggable key={pull.id} pull={pull} index={index} />
+                ))}
                 {provided.placeholder}
               </div>
             )}
