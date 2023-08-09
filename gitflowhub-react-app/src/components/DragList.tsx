@@ -5,7 +5,6 @@ import useAuth from "../hooks/useAuth";
 
 import TextField from "@mui/material/TextField";
 import "../css/PRDashboard.css";
-import Button from "@mui/material/Button";
 
 interface Option {
   label: string;
@@ -29,7 +28,7 @@ interface User {
   company_id: number;
 }
 
-const DragList = ({id_PR,asigned_user}) => {
+const DragList = ({id_PR}) => {
 
   //TODO: asignee has to be checked in db
 
@@ -37,7 +36,7 @@ const DragList = ({id_PR,asigned_user}) => {
   const [isMouseOver, setIsMouseOver] = useState(false);
   const [displayEdit, setDisplayEdit] = useState(false);
 
-  const [asignee, setAsignee] = React.useState<string | null>("");
+  const [asignee, setAsignee] = React.useState<string>("");
   const [inputValue, setInputValue] = React.useState("");
   const { optionUsers,assignUser,getPR} = useAuth();
 

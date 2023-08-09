@@ -50,12 +50,21 @@
 
 .card {
   position: relative;
-  width: 30%;
+  width: 80%;
   margin: 0.5rem;
   border: 1px solid #ddd;
   border-radius: 4px;
   overflow: hidden;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.card-animation{
+  transition: 0.2s;
+}
+
+.card-animation:hover{
+  transform: scale(1.03);
+  box-shadow: 0 0 5px black;
 }
 
 .card-header {

@@ -1,6 +1,7 @@
 import React from "react";
 import GoIcon from "./GoIcon";
 import DragList from "./DragList";
+import { Draggable } from "react-beautiful-dnd";
 
 interface User {
   id: number;
@@ -15,7 +16,7 @@ interface User {
   image: string | null;
   github_user: string;
   login: string;
-  avatar_url: string;
+  avatar_url: string| null;
   company_id: number;
 }
 
@@ -38,7 +39,8 @@ interface PRProps {
 const PR: React.FC<PRProps> = ({ pull }) => {
 
   return (
-    <div key={pull.id} className="card">
+    
+    <div key={pull.id} className="card w-full card-animation">
       <div className="card-header">
         <img
           src={pull.User.avatar_url}
@@ -55,7 +57,7 @@ const PR: React.FC<PRProps> = ({ pull }) => {
         <p>PR number: {pull.number}</p>
         <DragList
           id_PR={pull.id}
-          asigned_user={pull.asigned_user?.username || ""}
+
         />
       </div>
     </div>

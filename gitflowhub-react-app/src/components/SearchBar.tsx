@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import ProfileButton from "./ProfileButton";
+import { useNavigate } from "react-router-dom";
 
 interface SearchBarProps {
   onUserSearchChange: (user: string) => void;
@@ -9,16 +10,21 @@ interface SearchBarProps {
   avatar_url: string;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ 
-  onUserSearchChange, 
-  onRepoSearchChange, 
+const SearchBar: React.FC<SearchBarProps> = ({
+  onUserSearchChange,
+  onRepoSearchChange,
   onTitleSearchChange,
   username,
-  avatar_url 
+  avatar_url,
 }) => {
-  const [searchUser, setSearchUser] = useState('');
-  const [searchRepo, setSearchRepo] = useState('');
-  const [searchTitle, setSearchTitle] = useState('');
+  const [searchUser, setSearchUser] = useState("");
+  const [searchRepo, setSearchRepo] = useState("");
+  const [searchTitle, setSearchTitle] = useState("");
+
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate("/my-board");
+  };
 
   return (
     <div className="search-bar">
@@ -52,7 +58,16 @@ const SearchBar: React.FC<SearchBarProps> = ({
           onTitleSearchChange(e.target.value);
         }}
       />
-      <ProfileButton username={username} avatar_url={avatar_url} />
+
+      <div className="flex">
+        <ProfileButton username={username} avatar_url={avatar_url} />
+  
+        <button>
+          <div className="profile-button mx-3" onClick={handleClick}>
+            <span>My Board</span>
+          </div>
+        </button>
+      </div>
     </div>
   );
 };

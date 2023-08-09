@@ -22,6 +22,9 @@ interface AuthContextType {
   fetchUserInfo: Function;
   fetchCompanies: Function;
   updateUserProfile: Function;
+  getUserMultiplePRs:Function;
+  getAssignedPRs:Function;
+  
 }
 
 interface AuthData {
@@ -70,6 +73,8 @@ const AuthContext = createContext<AuthContextType>({
   fetchUserInfo: () => {},
   fetchCompanies: () => {},
   updateUserProfile: () => {},
+  getUserMultiplePRs:()=>{},
+  getAssignedPRs:()=>{}
 });
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -313,6 +318,56 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const getUserMultiplePRs= async()=>{
+    const token = localStorage.getItem("token");
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    try {
+      const multiplePRs= await axiosClient("/pr-user-info",config)
+      return multiplePRs.data
+
+      
+    } catch (error) {
+      console.error(`Error getting User's PR: ${error.message}`);
+      if (error.response) {
+        console.error(`Response status: ${error.response.status}`);
+        console.error(`Response data: ${JSON.stringify(error.response.data)}`);
+      }
+      throw error      
+    }
+
+  }
+
+  const getAssignedPRs= async()=>{
+    const token = localStorage.getItem("token");
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    try {
+      const assignedPRs= await axiosClient("/pr-user-assigned",config)
+      return assignedPRs.data
+
+      
+    } catch (error) {
+      console.error(`Error getting User's PR: ${error.message}`);
+      if (error.response) {
+        console.error(`Response status: ${error.response.status}`);
+        console.error(`Response data: ${JSON.stringify(error.response.data)}`);
+      }
+      throw error      
+    }
+
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -326,6 +381,8 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         fetchUserInfo,
         fetchCompanies,
         updateUserProfile,
+        getUserMultiplePRs,
+        getAssignedPRs
       }}
     >
       {children}
