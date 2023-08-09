@@ -50,6 +50,16 @@
 
 .card {
   position: relative;
+  width: 30%;
+  margin: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.card-draggable {
+  position: relative;
   width: 80%;
   margin: 0.5rem;
   border: 1px solid #ddd;
