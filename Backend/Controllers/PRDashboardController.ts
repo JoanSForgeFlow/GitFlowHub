@@ -218,18 +218,20 @@ const ChangePRStatus = async (req, res) => {
 
   try {
     const PullRequest = await prisma.pullRequest.findFirstOrThrow({
-      where: { id },
+      where: { id: parseInt(id) },
     });
     
     console.log(PullRequest)
     if (PullRequest) {
       try {
         const updatedPullRequest = await prisma.pullRequest.update({
-          where: { id },
+          where: { id: parseInt(id) },
           data: {
             gitflowHubStatus: status,
           },
         });
+
+        console.log(updatedPullRequest)
 
         return res.status(200).json(updatedPullRequest);
       } catch (error) {

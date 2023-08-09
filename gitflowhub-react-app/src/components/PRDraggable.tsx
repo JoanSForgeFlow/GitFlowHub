@@ -40,8 +40,8 @@ interface PRProps {
 const PRDraggable: React.FC<PRProps> = ({ pull,index}) => {
   return (
     <Draggable draggableId={pull.id.toString()} index={index}>
-      {(provided) => (
-        <div key={pull.id} className="card w-full card-animation"
+      {(provided,snapshot) => (
+        <div key={pull.id} className={`card w-full card-animation ${snapshot.draggingOver? 'card-dragging':''}`}
         {...provided.draggableProps}
         {...provided.dragHandleProps}
         ref={provided.innerRef}>

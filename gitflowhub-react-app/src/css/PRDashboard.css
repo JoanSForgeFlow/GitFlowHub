@@ -67,6 +67,15 @@
   box-shadow: 0 0 5px black;
 }
 
+.card-dragging{
+  background-color: rgba(89, 110, 131, 0.404); 
+}c
+
+.drop-over-effect{
+  background-color: aqua;
+
+}
+
 .card-header {
   display: flex;
   justify-content: space-between;

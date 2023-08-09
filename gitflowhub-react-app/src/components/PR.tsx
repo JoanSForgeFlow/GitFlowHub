@@ -1,7 +1,6 @@
 import React from "react";
 import GoIcon from "./GoIcon";
 import DragList from "./DragList";
-import { Draggable } from "react-beautiful-dnd";
 
 interface User {
   id: number;

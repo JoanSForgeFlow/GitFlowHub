@@ -24,6 +24,7 @@ interface AuthContextType {
   updateUserProfile: Function;
   getUserMultiplePRs:Function;
   getAssignedPRs:Function;
+  changePRStatus:Function;
   
 }
 
@@ -74,7 +75,8 @@ const AuthContext = createContext<AuthContextType>({
   fetchCompanies: () => {},
   updateUserProfile: () => {},
   getUserMultiplePRs:()=>{},
-  getAssignedPRs:()=>{}
+  getAssignedPRs:()=>{},
+  changePRStatus:()=>{}
 });
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -163,7 +165,6 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
       setLoading(false);
       return;
     }
-    console.log(data);
 
     try {
       const config = {
@@ -174,6 +175,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
       };
 
       await axiosClient.put("/pr/assign", data, config);
+      return
     } catch (error) {
       console.error("Error:", error.message);
     }
@@ -368,6 +370,26 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   }
 
+  const changePRStatus =async({id,status})=>{
+    const token = localStorage.getItem("token");
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    try {
+      const changedPR= await axiosClient.put("/pr-update-status",{id,status},config)
+      return
+      
+    } catch (error) {
+      console.log(error)
+      
+    }
+
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -382,7 +404,8 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         fetchCompanies,
         updateUserProfile,
         getUserMultiplePRs,
-        getAssignedPRs
+        getAssignedPRs,
+        changePRStatus
       }}
     >
       {children}

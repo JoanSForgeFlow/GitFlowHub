@@ -5,7 +5,7 @@ import PRDraggable from "../components/PRDraggable";
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 
 const UserDashboard = () => {
-  const { auth, updateUserProfile, getUserMultiplePRs, getAssignedPRs } =
+  const { getUserMultiplePRs, getAssignedPRs,changePRStatus } =
     useAuth();
   const [userPrs, setUserPrs] = useState([]);
   const [userAssignedPrs, setUserAssignedPrs] = useState([]);
@@ -14,8 +14,8 @@ const UserDashboard = () => {
   const [iceBox, setIceBox] = useState([]);
   const [reviewed, setReviewed] = useState([]);
 
-  const onDragEnd = (result: DropResult) => {
-    const { source, destination } = result;
+  const onDragEnd = async (result: DropResult) => {
+    const { source, destination,draggableId} = result;
 
     //If we drag into a non draggable element, do nothing
     if (!destination) {
@@ -46,14 +46,16 @@ const UserDashboard = () => {
       add = reviewedPr[source.index];
       reviewedPr.splice(source.index, 1);
     }
-        console.log(destination.droppableId)
+    
     if (destination.droppableId === "Not Started") {
       notStartedPr.splice(destination.index, 0,add);
+      await changePRStatus({id:draggableId,status:"Not Started"})
     } else if (destination.droppableId === "IceBox") {
-        console.log("entro aqui")
       iceBoxPr.splice(destination.index, 0,add);
+      await changePRStatus({id:draggableId,status:"IceBox"})
     } else {
       reviewedPr.splice(destination.index, 0,add);
+      await changePRStatus({id:draggableId,status:"Reviewed"})
     }
 
     setNotStarted(notStartedPr)
@@ -101,9 +103,9 @@ const UserDashboard = () => {
         Draggable Menu
         <div className="flex justify-evenly ">
           <Droppable droppableId="Not Started">
-            {(provided) => (
+            {(provided,snapshot) => (
               <div
-                className="w-1/3 flex flex-col bg-white"
+                className={`w-1/3 flex flex-col bg-white ${snapshot.isDraggingOver? "bg-slate-600":""}`}
                 ref={provided.innerRef}
                 {...provided.droppableProps}
               >
@@ -118,9 +120,9 @@ const UserDashboard = () => {
           </Droppable>
 
           <Droppable droppableId="IceBox">
-            {(provided) => (
+            {(provided,snapshot) => (
               <div
-                className="w-1/3 bg-slate-200"
+                className={`w-1/3 bg-slate-200 ${snapshot.isDraggingOver? "bg-slate-500":""}`}
                 ref={provided.innerRef}
                 {...provided.droppableProps}
               >
@@ -134,9 +136,9 @@ const UserDashboard = () => {
           </Droppable>
 
           <Droppable droppableId="Reviewed">
-            {(provided) => (
+            {(provided,snapshot) => (
               <div
-                className="w-1/3 bg-slate-400"
+                className={`w-1/3 bg-slate-400 ${snapshot.isDraggingOver? "bg-slate-500":""}`}
                 ref={provided.innerRef}
                 {...provided.droppableProps}
               >
