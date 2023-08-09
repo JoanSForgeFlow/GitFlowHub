@@ -1,11 +1,11 @@
 .profile-button {
-position: fixed;
-right: 20px;
-top: 20px;
+position: relative;
+height: 2.5rem;
+width: 9.5rem;
 display: flex;
 align-items: center;
-justify-content: space-evenly;
-padding: 10px 20px;
+justify-content: space-between;
+padding: 10px;
 background-color: #009688;
 color: white;
 border-radius: 50px;

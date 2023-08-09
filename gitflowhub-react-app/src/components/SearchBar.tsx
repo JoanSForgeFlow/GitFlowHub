@@ -27,46 +27,48 @@ const SearchBar: React.FC<SearchBarProps> = ({
   };
 
   return (
-    <div className="search-bar">
-      <input
-        className="input-field"
-        type="text"
-        placeholder="Search by user"
-        value={searchUser}
-        onChange={(e) => {
-          setSearchUser(e.target.value);
-          onUserSearchChange(e.target.value);
-        }}
-      />
-      <input
-        className="input-field"
-        type="text"
-        placeholder="Search by repository"
-        value={searchRepo}
-        onChange={(e) => {
-          setSearchRepo(e.target.value);
-          onRepoSearchChange(e.target.value);
-        }}
-      />
-      <input
-        className="input-field"
-        type="text"
-        placeholder="Search by PR title"
-        value={searchTitle}
-        onChange={(e) => {
-          setSearchTitle(e.target.value);
-          onTitleSearchChange(e.target.value);
-        }}
-      />
-
-      <div className="flex">
+    <div className="flex justify-end">
+      <div className="search-bar">
+        <input
+          className="input-field"
+          type="text"
+          placeholder="Search by user"
+          value={searchUser}
+          onChange={(e) => {
+            setSearchUser(e.target.value);
+            onUserSearchChange(e.target.value);
+          }}
+        />
+        <input
+          className="input-field"
+          type="text"
+          placeholder="Search by repository"
+          value={searchRepo}
+          onChange={(e) => {
+            setSearchRepo(e.target.value);
+            onRepoSearchChange(e.target.value);
+          }}
+        />
+        <input
+          className="input-field"
+          type="text"
+          placeholder="Search by PR title"
+          value={searchTitle}
+          onChange={(e) => {
+            setSearchTitle(e.target.value);
+            onTitleSearchChange(e.target.value);
+          }}
+        />
+      </div>
+      <div className="flex justify-between">
         <ProfileButton username={username} avatar_url={avatar_url} />
-  
-        <button>
-          <div className="profile-button mx-3" onClick={handleClick}>
-            <span>My Board</span>
-          </div>
-        </button>
+
+        <div
+          className="profile-button cursor-pointer w-50rem "
+          onClick={handleClick}
+        >
+          <span>My Board</span>
+        </div>
       </div>
     </div>
   );
