@@ -2,7 +2,8 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import PRDashboard from "./pages/PRDashboard";
-import UserProfile from "./pages/UserProfile"; 
+import UserProfile from "./pages/UserProfile";
+import UserDashboard from "./pages/UserDashboard";
 
 import AuthLayout from "./layouts/AuthLayout";
 import LoginUser from "./pages/LoginUser";
@@ -30,6 +31,9 @@ const App: React.FC = () => {
           </Route>
           <Route path="/my-profile" element={<ProtectedRoute/>}>
             <Route index element={<UserProfile />} />
+          </Route>
+          <Route path="/my-board" element={<ProtectedRoute/>}>
+            <Route index element={<UserDashboard />} />
           </Route>
         </Routes>
       </AuthProvider>

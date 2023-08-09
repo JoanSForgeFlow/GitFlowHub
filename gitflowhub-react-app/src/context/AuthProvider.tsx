@@ -22,6 +22,10 @@ interface AuthContextType {
   fetchUserInfo: Function;
   fetchCompanies: Function;
   updateUserProfile: Function;
+  getUserMultiplePRs:Function;
+  getAssignedPRs:Function;
+  changePRStatus:Function;
+  
 }
 
 interface AuthData {
@@ -70,6 +74,9 @@ const AuthContext = createContext<AuthContextType>({
   fetchUserInfo: () => {},
   fetchCompanies: () => {},
   updateUserProfile: () => {},
+  getUserMultiplePRs:()=>{},
+  getAssignedPRs:()=>{},
+  changePRStatus:()=>{}
 });
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -158,7 +165,6 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
       setLoading(false);
       return;
     }
-    console.log(data);
 
     try {
       const config = {
@@ -169,6 +175,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
       };
 
       await axiosClient.put("/pr/assign", data, config);
+      return
     } catch (error) {
       console.error("Error:", error.message);
     }
@@ -313,6 +320,76 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const getUserMultiplePRs= async()=>{
+    const token = localStorage.getItem("token");
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    try {
+      const multiplePRs= await axiosClient("/pr-user-info",config)
+      return multiplePRs.data
+
+      
+    } catch (error) {
+      console.error(`Error getting User's PR: ${error.message}`);
+      if (error.response) {
+        console.error(`Response status: ${error.response.status}`);
+        console.error(`Response data: ${JSON.stringify(error.response.data)}`);
+      }
+      throw error      
+    }
+
+  }
+
+  const getAssignedPRs= async()=>{
+    const token = localStorage.getItem("token");
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    try {
+      const assignedPRs= await axiosClient("/pr-user-assigned",config)
+      return assignedPRs.data
+
+      
+    } catch (error) {
+      console.error(`Error getting User's PR: ${error.message}`);
+      if (error.response) {
+        console.error(`Response status: ${error.response.status}`);
+        console.error(`Response data: ${JSON.stringify(error.response.data)}`);
+      }
+      throw error      
+    }
+
+  }
+
+  const changePRStatus =async({id,status})=>{
+    const token = localStorage.getItem("token");
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    try {
+      const changedPR= await axiosClient.put("/pr-update-status",{id,status},config)
+      return
+      
+    } catch (error) {
+      console.log(error)
+      
+    }
+
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -326,6 +403,9 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         fetchUserInfo,
         fetchCompanies,
         updateUserProfile,
+        getUserMultiplePRs,
+        getAssignedPRs,
+        changePRStatus
       }}
     >
       {children}

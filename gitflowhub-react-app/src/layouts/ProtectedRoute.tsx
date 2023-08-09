@@ -13,7 +13,7 @@ const ProtectedRoute = () => {
   return (
 
     <>
-    {!loading ? <Outlet/>:<Navigate to="/"/>}
+    {!loading ? <Outlet/>:<Navigate to="/main-page"/>}
     </>
   )
 }

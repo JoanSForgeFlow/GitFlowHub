@@ -20,7 +20,10 @@ import {
   getAndUpdateAvatarUrl,
   getCompanyUsers,
   assignPR,
-  getPR
+  getPR,
+  getUserPR,
+  getUserAssignedPR,
+  ChangePRStatus
 } from '../Controllers/PRDashboardController.js';
 
 import { getUser, getAllCompanies, updateUser } from "../Controllers/UserProfileController.js";
@@ -41,6 +44,9 @@ router.get('/pr/:id',checkAuth, errorChecked(getPR));
 router.get('/update-avatar/:githubUser', checkAuth,errorChecked(getAndUpdateAvatarUrl));
 router.get('/prs/users',checkAuth,errorChecked(getCompanyUsers))
 router.put('/pr/assign',checkAuth,errorChecked(assignPR))
+router.get('/pr-user-info',checkAuth,errorChecked(getUserPR))
+router.get('/pr-user-assigned',checkAuth,errorChecked(getUserAssignedPR))
+router.put('/pr-update-status',checkAuth,errorChecked(ChangePRStatus))
 
 router.get('/companies', checkAuth, getAllCompanies);
 router.get('/:github_user', checkAuth, getUser);
