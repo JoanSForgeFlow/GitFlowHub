@@ -14,6 +14,7 @@ interface ApiResponse {
   token: string;
   email: string;
   username: string;
+  avatar_url: string;
   github_user: string;
 }
 
@@ -42,15 +43,15 @@ const LoginUser = () => {
         "/login",
         {
           email,
-          password,
+          password
         }
       );
 
       const data: ApiResponse = response.data;
-      const { username, token, github_user } = data;
+      const { username, token, github_user,avatar_url } = data;
 
       localStorage.setItem("token", data.token);
-      setAuth({ email, username, token, github_user });
+      setAuth({ email, username, token, avatar_url,github_user });
       navigate("/main-page");
     } catch (error: any) {
       console.log(error);

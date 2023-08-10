@@ -1,21 +1,30 @@
-import { Outlet,Navigate } from "react-router-dom"
-import useAuth from "../hooks/useAuth"
+import { Outlet, Navigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
+import Header from "../components/Header";
 
 const ProtectedRoute = () => {
-    const {auth,loading}=useAuth()
+  const { auth, loading } = useAuth();
 
-    const{email}=auth
+  const { email } = auth;
 
-    console.log(auth)
+  console.log(auth);
 
-    //TODO: añadir un spinner de carga
+  //TODO: añadir un spinner de carga
 
   return (
-
     <>
-    {!loading ? <Outlet/>:<Navigate to="/main-page"/>}
+      {!loading ? (
+        <div>
+          <Header/>
+          <main>
+            <Outlet />
+          </main>
+        </div>
+      ) : (
+        <Navigate to="/main-page" />
+      )}
     </>
-  )
-}
+  );
+};
 
-export default ProtectedRoute
+export default ProtectedRoute;

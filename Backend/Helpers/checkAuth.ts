@@ -29,6 +29,8 @@ const checkAuth = async (req, res, next) => {
           timeZone:true,
           image:true,
           github_user: true,
+          avatar_url:true,
+          
         },
       });
 

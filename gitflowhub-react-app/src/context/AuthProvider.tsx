@@ -31,6 +31,7 @@ interface AuthContextType {
 interface AuthData {
   username: string;
   email: string;
+  avatar_url:string;
   token: string;
   github_user: string;
 }
@@ -62,6 +63,7 @@ const AuthContext = createContext<AuthContextType>({
   auth: {
     username: "",
     email: "",
+    avatar_url:"",
     token: "",
     github_user: "",
   },
@@ -83,6 +85,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [auth, setAuth] = useState<AuthData>({
     username: "",
     email: "",
+    avatar_url:"",
     token: "",
     github_user: "",
   });
@@ -113,6 +116,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         setAuth({
           username: "",
           email: "",
+          avatar_url:"",
           token: "",
           github_user: "",
         });
