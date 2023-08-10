@@ -181,7 +181,6 @@ const userProfile = (req, res) => {
   //On req the user will be stored
   const { user } = req;
 
-  console.log(user)
   const {
     email,
     github_user,
