@@ -1,0 +1,20 @@
+
+.material-symbols-outlined {
+  
+  
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 300,
+  'GRAD' 0,
+  'opsz' 5;
+
+}
+
+.home-button{
+  transition: 0.3s;
+  color:#0891b2;
+
+}
+.home-button:hover{
+  color: white;
+}
