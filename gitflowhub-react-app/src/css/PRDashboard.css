@@ -58,9 +58,19 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+.card-list {
+  position: relative;
+  width: 95%;
+  margin: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
 .card-draggable {
   position: relative;
-  width: 80%;
+  width: 90%;
   margin: 0.5rem;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -94,9 +104,24 @@
   background-color: #f5f5f5;
 }
 
+.card-header-list {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 1rem ;
+  background-color: #f5f5f5;
+}
+
 .user-info__img {
   width: 50px;
   height: 50px;
+  margin-right: 10px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.user-info__img-list {
+  width: 25px;
+  height: 25px;
   margin-right: 10px;
   border-radius: 50%;
   object-fit: cover;
@@ -139,5 +164,9 @@
 
 .review-label.needs-review {
   background-color: #FFA726;
+  color: white;
+}
+.review-label.total {
+  background-color: #575554c4;
   color: white;
 }

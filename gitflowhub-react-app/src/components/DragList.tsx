@@ -101,7 +101,7 @@ const DragList = ({id_PR}) => {
             }}
             id="controllable-states-demo"
             options={userOptions.map((option) => option.label)}
-            sx={{ width: "200px" }}
+            sx={{ width: "150px" }}
             renderInput={(params) => <TextField {...params} label="Asignee" />}
           />
 
