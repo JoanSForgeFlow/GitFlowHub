@@ -30,6 +30,7 @@ interface Pull {
   number: number;
   asigned_user: User;
   review_status: string;
+  gitflowHubStatus:string;
 }
 
 interface PRProps {
@@ -78,7 +79,7 @@ const PRList: React.FC<PRProps> = ({ pull }) => {
         </p>
         <p>
           <span className="font-bold mr-2">State:</span>
-          {pull.state}
+          {pull.gitflowHubStatus}
         </p>
         {reviewLabel()}
         <p>

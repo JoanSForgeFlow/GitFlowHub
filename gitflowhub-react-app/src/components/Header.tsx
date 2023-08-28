@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import Drawer from "@mui/material/Drawer";
 import { useState } from "react";
-
+import LogOutModal from "./LogOutModal";
 import "../css/LayoutProtectedRoute.css";
 
 const Header = ({ username, avatar_url }) => {
@@ -39,7 +39,7 @@ const Header = ({ username, avatar_url }) => {
       setState({ ...state, [anchor]: open });
     };
   return (
-    <div className="flex flex-row items-center bg-gray-900 py-1 border-b border-gray-400">
+    <div className="flex flex-row items-center bg-gray-900 py-1 border-b border-gray-600">
       <div className="w-10 h-10 mx-2 ">
         <img
           src={avatar_url}
@@ -56,10 +56,15 @@ const Header = ({ username, avatar_url }) => {
               width: 240,
               backgroundColor: "rgb(17, 24, 39)",
             },
+            
           }}
+          ModalProps={{
+            disablePortal: true,
+          }}
+
         >
           <div className="px-3">
-            <div className="mt-3 mb-3 bg-gray-900 border-b border-gray-400 text-gray-300 flex">
+            <div className="mt-3 mb-3 bg-gray-900 border-b border-gray-600 text-gray-300 flex">
               <img
                 src={avatar_url}
                 alt={`${username}'s avatar`}
@@ -93,6 +98,12 @@ const Header = ({ username, avatar_url }) => {
             >
               <span className="material-symbols-outlined mr-2">dashboard</span>
               Your Board
+            </div>
+
+            <div className="w-full border-b border-gray-600 mt-2 mb-2"></div>
+
+            <div>
+              <LogOutModal/>
             </div>
           </div>
         </Drawer>
