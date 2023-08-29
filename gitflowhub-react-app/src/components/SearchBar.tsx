@@ -60,16 +60,6 @@ const SearchBar: React.FC<SearchBarProps> = ({
           }}
         />
       </div>
-      <div className="flex justify-between">
-        <ProfileButton username={username} avatar_url={avatar_url} />
-
-        <div
-          className="profile-button cursor-pointer w-50rem "
-          onClick={handleClick}
-        >
-          <span>My Board</span>
-        </div>
-      </div>
     </div>
   );
 };
