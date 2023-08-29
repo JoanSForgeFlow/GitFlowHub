@@ -19,7 +19,7 @@
   width: 25%;
   padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 4px; 
+  border-radius: 4px;
   font-size: 1.2em;
   flex: 1;
   margin: 0 10px;
@@ -48,83 +48,71 @@
   width: 100%;
 }
 
-.card {
+.card, .card-list, .card-draggable {
   position: relative;
-  width: 30%;
   margin: 0.5rem;
   border: 1px solid #ddd;
   border-radius: 4px;
   overflow: hidden;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+.card {
+  width: 30%;
 }
 
 .card-list {
-  position: relative;
   width: 97%;
-  margin: 0.5rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  overflow: hidden;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .card-draggable {
-  position: relative;
   width: 90%;
-  margin: 0.5rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  overflow: hidden;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.card-animation{
+.card-animation {
   transition: 0.2s;
 }
 
-.card-animation:hover{
+.card-animation:hover {
   transform: scale(1.03);
-  box-shadow: 0 0 5px black;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
-.card-dragging{
-  background-color: rgba(89, 110, 131, 0.404); 
-}c
+.card-dragging {
+  background-color: rgba(89, 110, 131, 0.404);
+}
 
-.drop-over-effect{
+.drop-over-effect {
   background-color: aqua;
-
 }
 
-.card-header {
+.card-header, .card-header-list {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  background-color: #f5f5f5;
+  background-color: #c7c7c7;
 }
 
 .card-header-list {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-left: 1rem ;
-  background-color: #f5f5f5;
+  padding-left: 1rem;
+}
+
+.user-info__img, .user-info__img-list {
+  margin-right: 10px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .user-info__img {
   width: 50px;
   height: 50px;
-  margin-right: 10px;
-  border-radius: 50%;
-  object-fit: cover;
 }
+
 .user-info__img-list {
   width: 25px;
   height: 25px;
-  margin-right: 10px;
-  border-radius: 50%;
-  object-fit: cover;
 }
 
 .card-body {
@@ -141,11 +129,7 @@
 }
 
 .material-symbols-outlined {
-  font-variation-settings:
-  'FILL' 0,
-  'wght' 400,
-  'GRAD' 0,
-  'opsz' 24
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }
 
 .review-label {
@@ -158,15 +142,17 @@
 }
 
 .review-label.approved {
-  background-color: #4CAF50;
+  background-color: #66BB6A;
   color: white;
 }
 
 .review-label.needs-review {
-  background-color: #FFA726;
+  background-color: #FF8A65;
   color: white;
 }
+
 .review-label.total {
-  background-color: #575554c4;
-  color: white;
+  background-color: #dcedc1;
+  color: #2a2a2a;
 }
+

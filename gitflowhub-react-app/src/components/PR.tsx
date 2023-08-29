@@ -60,11 +60,15 @@ const PR: React.FC<PRProps> = ({ pull }) => {
     
     <div key={pull.id} className="card w-full card-animation">
       <div className="card-header">
-        <img
-          src={pull.User.avatar_url}
-          alt="User avatar"
-          className="user-info__img"
-        />
+        {
+          pull.User.avatar_url ? 
+          (<img
+            src={pull.User.avatar_url}
+            alt="User avatar"
+            className="user-info__img"
+          />) :
+          (<i className="fas fa-user fa-2x" style={{ marginRight: '0.75rem' }}></i>)
+        }
         <h3>{pull.title}</h3>
         <GoIcon url={pull.html_url} />
       </div>
@@ -76,7 +80,6 @@ const PR: React.FC<PRProps> = ({ pull }) => {
         <p>PR number: {pull.number}</p>
         <DragList
           id_PR={pull.id}
-
         />
       </div>
     </div>

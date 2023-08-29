@@ -46,11 +46,15 @@ const PRDraggable: React.FC<PRProps> = ({ pull,index}) => {
         {...provided.dragHandleProps}
         ref={provided.innerRef}>
           <div className="card-header">
-            <img
-              src={pull.User.avatar_url}
-              alt="User avatar"
-              className="user-info__img"
-            />
+            {
+              pull.User.avatar_url ? 
+              (<img
+                src={pull.User.avatar_url}
+                alt="User avatar"
+                className="user-info__img"
+              />) :
+              (<i className="fas fa-user fa-2x" style={{ marginRight: '0.75rem' }}></i>)
+            }
             <h3>{pull.title}</h3>
             <GoIcon url={pull.html_url} />
           </div>

@@ -84,7 +84,7 @@ const DragList = ({id_PR}) => {
   return (
     <div className="flex w-full">
       <div onClick={handleMouse} className="w-2rem mr-3 mt-4 font-bold cursor-pointer">
-        Asignee:
+        Assignee:
       </div>
 
       {displayEdit ? (
@@ -102,7 +102,7 @@ const DragList = ({id_PR}) => {
             id="controllable-states-demo"
             options={userOptions.map((option) => option.label)}
             sx={{ width: "150px" }}
-            renderInput={(params) => <TextField {...params} label="Asignee" />}
+            renderInput={(params) => <TextField {...params} label="Assignee" />}
           />
 
           <button
@@ -110,7 +110,7 @@ const DragList = ({id_PR}) => {
             className="bg-sky-700 w-400 py-1 px-2 ml-1  text-white uppercase rounded-lg hover:cursor-pointer hover:bg-sky-950 transition-colors"
             onClick={handleAssign}
           >
-            Asign
+            Assign
           </button>
         </div>
       ) : (

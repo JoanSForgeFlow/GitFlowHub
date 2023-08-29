@@ -61,11 +61,15 @@ const PRList: React.FC<PRProps> = ({ pull }) => {
     <div key={pull.id} className="card-list w-full card-animation">
       <div className="card-header-list">
         <div className="flex">
-          <img
-            src={pull.User.avatar_url}
-            alt="User avatar"
-            className="user-info__img-list"
-          />
+          {
+              pull.User.avatar_url ? 
+              (<img
+                src={pull.User.avatar_url}
+                alt="User avatar"
+                className="user-info__img"
+              />) :
+              (<i className="fas fa-user fa-2x" style={{ marginRight: '0.75rem' }}></i>)
+            }
           <h3>{pull.title}</h3>
         </div>
 
