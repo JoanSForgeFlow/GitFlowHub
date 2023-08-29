@@ -1,15 +1,37 @@
 import { useNavigate } from "react-router-dom";
 import Drawer from "@mui/material/Drawer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LogOutModal from "./LogOutModal";
 import "../css/LayoutProtectedRoute.css";
+import useAuth from "../hooks/useAuth";
+
+type Anchor = "left";
+
+interface User {
+  id: number;
+  email: string;
+  username: string | null;
+  password: string;
+  token: string | null;
+  confirmed: boolean;
+  location: string | null;
+  language: string | null;
+  timeZone: string | null;
+  image: string | null;
+  github_user: string;
+  login: string;
+  avatar_url: string;
+  company_id: number;
+}
 
 const Header = ({ username, avatar_url }) => {
   const navigate = useNavigate();
   const [state, setState] = useState({
     left: false,
   });
-  type Anchor = "left";
+  
+  const [userInfo, setUserInfo] = useState<User | null>(null);
+  const { fetchPulls, fetchUserInfo } = useAuth();
 
   const handleClickMain = () => {
     navigate("/main-page");
@@ -38,11 +60,22 @@ const Header = ({ username, avatar_url }) => {
 
       setState({ ...state, [anchor]: open });
     };
+
+    useEffect(()=>{
+      const getUserInfoAndPulls = async () => {
+        const userData = await fetchUserInfo();
+        setUserInfo(userData);
+
+      };
+  
+      getUserInfoAndPulls();
+
+    },[])
   return (
     <div className="flex flex-row items-center bg-gray-900 py-1 border-b border-gray-600">
       <div className="w-10 h-10 mx-2 ">
         <img
-          src={avatar_url}
+          src={userInfo?.avatar_url}
           alt={`${username}'s avatar`}
           className="rounded-full border-2 border-cyan-950 hover:border-white hover:transition-all hover:duration-500 cursor-pointer"
           onClick={toggleDrawer("left", true)}
@@ -66,7 +99,7 @@ const Header = ({ username, avatar_url }) => {
           <div className="px-3">
             <div className="mt-3 mb-3 bg-gray-900 border-b border-gray-600 text-gray-300 flex">
               <img
-                src={avatar_url}
+                src={userInfo?.avatar_url}
                 alt={`${username}'s avatar`}
                 className="rounded-full border-2 border-cyan-950 w-10 mb-2"
               />

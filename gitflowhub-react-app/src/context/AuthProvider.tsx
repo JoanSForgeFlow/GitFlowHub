@@ -25,6 +25,7 @@ interface AuthContextType {
   getUserMultiplePRs:Function;
   getAssignedPRs:Function;
   changePRStatus:Function;
+  signOut:Function;
   
 }
 
@@ -78,7 +79,8 @@ const AuthContext = createContext<AuthContextType>({
   updateUserProfile: () => {},
   getUserMultiplePRs:()=>{},
   getAssignedPRs:()=>{},
-  changePRStatus:()=>{}
+  changePRStatus:()=>{},
+  signOut:()=>{}
 });
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -394,6 +396,16 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   }
 
+  const signOut= ()=>{
+    setAuth({
+      username: "",
+      email: "",
+      avatar_url:"",
+      token: "",
+      github_user: "",
+    })
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -409,7 +421,8 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         updateUserProfile,
         getUserMultiplePRs,
         getAssignedPRs,
-        changePRStatus
+        changePRStatus,
+        signOut
       }}
     >
       {children}

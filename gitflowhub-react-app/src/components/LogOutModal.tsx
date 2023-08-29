@@ -1,11 +1,22 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
+import useAuth from '../hooks/useAuth'
+import { useNavigate } from "react-router-dom";
 
 export default function LogOutModal() {
   let [isOpen, setIsOpen] = useState(false)
+  const {signOut}=useAuth()
+  const navigate = useNavigate();
 
   function closeModal() {
     setIsOpen(false)
+  }
+
+  function handleSignOut(){
+    setIsOpen(false)
+    localStorage.removeItem('token')
+    signOut()
+    navigate("/");
   }
 
   function openModal() {
@@ -61,14 +72,14 @@ export default function LogOutModal() {
                   <div className="mt-4 flex justify-evenly">
                     <button
                       type="button"
-                      className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 w-1/3"
-                      onClick={closeModal}
+                      className="inline-flex justify-center rounded-md border border-transparent bg-green-100 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2 w-1/3"
+                      onClick={handleSignOut}
                     >
                       Yes
                     </button>
                     <button
                       type="button"
-                      className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 w-1/3"
+                      className="inline-flex justify-center rounded-md border border-transparent bg-green-100 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2 w-1/3"
                       onClick={closeModal}
                     >
                       No
