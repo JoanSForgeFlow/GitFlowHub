@@ -25,12 +25,14 @@ interface AuthContextType {
   getUserMultiplePRs:Function;
   getAssignedPRs:Function;
   changePRStatus:Function;
+  signOut:Function;
   
 }
 
 interface AuthData {
   username: string;
   email: string;
+  avatar_url:string;
   token: string;
   github_user: string;
 }
@@ -62,6 +64,7 @@ const AuthContext = createContext<AuthContextType>({
   auth: {
     username: "",
     email: "",
+    avatar_url:"",
     token: "",
     github_user: "",
   },
@@ -76,13 +79,15 @@ const AuthContext = createContext<AuthContextType>({
   updateUserProfile: () => {},
   getUserMultiplePRs:()=>{},
   getAssignedPRs:()=>{},
-  changePRStatus:()=>{}
+  changePRStatus:()=>{},
+  signOut:()=>{}
 });
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [auth, setAuth] = useState<AuthData>({
     username: "",
     email: "",
+    avatar_url:"",
     token: "",
     github_user: "",
   });
@@ -113,6 +118,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         setAuth({
           username: "",
           email: "",
+          avatar_url:"",
           token: "",
           github_user: "",
         });
@@ -390,6 +396,16 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   }
 
+  const signOut= ()=>{
+    setAuth({
+      username: "",
+      email: "",
+      avatar_url:"",
+      token: "",
+      github_user: "",
+    })
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -405,7 +421,8 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         updateUserProfile,
         getUserMultiplePRs,
         getAssignedPRs,
-        changePRStatus
+        changePRStatus,
+        signOut
       }}
     >
       {children}

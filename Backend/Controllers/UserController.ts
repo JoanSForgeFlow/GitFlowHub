@@ -180,11 +180,13 @@ const newPassword = async (req, res) => {
 const userProfile = (req, res) => {
   //On req the user will be stored
   const { user } = req;
+
   const {
     email,
     github_user,
     id,
     image,
+    avatar_url,
     language,
     location,
     timezone,
@@ -199,6 +201,7 @@ const userProfile = (req, res) => {
       github_user,
       id,
       image,
+      avatar_url,
       language,
       location,
       timezone,
