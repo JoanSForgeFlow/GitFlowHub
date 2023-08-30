@@ -63,13 +63,12 @@ const SignInUser = () => {
           error: true,
         });
       }
-
     } catch (error) {
       setAlert({
         msg: "GitHubUser does not exist ",
         error: true,
       });
-      return
+      return;
     }
 
     // If all validations have passed then we generate the post request
@@ -77,7 +76,12 @@ const SignInUser = () => {
     try {
       const data: AxiosResponse<ApiResponse> = await axiosClient.post(
         `/sign-in`,
-        { email: email, username: name, password: password, github_user:gitHubUser }
+        {
+          email: email,
+          username: name,
+          password: password,
+          github_user: gitHubUser,
+        }
       );
 
       setAlert({
@@ -102,21 +106,21 @@ const SignInUser = () => {
 
   return (
     <>
-      <h1 className="text-sky-600 font-black text-4xl">
+      <h1 className="text-sky-500 font-black text-2xl">
         Create your account,{" "}
-        <span className="text-slate-700">start managing your PRs</span>
+        <span className="text-slate-400">start managing your PRs</span>
       </h1>
 
       {/* if alert exists, then the component alert shows */}
       {msg && <Alert alert={alert} />}
 
       <form
-        className="my-10 bg-white shadow rounded-lg p-5"
+        className="my-3 bg-gray-400 shadow rounded-lg p-5 "
         onSubmit={handleSubmit}
       >
-        <div className="my-5">
+        <div className="my-2">
           <label
-            className="uppercase text-gray-600 font-bold block text-xl"
+            className="uppercase text-gray-800 font-bold block text-xl"
             htmlFor="name"
           >
             Name
@@ -125,14 +129,14 @@ const SignInUser = () => {
             id="name"
             type="text"
             placeholder="Your name"
-            className="w-full my-2 p-3 border rounded-xl bg-gray-50"
+            className="w-full my-2 p-3 border  rounded-xl bg-gray-50"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
         </div>
-        <div className="my-5">
+        <div className="my-2">
           <label
-            className="uppercase text-gray-600 font-bold block text-xl"
+            className=" uppercase text-gray-800 font-bold block text-xl"
             htmlFor="name"
           >
             GitHub user
@@ -141,7 +145,7 @@ const SignInUser = () => {
             id="github_user"
             type="text"
             placeholder="Your GitHub user name"
-            className="w-full my-2 p-3 border rounded-xl bg-gray-50"
+            className="w-full my-2 p-3 border  rounded-xl bg-gray-50"
             value={gitHubUser}
             onChange={(e) => setGitHubUser(e.target.value)}
           />
@@ -149,7 +153,7 @@ const SignInUser = () => {
 
         <div className="my-5">
           <label
-            className="uppercase text-gray-600 font-bold block text-xl"
+            className=" uppercase text-gray-800 font-bold block text-xl"
             htmlFor="email"
           >
             Email
@@ -158,23 +162,23 @@ const SignInUser = () => {
             id="email"
             type="email"
             placeholder="User email"
-            className="w-full my-2 p-3 border rounded-xl bg-gray-50"
+            className="w-full my-2 p-3 border  rounded-xl bg-gray-50"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
         <div className="my-5">
           <label
-            className="uppercase text-gray-600 font-bold block text-xl"
+            className=" uppercase text-gray-800 font-bold block text-xl"
             htmlFor="password"
           >
-            password
+            Password
           </label>
           <input
             id="password"
             type="password"
             placeholder="User Password"
-            className="w-full my-2 p-3 border rounded-xl bg-gray-50"
+            className="w-full my-2 p-3 border  rounded-xl bg-gray-50"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -182,7 +186,7 @@ const SignInUser = () => {
 
         <div className="my-5">
           <label
-            className="uppercase text-gray-600 font-bold block text-xl"
+            className=" uppercase text-gray-800 font-bold block text-xl"
             htmlFor="password"
           >
             Repeat password
@@ -191,7 +195,7 @@ const SignInUser = () => {
             id="password2"
             type="password"
             placeholder="Repeat your password"
-            className="w-full my-2 p-3 border rounded-xl bg-gray-50"
+            className="w-full my-2 p-3 border  rounded-xl bg-gray-50"
             value={repeatPassword}
             onChange={(e) => setRepeatPassword(e.target.value)}
           />
@@ -199,20 +203,20 @@ const SignInUser = () => {
           <input
             type="submit"
             value="Register now"
-            className="bg-sky-700 w-full py-3 text-white uppercase rounded-lg font-bold mt-5 hover:cursor-pointer hover:bg-sky-950 transition-colors"
+            className="bg-sky-700 w-full py-3 text-white  rounded-lg  mt-5 hover:cursor-pointer hover:bg-sky-950 transition-colors font-bold uppercase"
           />
         </div>
       </form>
 
       <nav className="lg:flex lg:justify-between">
         <Link
-          className="block text-center my-5 text-slate-500 uppercase text-sm"
+          className="block text-center mb-5 text-slate-500  text-sm"
           to="/"
         >
           Do you have an account? Log in
         </Link>
         <Link
-          className="block text-center my-5 text-slate-500 uppercase text-sm "
+          className="block text-center mb-5 text-slate-500  text-sm "
           to="/forget-password"
         >
           I Forgot my password
