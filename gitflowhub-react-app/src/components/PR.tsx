@@ -40,9 +40,9 @@ const PR: React.FC<PRProps> = ({ pull }) => {
   const reviewLabel = () => {
     switch (pull.review_status) {
       case "approved":
-        return <span className="review-label approved">Approved</span>;
+        return <span className="review-label approved">✔ Approved</span>;
       case "reviews_welcomed":
-        return <span className="review-label needs-review">Needs Review</span>;
+        return <span className="review-label needs-review">⚠ Needs Review</span>;
       default:
         return null;
     }
@@ -57,7 +57,6 @@ const PR: React.FC<PRProps> = ({ pull }) => {
   }
 
   return (
-    
     <div key={pull.id} className="card w-full card-animation">
       <div className="card-header">
         {
@@ -73,14 +72,20 @@ const PR: React.FC<PRProps> = ({ pull }) => {
         <GoIcon url={pull.html_url} />
       </div>
       <div className="card-body">
-        <p>Submitted by: {pull.User.github_user}</p>
-        <p>State: {pull.state}</p>
+        <div className="pr-info">
+          <i className="fas fa-user"></i>
+          <p>{pull.User.github_user}</p>
+        </div>
+        <div className="pr-info">
+          <i className="fas fa-calendar-alt"></i>
+          <p>{formatDate(pull.created_at)}</p>
+        </div>
+        <div className="pr-info">
+          <i className="fas fa-hashtag"></i>
+          <p>PR #{pull.number}</p>
+        </div>
         {reviewLabel()}
-        <p>Created at: {formatDate(pull.created_at)}</p>
-        <p>PR number: {pull.number}</p>
-        <DragList
-          id_PR={pull.id}
-        />
+        <DragList id_PR={pull.id} />
       </div>
     </div>
   );

@@ -41,9 +41,9 @@ const PRList: React.FC<PRProps> = ({ pull }) => {
   const reviewLabel = () => {
     switch (pull.review_status) {
       case "approved":
-        return <span className="review-label approved">Approved</span>;
+        return <span className="review-label approved">✔ Approved</span>;
       case "reviews_welcomed":
-        return <span className="review-label needs-review">Needs Review</span>;
+        return <span className="review-label needs-review">⚠ Needs Review</span>;
       default:
         return null;
     }
@@ -62,45 +62,45 @@ const PRList: React.FC<PRProps> = ({ pull }) => {
       <div className="card-header-list">
         <div className="flex">
           {
-              pull.User.avatar_url ? 
-              (<img
-                src={pull.User.avatar_url}
-                alt="User avatar"
-                className="user-info__img"
-              />) :
-              (<i className="fas fa-user fa-2x" style={{ marginRight: '0.75rem' }}></i>)
-            }
+            pull.User.avatar_url ? 
+            (<img
+              src={pull.User.avatar_url}
+              alt="User avatar"
+              className="user-info__img"
+            />) :
+            (<i className="fas fa-user fa-2x" style={{ marginRight: '0.75rem' }}></i>)
+          }
           <h3>{pull.title}</h3>
         </div>
-
+  
         <GoIcon url={pull.html_url} />
       </div>
-
+  
       <div className="flex justify-between items-center pt-1">
         <p>
-          <span className="font-bold mr-2 ml-2">Submitted by: </span>
+          <i className="fas fa-user mr-2"></i>
           {pull.User.github_user}
         </p>
+        <p>
+          <i className="fas fa-calendar-alt mr-2"></i>
+          {formatDate(pull.created_at)}
+        </p>
+        <p>
+          <i className="fas fa-hashtag mr-2"></i>
+          {pull.number}
+        </p>
+        {reviewLabel()}
         <p>
           <span className="font-bold mr-2">State:</span>
           {pull.gitflowHubStatus}
         </p>
-        {reviewLabel()}
-        <p>
-          <span className="font-bold mr-2">Created at:</span>
-          {formatDate(pull.created_at)}
-        </p>
-        <p>
-          <span className="font-bold mr-2">PR number:</span>
-          {pull.number}
-        </p>
-
+  
         <div className="w-1/4">
           <DragList id_PR={pull.id} />
         </div>
       </div>
     </div>
-  );
+  );  
 };
 
 export default PRList;

@@ -37,6 +37,15 @@ interface PRProps {
   index: number;
 }
 
+function formatDate(isoDate: string): string {
+  const date = new Date(isoDate);
+  const day = String(date.getUTCDate()).padStart(2, "0");
+  const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+  const year = date.getUTCFullYear();
+  return `${day}-${month}-${year}`;
+}
+
+
 const PRDraggable: React.FC<PRProps> = ({ pull,index}) => {
   return (
     <Draggable draggableId={pull.id.toString()} index={index}>
@@ -59,13 +68,23 @@ const PRDraggable: React.FC<PRProps> = ({ pull,index}) => {
             <GoIcon url={pull.html_url} />
           </div>
           <div className="card-body">
-            <p>Submitted by: {pull.User.github_user}</p>
-            <p>State: {pull.state}</p>
-            <p>Created at: {pull.created_at}</p>
-            <p>PR number: {pull.number}</p>
-            <DragList
-              id_PR={pull.id}
-            />
+            <div className="flex justify-between items-center">
+              <div>
+                <div className="flex items-center">
+                  <i className="fas fa-user mr-2"></i>
+                  <span>{pull.User.github_user}</span>
+                </div>
+                <div className="flex items-center">
+                  <i className="fas fa-calendar-alt mr-2"></i>
+                  <span>{formatDate(pull.created_at)}</span>
+                </div>
+                <div className="flex items-center">
+                  <i className="fas fa-hashtag mr-2"></i>
+                  <span>{pull.number}</span>
+                </div>
+              </div>
+            </div>
+            <DragList id_PR={pull.id} />
           </div>
         </div>
       )}

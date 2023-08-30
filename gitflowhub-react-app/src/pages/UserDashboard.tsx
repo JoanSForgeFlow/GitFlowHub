@@ -210,8 +210,8 @@ const UserDashboard = () => {
         <div className="flex flex-row items-center m-4 border-b border-gray-400">
           <p className="ml-3 mr-3 font-bold ">User owner Repo list</p>
           <div className="w-1/3 flex justify-between mx-3">
-            <p className=" review-label needs-review ">Needs Review: {needsReview}</p>
-            <p className=" review-label approved">Approved: {approved}</p>
+            <p className=" review-label needs-review ">⚠ Needs Review: {needsReview}</p>
+            <p className=" review-label approved">✔  Approved: {approved}</p>
             <p className=" review-label total">TOTAL: {total}</p>
           </div>
         </div>
