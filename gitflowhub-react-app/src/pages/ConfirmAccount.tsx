@@ -47,9 +47,9 @@ const ConfirmAccount = () => {
 
   return (
     <>
-      <h1 className="text-sky-600 font-black text-4xl">
+      <h1 className="text-sky-500 font-black text-2xl">
         Confirm your account,{" "}
-        <span className="text-slate-700">start managing your PRs</span>
+        <span className="text-slate-400">start managing your PRs</span>
       </h1>
       <div>
         {/* if alert exists, then the component alert shows */}

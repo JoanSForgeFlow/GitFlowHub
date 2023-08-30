@@ -93,21 +93,21 @@ const NewPassword = () => {
 
   return (
     <>
-      <h1 className="text-sky-600 font-black text-4xl">
+      <h1 className="text-sky-500 font-black text-2xl">
         Reset your password,{" "}
-        <span className="text-slate-700">PRs are waiting for you</span>
+        <span className="text-slate-400">PRs are waiting for you</span>
       </h1>
 
       {validatedToken ? (
         <form
-          className="my-10 bg-white shadow rounded-lg p-5"
+          className="my-3 bg-gray-400 shadow rounded-lg p-5"
           onSubmit={handleSubmit}
         >
           <div>{msg && <Alert alert={alert} />}</div>
 
           <div className="my-5">
             <label
-              className="uppercase text-gray-600 font-bold block text-xl"
+              className="uppercase text-gray-800 font-bold block text-xl"
               htmlFor="password"
             >
               password
@@ -124,7 +124,7 @@ const NewPassword = () => {
 
           <div className="my-5">
             <label
-              className="uppercase text-gray-600 font-bold block text-xl"
+              className="uppercase text-gray-800 font-bold block text-xl"
               htmlFor="password"
             >
               Repeat password

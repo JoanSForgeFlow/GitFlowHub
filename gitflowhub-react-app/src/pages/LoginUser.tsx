@@ -68,18 +68,18 @@ const LoginUser = () => {
 
   return (
     <>
-      <h1 className="text-sky-600 font-black text-4xl">
+      <h1 className="text-sky-600 font-black text-2xl">
         Log In,{" "}
-        <span className="text-slate-700">PR are waiting to be managed</span>
+        <span className="text-slate-400">PR are waiting to be managed</span>
       </h1>
       {msg && <Alert alert={alert} />}
       <form
-        className="my-10 bg-white shadow rounded-lg p-5"
+        className="my-3 bg-gray-400 shadow rounded-lg p-5"
         onSubmit={handleSubmit}
       >
         <div className="my-5">
           <label
-            className="uppercase text-gray-600 font-bold block text-xl"
+            className="uppercase text-gray-800 font-bold block text-xl"
             htmlFor="email"
           >
             Email
@@ -88,14 +88,14 @@ const LoginUser = () => {
             id="email"
             type="email"
             placeholder="User email"
-            className="w-full my-2 p-3 border rounded-xl bg-gray-50"
+            className="w-full my-2 p-3 border  rounded-xl bg-gray-50"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
         <div className="my-5">
           <label
-            className="uppercase text-gray-600 font-bold block text-xl"
+            className="uppercase text-gray-800 font-bold block text-xl"
             htmlFor="password"
           >
             password
