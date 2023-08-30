@@ -5,6 +5,8 @@ import Repo from "../components/Repo";
 import axiosClient from '../config/axiosClient';
 import useAuth from "../hooks/useAuth";
 import AuthContext from '../context/AuthProvider';
+import Logo from '../components/Logo';
+
 
 interface User {
   id: number;
@@ -105,31 +107,40 @@ const PRDashboard: React.FC = () => {
         onRepoSearchChange={(repo) => setSearchRepo(repo)}
         onTitleSearchChange={(title) => setSearchTitle(title)}
       />
-      {Object.keys(repoGroups)
-        .filter(
-          (repoName) =>
-            repoName.toLowerCase().includes(searchRepo.toLowerCase()) &&
-            repoGroups[repoName].some(
-              (pull) =>
-                pull.User.github_user
-                  .toLowerCase()
-                  .includes(searchUser.toLowerCase()) &&
-                pull.title.toLowerCase().includes(searchTitle.toLowerCase())
-            )
-        )
-        .sort((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" }))
-        .map((repoName) => (
-          <Repo
-            key={repoName}
-            repoName={repoName}
-            pulls={repoGroups[repoName]}
-            handleRepoClick={handleRepoClick}
-            searchUser={searchUser}
-            searchTitle={searchTitle}
-            autoExpand={autoExpand}
-            isExpanded={expandedRepos.has(repoName)}
-          />
-        ))}
+        {filteredPulls.length === 0 ? (
+          <div className="no-prs-container">
+            <Logo />
+            <div className="no-prs-message">
+              No PRs matched your search
+            </div>
+          </div>
+        ) : (
+        Object.keys(repoGroups)
+          .filter(
+            (repoName) =>
+              repoName.toLowerCase().includes(searchRepo.toLowerCase()) &&
+              repoGroups[repoName].some(
+                (pull) =>
+                  pull.User.github_user
+                    .toLowerCase()
+                    .includes(searchUser.toLowerCase()) &&
+                  pull.title.toLowerCase().includes(searchTitle.toLowerCase())
+              )
+          )
+          .sort((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" }))
+          .map((repoName) => (
+            <Repo
+              key={repoName}
+              repoName={repoName}
+              pulls={repoGroups[repoName]}
+              handleRepoClick={handleRepoClick}
+              searchUser={searchUser}
+              searchTitle={searchTitle}
+              autoExpand={autoExpand}
+              isExpanded={expandedRepos.has(repoName)}
+            />
+          ))
+      )}
     </div>
   );
 };
