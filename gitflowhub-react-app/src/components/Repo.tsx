@@ -46,7 +46,10 @@ interface RepoProps {
   
   const Repo: React.FC<RepoProps> = ({ repoName, pulls, handleRepoClick, searchUser, searchTitle, autoExpand, isExpanded }) => (
     <div key={repoName} className="repo-group">
-      <h2 onClick={() => handleRepoClick(repoName)}>{repoName}</h2>
+      <h2 onClick={() => handleRepoClick(repoName)}>
+        <i className={`fa ${isExpanded ? "fa-chevron-down" : "fa-chevron-right"}`} style={{ marginRight: '5px' }}></i>
+        {repoName}
+      </h2>
       {(autoExpand || isExpanded) && (
         <div className="pull-cards"> 
           {pulls.filter(pull => 

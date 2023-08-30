@@ -13,6 +13,7 @@ import NewPassword from "./pages/NewPassword";
 import ConfirmAccount from "./pages/ConfirmAccount";
 import { AuthProvider } from "./context/AuthProvider";
 import ProtectedRoute from "./layouts/ProtectedRoute";
+import 'font-awesome/css/font-awesome.min.css';
 
 const App: React.FC = () => {
   return (
