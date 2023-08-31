@@ -188,3 +188,24 @@
   align-items: center;
   gap: 0.5rem;
 }
+
+.pr-badge {
+  display: inline-block;
+  margin-left: 10px;
+  padding: 3px 8px;
+  border-radius: 12px;
+  background-color: #7B7B7B;
+  color: white;
+  font-size: 0.9em;
+  margin-right: 10px;
+}
+
+.repo-title {
+  display: flex;
+  align-items: center;
+}
+
+.repo-name {
+  flex-grow: 1;
+  margin-right: 10px;
+}

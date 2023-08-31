@@ -44,23 +44,28 @@ interface RepoProps {
     isExpanded: boolean;
   }
   
-  const Repo: React.FC<RepoProps> = ({ repoName, pulls, handleRepoClick, searchUser, searchTitle, autoExpand, isExpanded }) => (
-    <div key={repoName} className="repo-group">
-      <h2 onClick={() => handleRepoClick(repoName)}>
-        <i className={`fa ${isExpanded ? "fa-chevron-down" : "fa-chevron-right"}`} style={{ marginRight: '5px' }}></i>
-        {repoName}
-      </h2>
-      {(autoExpand || isExpanded) && (
-        <div className="pull-cards"> 
-          {pulls.filter(pull => 
-            pull.User.github_user.toLowerCase().includes(searchUser.toLowerCase()) &&
-            pull.title.toLowerCase().includes(searchTitle.toLowerCase())
-          ).map((pull: Pull) => (
-            <PR key={pull.id} pull={pull} />
-          ))}
+  const Repo: React.FC<RepoProps> = ({ repoName, pulls, handleRepoClick, searchUser, searchTitle, autoExpand, isExpanded }) => {
+    const filteredPulls = pulls.filter(pull => 
+        pull.User.github_user.toLowerCase().includes(searchUser.toLowerCase()) &&
+        pull.title.toLowerCase().includes(searchTitle.toLowerCase())
+    );
+
+    return (
+        <div key={repoName} className="repo-group">
+            <h2 onClick={() => handleRepoClick(repoName)} className="repo-title">
+                <i className={`fa ${isExpanded ? "fa-chevron-down" : "fa-chevron-right"}`} style={{ marginRight: '5px' }}></i>
+                <span className="pr-badge">{filteredPulls.length}</span>
+                {repoName}
+            </h2>
+            {(autoExpand || isExpanded) && (
+                <div className="pull-cards"> 
+                    {filteredPulls.map((pull: Pull) => (
+                        <PR key={pull.id} pull={pull} />
+                    ))}
+                </div>
+            )}
         </div>
-      )}
-    </div>
-  );
+    );
+}
   
   export default Repo;
