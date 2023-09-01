@@ -261,6 +261,19 @@
   margin-right: 10px;
 }
 
+/* Tag Code */
+
+.tag {
+  display: flex;
+  flex-direction: row;
+  justify-items: center;
+  background: #00000052;
+  margin-right: 1rem;
+  padding-left: 0.25rem;
+  padding-right: 0.15rem;
+  border-radius: 0.5rem;
+}
+
 
 /* Spinner code */
 
