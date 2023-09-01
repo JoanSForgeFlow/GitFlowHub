@@ -29,36 +29,45 @@ const SearchBar: React.FC<SearchBarProps> = ({
   return (
     <div className="flex justify-end">
       <div className="search-bar">
-        <input
-          className="input-field"
-          type="text"
-          placeholder="Search by user"
-          value={searchUser}
-          onChange={(e) => {
-            setSearchUser(e.target.value);
-            onUserSearchChange(e.target.value);
-          }}
-        />
-        <input
-          className="input-field"
-          type="text"
-          placeholder="Search by repository"
-          value={searchRepo}
-          onChange={(e) => {
-            setSearchRepo(e.target.value);
-            onRepoSearchChange(e.target.value);
-          }}
-        />
-        <input
-          className="input-field"
-          type="text"
-          placeholder="Search by PR title"
-          value={searchTitle}
-          onChange={(e) => {
-            setSearchTitle(e.target.value);
-            onTitleSearchChange(e.target.value);
-          }}
-        />
+        <div className="input-with-icon">
+          <input
+            className="input-field"
+            type="text"
+            placeholder="Search by user"
+            value={searchUser}
+            onChange={(e) => {
+              setSearchUser(e.target.value);
+              onUserSearchChange(e.target.value);
+            }}
+          />
+          <i className="fas fa-search"></i>
+        </div>
+        <div className="input-with-icon">
+          <input
+            className="input-field"
+            type="text"
+            placeholder="Search by repository"
+            value={searchRepo}
+            onChange={(e) => {
+              setSearchRepo(e.target.value);
+              onRepoSearchChange(e.target.value);
+            }}
+          />
+          <i className="fas fa-search"></i>
+        </div>
+        <div className="input-with-icon">
+          <input
+            className="input-field"
+            type="text"
+            placeholder="Search by PR title"
+            value={searchTitle}
+            onChange={(e) => {
+              setSearchTitle(e.target.value);
+              onTitleSearchChange(e.target.value);
+            }}
+          />
+          <i className="fas fa-search"></i>
+        </div>
       </div>
     </div>
   );
