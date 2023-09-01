@@ -9,13 +9,14 @@ const ProtectedRoute = () => {
 
   console.log(avatar_url)
   //TODO: añadir un spinner de carga
+  
 
   return (
     <>
       {!loading ? (
         <div>
           <Header username={username} avatar_url={avatar_url}/>
-          <main>
+          <main className="mt-20">
             <Outlet />
           </main>
         </div>

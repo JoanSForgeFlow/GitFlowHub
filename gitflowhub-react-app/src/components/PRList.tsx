@@ -66,7 +66,7 @@ const PRList: React.FC<PRProps> = ({ pull }) => {
             (<img
               src={pull.User.avatar_url}
               alt="User avatar"
-              className="user-info__img"
+              className="user-info__img-list"
             />) :
             (<i className="fas fa-user fa-2x" style={{ marginRight: '0.75rem' }}></i>)
           }
@@ -76,26 +76,26 @@ const PRList: React.FC<PRProps> = ({ pull }) => {
         <GoIcon url={pull.html_url} />
       </div>
   
-      <div className="flex justify-between items-center pt-1">
+      <div className="md:flex md:justify-between md:items-center pt-1 ml-1">
         <p>
-          <i className="fas fa-user mr-2"></i>
+          <i className="fas fa-user mr-2 "></i>
           {pull.User.github_user}
         </p>
         <p>
-          <i className="fas fa-calendar-alt mr-2"></i>
+          <i className="fas fa-calendar-alt mr-2 "></i>
           {formatDate(pull.created_at)}
         </p>
         <p>
-          <i className="fas fa-hashtag mr-2"></i>
+          <i className="fas fa-hashtag mr-2 "></i>
           {pull.number}
         </p>
         {reviewLabel()}
         <p>
-          <span className="font-bold mr-2">State:</span>
+          <span className="font-bold mr-2 ">State:</span>
           {pull.gitflowHubStatus}
         </p>
   
-        <div className="w-1/4">
+        <div className="lg:w-1/4 ">
           <DragList id_PR={pull.id} />
         </div>
       </div>

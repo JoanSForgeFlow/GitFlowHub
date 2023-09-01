@@ -15,6 +15,7 @@ interface AuthContextType {
   auth: AuthData;
   setAuth: Dispatch<SetStateAction<AuthData>>;
   loading: Boolean;
+  spinner: Boolean;
   optionUsers: Function;
   fetchPulls: Function;
   assignUser: Function;
@@ -22,17 +23,16 @@ interface AuthContextType {
   fetchUserInfo: Function;
   fetchCompanies: Function;
   updateUserProfile: Function;
-  getUserMultiplePRs:Function;
-  getAssignedPRs:Function;
-  changePRStatus:Function;
-  signOut:Function;
-  
+  getUserMultiplePRs: Function;
+  getAssignedPRs: Function;
+  changePRStatus: Function;
+  signOut: Function;
 }
 
 interface AuthData {
   username: string;
   email: string;
-  avatar_url:string;
+  avatar_url: string;
   token: string;
   github_user: string;
 }
@@ -64,35 +64,37 @@ const AuthContext = createContext<AuthContextType>({
   auth: {
     username: "",
     email: "",
-    avatar_url:"",
+    avatar_url: "",
     token: "",
     github_user: "",
   },
   setAuth: () => {},
   loading: true,
+  spinner: true,
   optionUsers: () => {},
   fetchPulls: () => {},
   assignUser: () => {},
-  getPR: ()=>{},
+  getPR: () => {},
   fetchUserInfo: () => {},
   fetchCompanies: () => {},
   updateUserProfile: () => {},
-  getUserMultiplePRs:()=>{},
-  getAssignedPRs:()=>{},
-  changePRStatus:()=>{},
-  signOut:()=>{}
+  getUserMultiplePRs: () => {},
+  getAssignedPRs: () => {},
+  changePRStatus: () => {},
+  signOut: () => {},
 });
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [auth, setAuth] = useState<AuthData>({
     username: "",
     email: "",
-    avatar_url:"",
+    avatar_url: "",
     token: "",
     github_user: "",
   });
 
   const [loading, setLoading] = useState(true);
+  const [spinner, setSpinner] = useState(true);
   const navigate = useNavigate();
   const { github_user } = auth;
 
@@ -118,7 +120,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         setAuth({
           username: "",
           email: "",
-          avatar_url:"",
+          avatar_url: "",
           token: "",
           github_user: "",
         });
@@ -181,7 +183,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
       };
 
       await axiosClient.put("/pr/assign", data, config);
-      return
+      return;
     } catch (error) {
       console.error("Error:", error.message);
     }
@@ -205,13 +207,15 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       const response = await axiosClient(`/pr/${id}`, config);
 
-      return response.data
+      return response.data;
     } catch (error) {
       console.error("Error:", error.message);
     }
   };
 
   const fetchPulls = async () => {
+    setSpinner(true);
+
     const token = localStorage.getItem("token");
     if (!token) {
       setLoading(false);
@@ -236,6 +240,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
 
       const url = `/prs?github_user=${githubUser}`;
+
       const { data: prs } = await axiosClient(url, config);
 
       // Registro de seguimiento
@@ -253,17 +258,23 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         // setPulls(newPulls);
         // Registro de seguimiento
         console.log("Updated pulls:", newPulls);
-
+        setSpinner(false);
         return newPulls;
       }
     } catch (error: any) {
       console.error("Error:", error.message);
       console.error("Error response:", error.response);
+    } finally {
+      setSpinner(false);
     }
   };
 
   const fetchUserInfo = async () => {
     const token = localStorage.getItem("token");
+    if (!token) {
+      setLoading(false);
+      return;
+    }
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -272,7 +283,10 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
 
     try {
-      const response = await axiosClient.get<User>(`/${auth.github_user}`, config);
+      const response = await axiosClient.get<User>(
+        `/${auth.github_user}`,
+        config
+      );
       console.log(`Fetch User Data Response: ${JSON.stringify(response.data)}`);
       return response.data;
     } catch (error) {
@@ -285,15 +299,19 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const fetchCompanies = async () => {
     const token = localStorage.getItem("token");
+    if (!token) {
+      setLoading(false);
+      return;
+    }
     const config = {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
     };
-  
+
     try {
-      const response = await axiosClient.get<Company[]>('/companies', config);
+      const response = await axiosClient.get<Company[]>("/companies", config);
       return response.data;
     } catch (error) {
       console.error(`Error fetching companies: ${error.message}`);
@@ -303,8 +321,15 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const updateUserProfile = async (github_user: string, updateData: { company_id: number | null, username: string }) => {
+  const updateUserProfile = async (
+    github_user: string,
+    updateData: { company_id: number | null; username: string }
+  ) => {
     const token = localStorage.getItem("token");
+    if (!token) {
+      setLoading(false);
+      return;
+    }
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -313,7 +338,11 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
 
     try {
-      const response = await axiosClient.put(`/${github_user}`, updateData, config);
+      const response = await axiosClient.put(
+        `/${github_user}`,
+        updateData,
+        config
+      );
       console.log(`Update Profile Response: ${JSON.stringify(response.data)}`);
       return response.data;
     } catch (error) {
@@ -326,8 +355,12 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const getUserMultiplePRs= async()=>{
+  const getUserMultiplePRs = async () => {
     const token = localStorage.getItem("token");
+    if (!token) {
+      setLoading(false);
+      return;
+    }
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -336,23 +369,25 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
 
     try {
-      const multiplePRs= await axiosClient("/pr-user-info",config)
-      return multiplePRs.data
-
-      
+      const multiplePRs = await axiosClient("/pr-user-info", config);
+      return multiplePRs.data;
     } catch (error) {
       console.error(`Error getting User's PR: ${error.message}`);
       if (error.response) {
         console.error(`Response status: ${error.response.status}`);
         console.error(`Response data: ${JSON.stringify(error.response.data)}`);
       }
-      throw error      
+      throw error;
     }
+  };
 
-  }
-
-  const getAssignedPRs= async()=>{
+  const getAssignedPRs = async () => {
+    setSpinner(true);
     const token = localStorage.getItem("token");
+    if (!token) {
+      setLoading(false);
+      return;
+    }
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -361,23 +396,25 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
 
     try {
-      const assignedPRs= await axiosClient("/pr-user-assigned",config)
-      return assignedPRs.data
-
-      
+      const assignedPRs = await axiosClient("/pr-user-assigned", config);
+      setSpinner(false);
+      return assignedPRs.data;
     } catch (error) {
       console.error(`Error getting User's PR: ${error.message}`);
       if (error.response) {
         console.error(`Response status: ${error.response.status}`);
         console.error(`Response data: ${JSON.stringify(error.response.data)}`);
       }
-      throw error      
+      throw error;
     }
+  };
 
-  }
-
-  const changePRStatus =async({id,status})=>{
+  const changePRStatus = async ({ id, status }) => {
     const token = localStorage.getItem("token");
+    if (!token) {
+      setLoading(false);
+      return;
+    }
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -386,25 +423,26 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
 
     try {
-      const changedPR= await axiosClient.put("/pr-update-status",{id,status},config)
-      return
-      
+      const changedPR = await axiosClient.put(
+        "/pr-update-status",
+        { id, status },
+        config
+      );
+      return;
     } catch (error) {
-      console.log(error)
-      
+      console.log(error);
     }
+  };
 
-  }
-
-  const signOut= ()=>{
+  const signOut = () => {
     setAuth({
       username: "",
       email: "",
-      avatar_url:"",
+      avatar_url: "",
       token: "",
       github_user: "",
-    })
-  }
+    });
+  };
 
   return (
     <AuthContext.Provider
@@ -412,6 +450,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         auth,
         setAuth,
         loading,
+        spinner,
         optionUsers,
         fetchPulls,
         assignUser,
@@ -422,7 +461,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         getUserMultiplePRs,
         getAssignedPRs,
         changePRStatus,
-        signOut
+        signOut,
       }}
     >
       {children}

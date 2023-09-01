@@ -2,11 +2,11 @@ import React, { useState, useEffect, useContext } from "react";
 import "../css/PRDashboard.css";
 import SearchBar from "../components/SearchBar";
 import Repo from "../components/Repo";
-import axiosClient from '../config/axiosClient';
 import useAuth from "../hooks/useAuth";
-import AuthContext from '../context/AuthProvider';
-import Logo from '../components/Logo';
-
+import AuthContext from "../context/AuthProvider";
+import Logo from "../components/Logo";
+import { dividerClasses } from "@mui/material";
+import Spinner from "../components/Spinner";
 
 interface User {
   id: number;
@@ -36,7 +36,7 @@ interface Pull {
   user_id: number;
   User: User;
   number: number;
-  asigned_user:User;
+  asigned_user: User;
   review_status: string;
 }
 
@@ -46,10 +46,9 @@ const PRDashboard: React.FC = () => {
   const [searchRepo, setSearchRepo] = useState("");
   const [searchTitle, setSearchTitle] = useState("");
   const [expandedRepos, setExpandedRepos] = useState<Set<string>>(new Set());
-  const { fetchPulls, fetchUserInfo } = useAuth();
+  const { fetchPulls, fetchUserInfo, spinner } = useAuth();
   const { auth } = useContext(AuthContext);
   const [userInfo, setUserInfo] = useState<User | null>(null);
-
 
   useEffect(() => {
     console.log("Running useEffect");
@@ -99,49 +98,59 @@ const PRDashboard: React.FC = () => {
   const autoExpand = filteredPulls.length <= 5;
 
   return (
-    <div className="github-app">
-      <SearchBar
-        username={userInfo?.username ?? ''}
-        avatar_url={userInfo?.avatar_url ?? ''}
-        onUserSearchChange={(user) => setSearchUser(user)}
-        onRepoSearchChange={(repo) => setSearchRepo(repo)}
-        onTitleSearchChange={(title) => setSearchTitle(title)}
-      />
-        {filteredPulls.length === 0 ? (
-          <div className="no-prs-container">
-            <Logo />
-            <div className="no-prs-message">
-              No PRs matched your search
+    <>
+      {!spinner ? (
+        <div className="github-app">
+          <SearchBar
+            username={userInfo?.username ?? ""}
+            avatar_url={userInfo?.avatar_url ?? ""}
+            onUserSearchChange={(user) => setSearchUser(user)}
+            onRepoSearchChange={(repo) => setSearchRepo(repo)}
+            onTitleSearchChange={(title) => setSearchTitle(title)}
+          />
+          {filteredPulls.length === 0 ? (
+            <div className="no-prs-container">
+              <Logo />
+              <div className="no-prs-message">No PRs matched your search</div>
             </div>
-          </div>
-        ) : (
-        Object.keys(repoGroups)
-          .filter(
-            (repoName) =>
-              repoName.toLowerCase().includes(searchRepo.toLowerCase()) &&
-              repoGroups[repoName].some(
-                (pull) =>
-                  pull.User.github_user
-                    .toLowerCase()
-                    .includes(searchUser.toLowerCase()) &&
-                  pull.title.toLowerCase().includes(searchTitle.toLowerCase())
+          ) : (
+            Object.keys(repoGroups)
+              .filter(
+                (repoName) =>
+                  repoName.toLowerCase().includes(searchRepo.toLowerCase()) &&
+                  repoGroups[repoName].some(
+                    (pull) =>
+                      pull.User.github_user
+                        .toLowerCase()
+                        .includes(searchUser.toLowerCase()) &&
+                      pull.title
+                        .toLowerCase()
+                        .includes(searchTitle.toLowerCase())
+                  )
               )
-          )
-          .sort((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" }))
-          .map((repoName) => (
-            <Repo
-              key={repoName}
-              repoName={repoName}
-              pulls={repoGroups[repoName]}
-              handleRepoClick={handleRepoClick}
-              searchUser={searchUser}
-              searchTitle={searchTitle}
-              autoExpand={autoExpand}
-              isExpanded={expandedRepos.has(repoName)}
-            />
-          ))
+              .sort((a, b) =>
+                a.localeCompare(b, undefined, { sensitivity: "base" })
+              )
+              .map((repoName) => (
+                <Repo
+                  key={repoName}
+                  repoName={repoName}
+                  pulls={repoGroups[repoName]}
+                  handleRepoClick={handleRepoClick}
+                  searchUser={searchUser}
+                  searchTitle={searchTitle}
+                  autoExpand={autoExpand}
+                  isExpanded={expandedRepos.has(repoName)}
+                />
+              ))
+          )}
+        </div>
+      ) : (
+        <div className="flex flex-row align-middle justify-center ml-30">
+          <Spinner />
+        </div>
       )}
-    </div>
+    </>
   );
 };
 
