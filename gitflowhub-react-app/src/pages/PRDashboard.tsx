@@ -49,6 +49,10 @@ const PRDashboard: React.FC = () => {
   const { fetchPulls, fetchUserInfo, spinner } = useAuth();
   const { auth } = useContext(AuthContext);
   const [userInfo, setUserInfo] = useState<User | null>(null);
+  const [userSuggestions, setUserSuggestions] = useState<string[]>([]);
+  const [repoSuggestions, setRepoSuggestions] = useState<string[]>([]);
+  const [titleSuggestions, setTitleSuggestions] = useState<string[]>([]);
+
 
   useEffect(() => {
     console.log("Running useEffect");
@@ -62,6 +66,18 @@ const PRDashboard: React.FC = () => {
 
     getUserInfoAndPulls();
   }, []);
+
+useEffect(() => {
+    console.log("Setting up suggestions based on pulls");
+
+    const uniqueUsers = Array.from(new Set(Object.values(pulls).map(pull => pull.User.github_user)));
+    const uniqueRepos = Array.from(new Set(Object.values(pulls).map(pull => pull.repo_name)));
+    const uniqueTitles = Array.from(new Set(Object.values(pulls).map(pull => pull.title)));
+  
+    setUserSuggestions(uniqueUsers);
+    setRepoSuggestions(uniqueRepos);
+    setTitleSuggestions(uniqueTitles);
+}, [pulls]);
 
   const groupByRepository = (pulls: Record<number, Pull>) => {
     const groups: Record<string, Pull[]> = {};
@@ -107,6 +123,9 @@ const PRDashboard: React.FC = () => {
             onUserSearchChange={(user) => setSearchUser(user)}
             onRepoSearchChange={(repo) => setSearchRepo(repo)}
             onTitleSearchChange={(title) => setSearchTitle(title)}
+            userSuggestions={userSuggestions}
+            repoSuggestions={repoSuggestions}
+            titleSuggestions={titleSuggestions}
           />
           {filteredPulls.length === 0 ? (
             <div className="no-prs-container">

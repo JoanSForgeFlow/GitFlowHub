@@ -42,6 +42,34 @@
   z-index: 10;
 }
 
+.suggestion-list {
+  position: absolute;
+  top: 100%; /* Esto coloca la lista justo debajo del input */
+  left: 0;
+  right: 0; /* Asegura que la lista tenga el mismo ancho que el input */
+  max-height: 150px; /* Un max-height para que no sea demasiado largo si hay muchas sugerencias */
+  overflow-y: auto; /* Permite el desplazamiento si la lista supera el max-height */
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Sombra suave */
+  z-index: 5; /* Asegura que la lista esté sobre otros elementos */
+}
+
+.suggestion-item {
+  padding: 8px 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #f0f0f0; /* Un borde sutil entre elementos */
+}
+
+.suggestion-item:last-child {
+  border-bottom: none; /* Quita el borde para el último ítem */
+}
+
+.suggestion-item:hover {
+  background-color: #f5f5f5; /* Color de fondo cuando se pasa el cursor */
+}
+
 .repo-group {
   display: flex;
   flex-direction: column;
