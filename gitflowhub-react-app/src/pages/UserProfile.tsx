@@ -6,6 +6,7 @@ import axiosClient from '../config/axiosClient';
 import { Alert } from '../components/Alert';
 import '../css/UserProfile.css';
 import useAuth from "../hooks/useAuth";
+import Spinner from '../components/Spinner';
 
 interface Company {
   id: number;
@@ -46,7 +47,7 @@ const UserProfile: React.FC = () => {
     navigate('/main-page');
   };
 
-  const { fetchCompanies, fetchUserInfo } = useAuth();
+  const { fetchCompanies, fetchUserInfo,spinner } = useAuth();
 
   useEffect(() => {
     const fetchUserInfoAndCompanies = async () => {
@@ -95,7 +96,9 @@ const UserProfile: React.FC = () => {
   };
 
   if (!user) {
-    return <div>Loading...</div>;
+    return <div className="flex flex-row align-middle justify-center ml-30">
+    <Spinner />
+  </div>;
   }
 
   return (

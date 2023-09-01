@@ -82,7 +82,7 @@ const DragList = ({id_PR}) => {
   };
 
   return (
-    <div className="flex w-full">
+    <div className="lg:flex lg:w-3/4 md:w-2/3 w-3/4 ">
       <div onClick={handleMouse} className="w-2rem mr-3 mt-4 font-bold cursor-pointer">
         Assignee:
       </div>

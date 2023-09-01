@@ -71,8 +71,8 @@ const Header = ({ username, avatar_url }) => {
     getUserInfoAndPulls();
   }, []);
   return (
-    <div className="flex flex-row items-center bg-gray-900 py-1 border-b border-gray-600">
-      <div className="flex items-center w-2/5 justify-start">
+    <div className="flex flex-row items-center bg-gray-900 py-1 border-b border-gray-600 fixed top-0 left-0 w-full z-50">
+      <div className="flex items-center md:w-2/5 md:justify-start ">
         <div className="w-10 h-10 mx-2 ">
           <img
             src={userInfo?.avatar_url}
@@ -150,7 +150,7 @@ const Header = ({ username, avatar_url }) => {
         </div>
       </div>
 
-      <div className="flex flex-row items-center ml-20">
+      <div className="flex flex-row items-center ml-10">
         <Logo />
 
         <p className="title-company">GitFlowHub</p>
