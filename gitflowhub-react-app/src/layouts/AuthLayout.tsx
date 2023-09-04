@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import "../css/Layout.css";
 import Logo from "../components/Logo";
+import 'react-toastify/dist/ReactToastify.css';
 
 const AuthLayout = () => {
   return (
