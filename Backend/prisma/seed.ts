@@ -17,10 +17,10 @@ async function main() {
     data: {
       email: "usuario1@forgeflow.com",
       password: "contraseñasegura1",
-      github_user: "JoanSForgeFlow",
-      login: "JoanSForgeFlow",
+      github_user: "MateuGForgeFlow",
+      login: "MateuGForgeFlow",
       company_id: company1.id,
-      username: "Joan",
+      username: "Mateu",
     },
   })
 

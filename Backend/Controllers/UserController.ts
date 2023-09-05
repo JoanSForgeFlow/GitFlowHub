@@ -4,6 +4,7 @@ import generarId from "../Helpers/generarId.js";
 import generarJWT from "../Helpers/generarJWT.js";
 import { signInEmail, newPasswordEmail } from "../Helpers/emails.js";
 import { updateUserPullRequests } from "../Crons/cronJobs.js";
+import { getAndUpdateAvatarUrl } from './PRDashboardController.js';
 
 const RegisterUser = async (req, res) => {
   const data = req.body;
@@ -37,14 +38,11 @@ const RegisterUser = async (req, res) => {
 };
 
 const confirmUser = async (req, res) => {
-  //Extract token from the header
   const { token } = req.params;
 
-  //Search on db for this token
   const searchedUser = await prisma.user.findFirst({ where: { token } });
 
   if (searchedUser) {
-    //If the user exists, account is confirmed and token is removed
     const updatedUser = await prisma.user.update({
       where: { id: searchedUser.id },
       data: { confirmed: true },
@@ -52,12 +50,28 @@ const confirmUser = async (req, res) => {
 
     console.log(updatedUser);
 
-    // Start updating PRs in the background
+    // Start updating the user's PRs in the background
     updateUserPullRequests().catch((error) => {
       console.error('Error updating PRs in the background:', error);
     });
 
-    return res.status(200).json({ msg: "User confirmation success" });
+    // Update the user's avatar URL
+    const githubUser = searchedUser.github_user;
+    const fakeReq = { params: { githubUser } };
+    const fakeRes = {
+      status: (statusCode) => {
+        console.log(`Avatar update returned status: ${statusCode}`);
+        return {
+          send: (message) => console.log(message),
+          json: (json) => console.log(json),
+        };
+      },
+    };
+
+    await getAndUpdateAvatarUrl(fakeReq, fakeRes);
+
+    // Send success response
+    return res.status(200).json({ msg: "User confirmation successful" });
   } else {
     // If the user does not exist, send an error response
     return res.status(404).json({ msg: "Token not found" });
