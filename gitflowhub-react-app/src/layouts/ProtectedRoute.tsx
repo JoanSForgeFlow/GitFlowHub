@@ -5,15 +5,8 @@ import { ToastContainer } from "react-toastify";
 import {useEffect} from 'react'
 
 const ProtectedRoute = () => {
-  const { auth, loading, setAuth } = useAuth();
+  const { auth, loading} = useAuth();
   const { username, avatar_url } = auth;
-
-  useEffect(() => {
-
-    setAuth(auth)
-  }, [auth])
-  
-  console.log(avatar_url);
 
   return (
     <>

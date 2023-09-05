@@ -11,19 +11,22 @@ const signInEmail = async (data) => {
     FRONTEND_URL,
     PORT_NODEMAILER,
     HOST_NODEMAILER,
+    GMAIL_USER,
+    GMAIL_PASSWORD,
   } = process.env;
   //nodemailer configuration
   const transport = nodemailer.createTransport({
-    host: HOST_NODEMAILER,
-    port: PORT_NODEMAILER,
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
     auth: {
-      user: USER_NODEMAILER,
-      pass: PASSWORD_NODEMAILER,
+      user: GMAIL_USER,
+      pass: GMAIL_PASSWORD,
     },
   });
 
   const info = await transport.sendMail({
-    from: '"GitFlowHub <account@gitflowhub.com>"',
+    from: '"GitFlowHub <gitflowhub@gmail.com>"',
     to: email,
     subject: "GitFlowHub - Confirm account",
     text: "Confirm your GitFlowHub account ",
@@ -91,18 +94,21 @@ const newPasswordEmail = async (data) => {
     FRONTEND_URL,
     PORT_NODEMAILER,
     HOST_NODEMAILER,
+    GMAIL_USER,
+    GMAIL_PASSWORD,
   } = process.env;
   //nodemailer configuration
   const transport = nodemailer.createTransport({
-    host: HOST_NODEMAILER,
-    port: PORT_NODEMAILER,
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
     auth: {
-      user: USER_NODEMAILER,
-      pass: PASSWORD_NODEMAILER,
+      user: GMAIL_USER,
+      pass: GMAIL_PASSWORD,
     },
   });
   const info = await transport.sendMail({
-    from: '"GitFlowHub <account@gitflowhub.com>"',
+    from: '"GitFlowHub <gitflowhub@gitflowhub.com>"',
     to: email,
     subject: "GitFlowHub - Reset your password",
     text: "Reset your GitFlowHub password ",
