@@ -130,7 +130,7 @@ const UserDashboard = () => {
           <DragDropContext onDragEnd={onDragEnd}>
             <div className="flex justify-evenly mt-5 ml-8 mr-8">
               <div className="w-1/3 mr-1 ml-2">
-                <div className="bg-white border-black rounded-t-md mb-1 pb-1 flex justify-center font-bold">
+                <div className="bg-white border-black rounded-t-md mb-1 pb-1 flex justify-center font-bold board-title">
                   NOT STARTED
                 </div>
                 <Droppable droppableId="Not Started">
@@ -161,7 +161,7 @@ const UserDashboard = () => {
               </div>
 
               <div className="w-1/3 mr-1 ml-1">
-                <div className="bg-slate-200 border-black rounded-t-md mb-1 pb-1 flex justify-center font-bold">
+                <div className="bg-slate-200 border-black rounded-t-md mb-1 pb-1 flex justify-center font-bold board-title">
                   ICEBOX
                 </div>
                 <Droppable droppableId="IceBox">
@@ -191,7 +191,7 @@ const UserDashboard = () => {
               </div>
 
               <div className="w-1/3 mr-2 ml-1">
-                <div className="bg-slate-400 border-black rounded-t-md mb-1 pb-1 flex justify-center font-bold">
+                <div className="bg-slate-400 border-black rounded-t-md mb-1 pb-1 flex justify-center font-bold board-title">
                   REVIEWED
                 </div>
                 <Droppable droppableId="Reviewed">

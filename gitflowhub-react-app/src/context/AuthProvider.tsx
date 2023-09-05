@@ -6,6 +6,7 @@ import {
   Dispatch,
   SetStateAction,
 } from "react";
+import { toast } from "react-toastify";
 
 import { AxiosResponse } from "axios";
 import { useNavigate } from "react-router-dom";
@@ -183,6 +184,18 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
       };
 
       await axiosClient.put("/pr/assign", data, config);
+      console.log(data)
+      toast.success(`Pull request assigned to ${data.username}`, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+
       return;
     } catch (error) {
       console.error("Error:", error.message);

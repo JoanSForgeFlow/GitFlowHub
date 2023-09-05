@@ -78,7 +78,7 @@ const Repo: React.FC<RepoProps> = ({
         ></i>
 
         <Tooltip title="Pull requests assigned to you">
-          <div className="tag text-teal-400">
+          <div className="tag text-teal-200">
             <span className="mr-1">{assigned_PR}</span>
             <span className="material-symbols-outlined">person_alert</span>
           </div>
