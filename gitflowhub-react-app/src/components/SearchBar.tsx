@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import SuggestionList from "./SuggestionList";
 
@@ -23,6 +23,9 @@ const SearchBar: React.FC<SearchBarProps> = ({
   repoSuggestions,
   titleSuggestions,
 }) => {
+  const userRef = useRef(null);
+  const repoRef = useRef(null);
+  const titleRef = useRef(null);
   const [searchUser, setSearchUser] = useState("");
   const [searchRepo, setSearchRepo] = useState("");
   const [searchTitle, setSearchTitle] = useState("");
@@ -42,20 +45,21 @@ const SearchBar: React.FC<SearchBarProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (event: any) => {
-      if (event.target.closest('.input-field')) {
-        setShowUserSuggestions(event.target.placeholder === "Search by user");
-        setShowRepoSuggestions(event.target.placeholder === "Search by repository");
-        setShowTitleSuggestions(event.target.placeholder === "Search by PR title");
+      if (
+        userRef.current?.contains(event.target) ||
+        repoRef.current?.contains(event.target) ||
+        titleRef.current?.contains(event.target)
+      ) {
         return;
       }
-
+  
       setShowUserSuggestions(false);
       setShowRepoSuggestions(false);
       setShowTitleSuggestions(false);
     };
-
+  
     document.addEventListener('mousedown', handleClickOutside);
-
+  
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
@@ -70,7 +74,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   return (
     <div className="flex justify-end">
       <div className="search-bar">
-        <div className="input-with-icon">
+        <div className="input-with-icon" ref={userRef}>
           <input
             className="input-field"
             type="text"
@@ -94,7 +98,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
           {showUserSuggestions && <SuggestionList items={filteredUserSuggestions} onSuggestionClick={(item) => { setSearchUser(item); onUserSearchChange(item); setShowUserSuggestions(false); }} />}
         </div>
 
-        <div className="input-with-icon">
+        <div className="input-with-icon" ref={repoRef}>
           <input
             className="input-field"
             type="text"
@@ -118,7 +122,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
           {showRepoSuggestions && <SuggestionList items={filteredRepoSuggestions} onSuggestionClick={(item) => { setSearchRepo(item); onRepoSearchChange(item); setShowRepoSuggestions(false); }} />}
         </div>
 
-        <div className="input-with-icon">
+        <div className="input-with-icon" ref={titleRef}>
           <input
             className="input-field"
             type="text"
