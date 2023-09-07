@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import SuggestionList from "./SuggestionList";
+import StarRating from './StarRating';
 
 enum Priority {
   LOW = "LOW",
@@ -83,6 +84,16 @@ const SearchBar: React.FC<SearchBarProps> = ({
 
   return (
     <div className="flex justify-end">
+      <div className="input-with-icon">
+        <div className="star-container">
+          <StarRating
+            priority={selectedPriority}
+            onChange={(newPriority: Priority) => {
+              onPriorityChange(newPriority);
+            }}
+          />
+        </div>
+      </div>
       <div className="search-bar">
         <div className="input-with-icon" ref={userRef}>
           <input
@@ -154,20 +165,6 @@ const SearchBar: React.FC<SearchBarProps> = ({
           />
           <i className="fas fa-search"></i>
           {showTitleSuggestions && <SuggestionList items={filteredTitleSuggestions} onSuggestionClick={(item) => { setSearchTitle(item); onTitleSearchChange(item); setShowTitleSuggestions(false); }} />}
-        </div>
-        <div className="input-with-icon">
-          <select
-            className="input-field"
-            value={selectedPriority}
-            onChange={(e) => {
-              const priority = e.target.value as Priority;
-              onPriorityChange(priority);
-            }}
-          >
-            <option value={Priority.LOW}>Low or Higher</option>
-            <option value={Priority.MEDIUM}>Medium or Higher</option>
-            <option value={Priority.HIGH}>High</option>
-          </select>
         </div>
       </div>
     </div>

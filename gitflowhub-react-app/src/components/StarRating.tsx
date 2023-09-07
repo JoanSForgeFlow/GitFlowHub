@@ -7,8 +7,9 @@ enum Priority {
 }
 
 interface StarRatingProps {
+  className?: string;
   priority: Priority;
-  onChange: (priority: Priority) => void;
+  onChange: (newPriority: Priority) => void;
 }
 
 const StarRating: React.FC<StarRatingProps> = ({ priority, onChange }) => {
