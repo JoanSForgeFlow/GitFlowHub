@@ -36,6 +36,12 @@ model Company {
   Users User[]
 }
 
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
 model PullRequest {
   id           Int      @id @default(autoincrement())
   number       Int
@@ -51,4 +57,5 @@ model PullRequest {
   gitflowHubStatus String @default("Not Started")
   review_status String  @default("reviews_welcomed")
   github_org_or_user String?
+  priority Priority @default(LOW)
 }

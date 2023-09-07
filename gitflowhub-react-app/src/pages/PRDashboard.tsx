@@ -25,6 +25,12 @@ interface User {
   company_id: number;
 }
 
+enum Priority {
+  LOW = "LOW",
+  MEDIUM = "MEDIUM",
+  HIGH = "HIGH",
+}
+
 interface Pull {
   id: number;
   title: string;
@@ -38,6 +44,7 @@ interface Pull {
   number: number;
   asigned_user: User;
   review_status: string;
+  priority: Priority;
 }
 
 const PRDashboard: React.FC = () => {

@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import GoIcon from "./GoIcon";
 import DragList from "./DragList";
+import StarRating from './StarRating';
+import AuthContext from "../context/AuthProvider";
 
 interface User {
   id: number;
@@ -19,6 +21,12 @@ interface User {
   company_id: number;
 }
 
+enum Priority {
+  LOW = "LOW",
+  MEDIUM = "MEDIUM",
+  HIGH = "HIGH",
+}
+
 interface Pull {
   id: number;
   title: string;
@@ -30,6 +38,7 @@ interface Pull {
   number: number;
   asigned_user: User;
   review_status: string;
+  priority: Priority;
 }
 
 interface PRProps {
@@ -37,6 +46,8 @@ interface PRProps {
 }
 
 const PR: React.FC<PRProps> = ({ pull }) => {
+  const { changePRPriority } = useContext(AuthContext);
+  const [localPriority, setLocalPriority] = useState<Priority>(pull.priority);
   const reviewLabel = () => {
     switch (pull.review_status) {
       case "approved":
@@ -55,6 +66,16 @@ const PR: React.FC<PRProps> = ({ pull }) => {
     const year = date.getUTCFullYear();
     return `${year}-${month}-${day}`;
   }
+
+  const handleChangePriority = async (newPriority: Priority) => {
+    console.log("Changing priority to:", newPriority);
+    const updatedPR = await changePRPriority(pull.id, newPriority)
+    if (updatedPR) {
+      setLocalPriority(newPriority);
+    } else {
+      alert('Hubo un problema al actualizar la prioridad.');
+    }
+  };
 
   return (
     <div key={pull.id} className="card w-full card-animation">
@@ -84,6 +105,10 @@ const PR: React.FC<PRProps> = ({ pull }) => {
           <i className="fas fa-hashtag"></i>
           <p>PR #{pull.number}</p>
         </div>
+        <StarRating 
+        priority={localPriority}
+        onChange={handleChangePriority} 
+        />
         {reviewLabel()}
         <DragList id_PR={pull.id} />
       </div>

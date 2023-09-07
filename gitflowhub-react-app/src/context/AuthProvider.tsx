@@ -28,6 +28,7 @@ interface AuthContextType {
   getAssignedPRs: Function;
   changePRStatus: Function;
   signOut: Function;
+  changePRPriority: Function;
 }
 
 interface AuthData {
@@ -43,6 +44,12 @@ interface User {
   username: string;
 }
 
+enum Priority {
+  LOW = "LOW",
+  MEDIUM = "MEDIUM",
+  HIGH = "HIGH",
+}
+
 interface Pull {
   id: number;
   title: string;
@@ -54,6 +61,7 @@ interface Pull {
   user_id: number;
   User: User;
   number: number;
+  priority: Priority;
 }
 
 interface Company {
@@ -83,6 +91,7 @@ const AuthContext = createContext<AuthContextType>({
   getAssignedPRs: () => {},
   changePRStatus: () => {},
   signOut: () => {},
+  changePRPriority: () => {},
 });
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -457,6 +466,37 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
+  const changePRPriority = async (id: number, priority: Priority) => {
+    console.log("Sending request to change priority for id:", id, "with priority:", priority);
+  
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.log("No token found, returning early.");
+      return;
+    }
+  
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+  
+    try {
+      const updatedPR = await axiosClient.put(
+        "/pr-update-priority",
+        { id, priority },
+        config
+      );
+      console.log("Successfully changed priority, server responded with:", updatedPR.data);
+      return updatedPR.data;
+    } catch (error) {
+      console.error("An error occurred while changing PR priority:", error);
+      return null;
+    }
+  };
+
+
   return (
     <AuthContext.Provider
       value={{
@@ -475,6 +515,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         getAssignedPRs,
         changePRStatus,
         signOut,
+        changePRPriority,
       }}
     >
       {children}

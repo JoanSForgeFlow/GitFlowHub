@@ -247,6 +247,29 @@ const ChangePRStatus = async (req, res) => {
   }
 };
 
+
+const changePRPriority = async (req, res) => {
+  console.log("Received request to change PR priority.");
+  
+  try {
+    const { id, priority } = req.body;
+    console.log("Received ID:", id, "Priority:", priority);
+    
+    const updatedPR = await prisma.pullRequest.update({
+      where: { id: parseInt(id) },
+      data: { priority: priority },
+    });
+    
+    console.log("Successfully updated PR:", updatedPR);
+    return res.status(200).json(updatedPR);
+    
+  } catch (error) {
+    console.error("An error occurred while changing PR priority:", error);
+    return res.status(500).json({ error: "An error occurred while changing PR priority" });
+  }
+};
+
+
 export {
   getPRsByCompany,
   getAndUpdateAvatarUrl,
@@ -255,5 +278,6 @@ export {
   getPR,
   getUserPR,
   getUserAssignedPR,
-  ChangePRStatus
+  ChangePRStatus,
+  changePRPriority
 };

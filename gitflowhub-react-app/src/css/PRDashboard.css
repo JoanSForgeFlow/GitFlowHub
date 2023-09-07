@@ -44,30 +44,30 @@
 
 .suggestion-list {
   position: absolute;
-  top: 100%; /* Esto coloca la lista justo debajo del input */
+  top: 100%;
   left: 0;
-  right: 0; /* Asegura que la lista tenga el mismo ancho que el input */
-  max-height: 150px; /* Un max-height para que no sea demasiado largo si hay muchas sugerencias */
-  overflow-y: auto; /* Permite el desplazamiento si la lista supera el max-height */
+  right: 0;
+  max-height: 150px;
+  overflow-y: auto;
   background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 4px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Sombra suave */
-  z-index: 5; /* Asegura que la lista esté sobre otros elementos */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  z-index: 5;
 }
 
 .suggestion-item {
   padding: 8px 10px;
   cursor: pointer;
-  border-bottom: 1px solid #f0f0f0; /* Un borde sutil entre elementos */
+  border-bottom: 1px solid #f0f0f0;
 }
 
 .suggestion-item:last-child {
-  border-bottom: none; /* Quita el borde para el último ítem */
+  border-bottom: none;
 }
 
 .suggestion-item:hover {
-  background-color: #f5f5f5; /* Color de fondo cuando se pasa el cursor */
+  background-color: #f5f5f5;
 }
 
 .repo-group {
@@ -205,6 +205,19 @@
 .review-label.total {
   background-color: #dcedc1;
   color: #2a2a2a;
+}
+
+.star {
+  cursor: pointer;
+}
+
+.star-rating .star {
+  font-size: 20px;
+  margin: 3px;
+}
+
+.star-rating .star.selected {
+  color: gold;
 }
 
 .no-prs-container {

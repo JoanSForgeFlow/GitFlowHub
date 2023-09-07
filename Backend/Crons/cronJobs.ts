@@ -104,6 +104,7 @@ export const updateUserPullRequests = async () => {
               html_url: prFromGithub.html_url,
               repo_name: repoName,
               github_org_or_user: githubOrgOrUser,
+              priority: "LOW",
               User: {
                 connect: {
                   id: user.id,

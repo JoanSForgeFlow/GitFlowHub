@@ -23,7 +23,8 @@ import {
   getPR,
   getUserPR,
   getUserAssignedPR,
-  ChangePRStatus
+  ChangePRStatus,
+  changePRPriority
 } from '../Controllers/PRDashboardController.js';
 
 import { getUser, getAllCompanies, updateUser } from "../Controllers/UserProfileController.js";
@@ -47,6 +48,7 @@ router.put('/pr/assign',checkAuth,errorChecked(assignPR))
 router.get('/pr-user-info',checkAuth,errorChecked(getUserPR))
 router.get('/pr-user-assigned',checkAuth,errorChecked(getUserAssignedPR))
 router.put('/pr-update-status',checkAuth,errorChecked(ChangePRStatus))
+router.put('/pr-update-priority', checkAuth, errorChecked(changePRPriority));
 
 router.get('/companies', checkAuth, getAllCompanies);
 router.get('/:github_user', checkAuth, getUser);
