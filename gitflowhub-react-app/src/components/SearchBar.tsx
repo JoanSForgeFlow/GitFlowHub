@@ -2,6 +2,12 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import SuggestionList from "./SuggestionList";
 
+enum Priority {
+  LOW = "LOW",
+  MEDIUM = "MEDIUM",
+  HIGH = "HIGH",
+}
+
 interface SearchBarProps {
   onUserSearchChange: (user: string) => void;
   onRepoSearchChange: (repo: string) => void;
@@ -11,6 +17,8 @@ interface SearchBarProps {
   userSuggestions: string[];
   repoSuggestions: string[];
   titleSuggestions: string[];
+  onPriorityChange: (priority: Priority) => void;
+  selectedPriority: Priority;
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({
@@ -22,6 +30,8 @@ const SearchBar: React.FC<SearchBarProps> = ({
   userSuggestions,
   repoSuggestions,
   titleSuggestions,
+  onPriorityChange,
+  selectedPriority,
 }) => {
   const userRef = useRef(null);
   const repoRef = useRef(null);
@@ -144,6 +154,20 @@ const SearchBar: React.FC<SearchBarProps> = ({
           />
           <i className="fas fa-search"></i>
           {showTitleSuggestions && <SuggestionList items={filteredTitleSuggestions} onSuggestionClick={(item) => { setSearchTitle(item); onTitleSearchChange(item); setShowTitleSuggestions(false); }} />}
+        </div>
+        <div className="input-with-icon">
+          <select
+            className="input-field"
+            value={selectedPriority}
+            onChange={(e) => {
+              const priority = e.target.value as Priority;
+              onPriorityChange(priority);
+            }}
+          >
+            <option value={Priority.LOW}>Low or Higher</option>
+            <option value={Priority.MEDIUM}>Medium or Higher</option>
+            <option value={Priority.HIGH}>High</option>
+          </select>
         </div>
       </div>
     </div>

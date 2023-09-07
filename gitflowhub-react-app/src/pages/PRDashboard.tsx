@@ -59,6 +59,7 @@ const PRDashboard: React.FC = () => {
   const [userSuggestions, setUserSuggestions] = useState<string[]>([]);
   const [repoSuggestions, setRepoSuggestions] = useState<string[]>([]);
   const [titleSuggestions, setTitleSuggestions] = useState<string[]>([]);
+  const [selectedPriority, setSelectedPriority] = useState<Priority>(Priority.LOW);
 
 
   useEffect(() => {
@@ -113,10 +114,15 @@ useEffect(() => {
     (pull) =>
       pull.User.github_user.toLowerCase().includes(searchUser.toLowerCase()) &&
       pull.repo_name.toLowerCase().includes(searchRepo.toLowerCase()) &&
-      pull.title.toLowerCase().includes(searchTitle.toLowerCase())
-  );
+      pull.title.toLowerCase().includes(searchTitle.toLowerCase()) &&
+      ( 
+        (selectedPriority === Priority.LOW) ||
+        (selectedPriority === Priority.MEDIUM && pull.priority !== Priority.LOW) ||
+        (selectedPriority === Priority.HIGH && pull.priority === Priority.HIGH)
+      )
+  );  
 
-  const repoGroups = groupByRepository(pulls);
+  const repoGroups = groupByRepository(filteredPulls);
 
   const autoExpand = filteredPulls.length <= 5;
 
@@ -133,6 +139,8 @@ useEffect(() => {
             userSuggestions={userSuggestions}
             repoSuggestions={repoSuggestions}
             titleSuggestions={titleSuggestions}
+            onPriorityChange={(priority) => setSelectedPriority(priority)}
+            selectedPriority={selectedPriority}
           />
           {filteredPulls.length === 0 ? (
             <div className="no-prs-container">
