@@ -8,14 +8,13 @@ import EmptyDashboard from "../components/EmptyDashboard";
 import Spinner from "../components/Spinner";
 
 const UserDashboard = () => {
-  const { getUserMultiplePRs, getAssignedPRs, changePRStatus, spinner } =
-    useAuth();
+  const { getUserMultiplePRs, getAssignedPRs, changePRStatus, spinner } = useAuth();
   const [userPrs, setUserPrs] = useState([]);
   const [userAssignedPrs, setUserAssignedPrs] = useState([]);
-
+  
   const [notStarted, setNotStarted] = useState([]);
-  const [iceBox, setIceBox] = useState([]);
-  const [reviewed, setReviewed] = useState([]);
+  const [suggested_changes, setSuggestedChanges] = useState([]);
+  const [pr_approved, setPrApproved] = useState([]);
 
   const [needsReview, setNeedsReview] = useState(0);
   const [approved, setApproved] = useState(0);
@@ -39,35 +38,35 @@ const UserDashboard = () => {
 
     let add,
       notStartedPr = notStarted,
-      reviewedPr = reviewed,
-      iceBoxPr = iceBox;
+      prApprovedPr = pr_approved,
+      suggestedChangesPr = suggested_changes;
 
     //put PR into the destination position
     if (source.droppableId === "Not Started") {
       add = notStartedPr[source.index];
       notStartedPr.splice(source.index, 1);
-    } else if (source.droppableId === "IceBox") {
-      add = iceBoxPr[source.index];
-      iceBoxPr.splice(source.index, 1);
+    } else if (source.droppableId === "Suggested Changes") {
+      add = suggestedChangesPr[source.index];
+      suggestedChangesPr.splice(source.index, 1);
     } else {
-      add = reviewedPr[source.index];
-      reviewedPr.splice(source.index, 1);
+      add = prApprovedPr[source.index];
+      prApprovedPr.splice(source.index, 1);
     }
 
     if (destination.droppableId === "Not Started") {
       notStartedPr.splice(destination.index, 0, add);
       await changePRStatus({ id: draggableId, status: "Not Started" });
-    } else if (destination.droppableId === "IceBox") {
-      iceBoxPr.splice(destination.index, 0, add);
-      await changePRStatus({ id: draggableId, status: "IceBox" });
+    } else if (destination.droppableId === "Suggested Changes") {
+      suggestedChangesPr.splice(destination.index, 0, add);
+      await changePRStatus({ id: draggableId, status: "Suggested Changes" });
     } else {
-      reviewedPr.splice(destination.index, 0, add);
-      await changePRStatus({ id: draggableId, status: "Reviewed" });
+      prApprovedPr.splice(destination.index, 0, add);
+      await changePRStatus({ id: draggableId, status: "PR Approved" });
     }
 
     setNotStarted(notStartedPr);
-    setIceBox(iceBoxPr);
-    setReviewed(reviewedPr);
+    setSuggestedChanges(suggestedChangesPr);
+    setPrApproved(prApprovedPr);
   };
 
   useEffect(() => {
@@ -98,23 +97,14 @@ const UserDashboard = () => {
 
     const getUserAssignedPR = async () => {
       const searchAssigedUserPrs = await getAssignedPRs();
-      //Obtain User Not started PRs
-      const userNotStarted = searchAssigedUserPrs.filter(
-        (PR) => PR.gitflowHubStatus === "Not Started"
-      );
+      const userNotStarted = searchAssigedUserPrs.filter((PR) => PR.gitflowHubStatus === "Not Started");
       setNotStarted(userNotStarted);
 
-      //Obtain User Icebox PRs
-      const userIceBox = searchAssigedUserPrs.filter(
-        (PR) => PR.gitflowHubStatus === "IceBox"
-      );
-      setIceBox(userIceBox);
+      const userSuggestedChanges = searchAssigedUserPrs.filter((PR) => PR.gitflowHubStatus === "Suggested Changes");
+      setSuggestedChanges(userSuggestedChanges);
 
-      //Obtain User Reviewed PRs
-      const userReviewed = searchAssigedUserPrs.filter(
-        (PR) => PR.gitflowHubStatus === "Reviewed"
-      );
-      setReviewed(userReviewed);
+      const userPrApproved = searchAssigedUserPrs.filter((PR) => PR.gitflowHubStatus === "PR Approved");
+      setPrApproved(userPrApproved);
 
       setUserAssignedPrs(searchAssigedUserPrs);
     };
@@ -162,9 +152,9 @@ const UserDashboard = () => {
 
               <div className="w-1/3 mr-1 ml-1">
                 <div className="bg-slate-200 border-black rounded-t-md mb-1 pb-1 flex justify-center font-bold board-title">
-                  ICEBOX
+                SUGGESTED CHANGES
                 </div>
-                <Droppable droppableId="IceBox">
+                <Droppable droppableId="Suggested Changes">
                   {(provided, snapshot) => (
                     <div
                       className={`w-full bg-slate-200 pt-1 border border-black rounded-b-md ${
@@ -173,8 +163,8 @@ const UserDashboard = () => {
                       ref={provided.innerRef}
                       {...provided.droppableProps}
                     >
-                      {iceBox && iceBox.length > 0 ? (
-                        iceBox.map((pull, index) => (
+                      {suggested_changes && suggested_changes.length > 0 ? (
+                        suggested_changes.map((pull, index) => (
                           <PRDraggable
                             key={pull.id}
                             pull={pull}
@@ -192,9 +182,9 @@ const UserDashboard = () => {
 
               <div className="w-1/3 mr-2 ml-1">
                 <div className="bg-slate-400 border-black rounded-t-md mb-1 pb-1 flex justify-center font-bold board-title">
-                  REVIEWED
+                  APPROVED
                 </div>
-                <Droppable droppableId="Reviewed">
+                <Droppable droppableId="PR Approved">
                   {(provided, snapshot) => (
                     <div
                       className={`w-full bg-slate-400 pt-1 border border-black rounded-b-md ${
@@ -203,8 +193,8 @@ const UserDashboard = () => {
                       ref={provided.innerRef}
                       {...provided.droppableProps}
                     >
-                      {reviewed && reviewed.length > 0 ? (
-                        reviewed.map((pull, index) => (
+                      {pr_approved && pr_approved.length > 0 ? (
+                        pr_approved.map((pull, index) => (
                           <PRDraggable
                             key={pull.id}
                             pull={pull}
