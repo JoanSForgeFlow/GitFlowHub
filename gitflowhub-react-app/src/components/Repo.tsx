@@ -68,6 +68,14 @@ const Repo: React.FC<RepoProps> = ({
   );
   const { auth } = useAuth();
 
+  const sortedPulls = [...filteredPulls].sort((a, b) => {
+    if (a.priority === b.priority) return 0;
+    if (a.priority === Priority.HIGH) return -1;
+    if (b.priority === Priority.HIGH) return 1;
+    if (a.priority === Priority.MEDIUM) return -1;
+    return 1;
+  });
+
   const assigned_PR = filteredPulls.filter(
     (pull) => pull.asigned_user?.username === auth.username
   ).length;
@@ -109,7 +117,7 @@ const Repo: React.FC<RepoProps> = ({
       </h2>
       {(autoExpand || isExpanded) && (
         <div className="pull-cards">
-          {filteredPulls.map((pull: Pull) => (
+          {sortedPulls.map((pull: Pull) => (
             <PR key={pull.id} pull={pull} />
           ))}
         </div>
