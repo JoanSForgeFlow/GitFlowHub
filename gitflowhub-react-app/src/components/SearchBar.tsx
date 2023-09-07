@@ -84,15 +84,13 @@ const SearchBar: React.FC<SearchBarProps> = ({
 
   return (
     <div className="flex justify-end">
-      <div className="input-with-icon">
-        <div className="star-container">
-          <StarRating
-            priority={selectedPriority}
-            onChange={(newPriority: Priority) => {
-              onPriorityChange(newPriority);
-            }}
-          />
-        </div>
+      <div className="star-container">
+        <StarRating
+          priority={selectedPriority}
+          onChange={(newPriority: Priority) => {
+            onPriorityChange(newPriority);
+          }}
+        />
       </div>
       <div className="search-bar">
         <div className="input-with-icon" ref={userRef}>

@@ -21,13 +21,12 @@ const StarRating: React.FC<StarRatingProps> = ({ priority, onChange }) => {
   };
 
   const renderStar = (p: Priority) => {
-    if (currentPriority === Priority.HIGH) return '⭐';
-    if (currentPriority === Priority.MEDIUM && (p === Priority.LOW || p === Priority.MEDIUM)) return '⭐';
-    if (currentPriority === Priority.LOW && p === Priority.LOW) return '⭐';
-    return '☆';
-  };  
+    if (currentPriority === Priority.HIGH) return <i className="fas fa-star"></i>;
+    if (currentPriority === Priority.MEDIUM && (p !== Priority.HIGH)) return <i className="fas fa-star"></i>;
+    if (currentPriority === Priority.LOW && p === Priority.LOW) return <i className="fas fa-star"></i>;
+    return <i className="far fa-star"></i>;
+  };
   
-
   return (
     <div className="star-rating">
       <span className="star" onClick={() => handleStarClick(Priority.LOW)}>{renderStar(Priority.LOW)}</span>

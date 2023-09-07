@@ -24,7 +24,8 @@
   background-color: #ddd;
   border-radius: 12px;
   padding: 2px;
-  margin: 5px 0;
+  margin: 10px 0;
+  width: 100px;
 }
 
 .input-with-icon {
