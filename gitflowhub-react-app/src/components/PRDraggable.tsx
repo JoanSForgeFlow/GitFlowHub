@@ -2,6 +2,9 @@ import React from "react";
 import GoIcon from "./GoIcon";
 import DragList from "./DragList";
 import { Draggable } from "react-beautiful-dnd";
+import useAuth from "../hooks/useAuth";
+import { useState } from "react";
+import StarRating from "./StarRating";
 
 interface User {
   id: number;
@@ -30,11 +33,19 @@ interface Pull {
   repo_name: string;
   number: number;
   asigned_user: User;
+  review_status: string;
+  priority: Priority;
 }
 
 interface PRProps {
   pull: Pull;
   index: number;
+}
+
+enum Priority {
+  LOW = "LOW",
+  MEDIUM = "MEDIUM",
+  HIGH = "HIGH",
 }
 
 function formatDate(isoDate: string): string {
@@ -45,25 +56,45 @@ function formatDate(isoDate: string): string {
   return `${day}-${month}-${year}`;
 }
 
+const PRDraggable: React.FC<PRProps> = ({ pull, index }) => {
+  const { changePRPriority } = useAuth();
+  const [localPriority, setLocalPriority] = useState<Priority>(pull.priority);
 
-const PRDraggable: React.FC<PRProps> = ({ pull,index}) => {
+  const handleChangePriority = async (newPriority: Priority) => {
+    console.log("Changing priority to:", newPriority);
+    const updatedPR = await changePRPriority(pull.id, newPriority);
+    if (updatedPR) {
+      setLocalPriority(newPriority);
+    } else {
+      alert("Hubo un problema al actualizar la prioridad.");
+    }
+  };
+
   return (
     <Draggable draggableId={pull.id.toString()} index={index}>
-      {(provided,snapshot) => (
-        <div key={pull.id} className={`card-draggable w-full card-animation ${snapshot.draggingOver? 'card-dragging':''}`}
-        {...provided.draggableProps}
-        {...provided.dragHandleProps}
-        ref={provided.innerRef}>
+      {(provided, snapshot) => (
+        <div
+          key={pull.id}
+          className={`card-draggable w-full card-animation ${
+            snapshot.draggingOver ? "card-dragging" : ""
+          }`}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          ref={provided.innerRef}
+        >
           <div className="card-header">
-            {
-              pull.User.avatar_url ? 
-              (<img
+            {pull.User.avatar_url ? (
+              <img
                 src={pull.User.avatar_url}
                 alt="User avatar"
                 className="user-info__img"
-              />) :
-              (<i className="fas fa-user fa-2x" style={{ marginRight: '0.75rem' }}></i>)
-            }
+              />
+            ) : (
+              <i
+                className="fas fa-user fa-2x"
+                style={{ marginRight: "0.75rem" }}
+              ></i>
+            )}
             <h3>{pull.title}</h3>
             <GoIcon url={pull.html_url} />
           </div>
@@ -82,6 +113,10 @@ const PRDraggable: React.FC<PRProps> = ({ pull,index}) => {
                   <i className="fas fa-hashtag mr-2"></i>
                   <span>{pull.number}</span>
                 </div>
+                <StarRating
+                  priority={localPriority}
+                  onChange={handleChangePriority}
+                />
               </div>
             </div>
             <DragList id_PR={pull.id} />

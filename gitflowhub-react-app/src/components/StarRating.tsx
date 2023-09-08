@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 enum Priority {
   LOW = "LOW",
@@ -21,17 +21,28 @@ const StarRating: React.FC<StarRatingProps> = ({ priority, onChange }) => {
   };
 
   const renderStar = (p: Priority) => {
-    if (currentPriority === Priority.HIGH) return <i className="fas fa-star"></i>;
-    if (currentPriority === Priority.MEDIUM && (p !== Priority.HIGH)) return <i className="fas fa-star"></i>;
-    if (currentPriority === Priority.LOW && p === Priority.LOW) return <i className="fas fa-star"></i>;
+    console.log(p);
+    console.log(currentPriority);
+    if (currentPriority === Priority.HIGH)
+      return <i className="fas fa-star"></i>;
+    if (currentPriority === Priority.MEDIUM && p !== Priority.HIGH)
+      return <i className="fas fa-star"></i>;
+    if (currentPriority === Priority.LOW && p === Priority.LOW)
+      return <i className="fas fa-star"></i>;
     return <i className="far fa-star"></i>;
   };
-  
+
   return (
     <div className="star-rating">
-      <span className="star" onClick={() => handleStarClick(Priority.LOW)}>{renderStar(Priority.LOW)}</span>
-      <span className="star" onClick={() => handleStarClick(Priority.MEDIUM)}>{renderStar(Priority.MEDIUM)}</span>
-      <span className="star" onClick={() => handleStarClick(Priority.HIGH)}>{renderStar(Priority.HIGH)}</span>
+      <span className="star" onClick={() => handleStarClick(Priority.LOW)}>
+        {renderStar(Priority.LOW)}
+      </span>
+      <span className="star" onClick={() => handleStarClick(Priority.MEDIUM)}>
+        {renderStar(Priority.MEDIUM)}
+      </span>
+      <span className="star" onClick={() => handleStarClick(Priority.HIGH)}>
+        {renderStar(Priority.HIGH)}
+      </span>
     </div>
   );
 };
