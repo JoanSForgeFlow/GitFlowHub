@@ -5,8 +5,8 @@
   "main": "index.ts",
   "type": "module",
   "scripts": {
-    "start": "ts-node index.ts",
-    "dev": "nodemon index.ts",
+    "start": "node --loader ts-node/esm index.ts",
+    "dev": "nodemon --loader ts-node/esm index.ts",
     "seed": "ts-node-esm ./prisma/seed.ts"
   },
   "keywords": [],
