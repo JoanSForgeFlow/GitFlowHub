@@ -29,7 +29,7 @@ const corsOptions={
   }
 }
 
-app.use(cors())
+app.use(cors(corsOptions))
 //Routes redirect
 app.use("/", UserRoutes);
 
