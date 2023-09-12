@@ -71,7 +71,7 @@ const signInEmail = async (data) => {
             
             <p>Thank you for signing up for our service! To activate your account, please use the following link:</p>
             
-            <a href="${FRONTEND_URL}/confirm-account/${token}">Confirm your account</a>
+            <a href="${FRONTEND_URL}/confirm-frontend-account/${token}">Confirm your account</a>
             
             <p>If you did not create an account, please ignore this email.</p>
             
