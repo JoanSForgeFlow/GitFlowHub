@@ -25,7 +25,7 @@ const App: React.FC = () => {
             <Route path="sign-in" element={<SignInUser />} />
             <Route path="forget-password" element={<ForgetPassword />} />
             <Route path="forget-password/:token" element={<NewPassword />} />
-            <Route path="confirm-account/:id" element={<ConfirmAccount />} />
+            <Route path="confirm-frontend-account/:id" element={<ConfirmAccount />} />
           </Route>
           <Route path="/main-page" element={<ProtectedRoute/>}>
             <Route index element={<PRDashboard />} />
