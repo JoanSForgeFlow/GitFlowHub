@@ -7,34 +7,46 @@ import { updateUserPullRequests } from "../Crons/cronJobs.js";
 import { getAndUpdateAvatarUrl } from './PRDashboardController.js';
 
 const RegisterUser = async (req, res) => {
-  const data = req.body;
+  try {
+    console.log("RegisterUser function called"); // Log cuando se llama la función
+    const data = req.body;
 
-  const { password } = data;
-  const hashedPassword = await bcrypt.hash(password, 10);
+    console.log("Received data:", data); // Log de los datos recibidos
 
-  data.password = hashedPassword;
+    const { password } = data;
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-  const createUser = await prisma.user.create({ data });
+    data.password = hashedPassword;
 
-  //Generate a token that will be used to confirm account
+    const createUser = await prisma.user.create({ data });
 
-  const token = generarId();
+    console.log("User created:", createUser); // Log del usuario creado
 
-  const updatedUser = await prisma.user.update({
-    where: { id: createUser.id },
-    data: { token },
-  });
+    // Generate a token that will be used to confirm account
+    const token = generarId();
 
-  // Insert send email command
-  signInEmail({
-    email: updatedUser.email,
-    username: updatedUser.username,
-    token: updatedUser.token,
-  });
+    const updatedUser = await prisma.user.update({
+      where: { id: createUser.id },
+      data: { token },
+    });
 
-  res
-    .status(200)
-    .json({ msg: "User created, check your email to confirm account" });
+    console.log("User updated with token:", updatedUser); // Log del usuario actualizado con el token
+
+    // Insert send email command
+    signInEmail({
+      email: updatedUser.email,
+      username: updatedUser.username,
+      token: updatedUser.token,
+    });
+
+    res
+      .status(200)
+      .json({ msg: "User created, check your email to confirm account" });
+
+  } catch (error) {
+    console.error("An error occurred:", error); // Log si se produce un error
+    res.status(500).json({ msg: "Internal Server Error" });
+  }
 };
 
 const confirmUser = async (req, res) => {
