@@ -104,26 +104,31 @@ const getCompanyUsers = async (req, res) => {
 };
 
 const assignPR = async (req, res) => {
-  //Function that receives a username and a PR id, it asigns the PR to the userid
   const { username, id_PR } = req.body;
 
   try {
-    //Find user and Pull request asigned to user on db
-    const searchedUser = await prisma.user.findFirstOrThrow({
-      where: { username },
-    });
+    let asigned_id = null;
+
+    if (username) {
+
+      const searchedUser = await prisma.user.findFirstOrThrow({
+        where: { username },
+      });
+
+      asigned_id = Number(searchedUser.id);
+    }
+
 
     const pullRequest = await prisma.pullRequest.findFirstOrThrow({
       where: { id: id_PR },
     });
 
-    //Update pull request
-
+    // Actualiza la pull request
     if (pullRequest) {
       const updatedPullRequest = await prisma.pullRequest.update({
         where: { id: id_PR },
         data: {
-          asigned_id: Number(searchedUser.id),
+          asigned_id: asigned_id,
         },
       });
 
@@ -131,12 +136,10 @@ const assignPR = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-
-    return res
-      .status(500)
-      .json({ error: "An error ocurred while assigning PR" });
+    return res.status(500).json({ error: "An error occurred while assigning PR" });
   }
 };
+
 
 const getPR = async (req, res) => {
   //Obtain a PR with the user and ssigned user info

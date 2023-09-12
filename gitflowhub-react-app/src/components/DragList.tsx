@@ -70,15 +70,15 @@ const DragList = ({id_PR}) => {
     setDisplayEdit(!displayEdit);
   };
 
-  const handleAssign=()=>{
-    setDisplayEdit(false)
-    
-    const assignAction= async()=>{
-      await assignUser({username:asignee,id_PR:id_PR})
+  const handleAssign = () => {
+    setDisplayEdit(false);
+    const assignAction = async () => {
+      await assignUser({
+        username: asignee || null,
+        id_PR: id_PR
+      });
     }
-
-    assignAction()
-    
+    assignAction();
   };
 
   return (
@@ -92,8 +92,8 @@ const DragList = ({id_PR}) => {
           <Autocomplete
             value={asignee}
             onChange={(event, newValue) => {
-              setAsignee(newValue);
-              setInputValue(newValue)
+              setAsignee(newValue || "");
+              setInputValue(newValue || "");
             }}
             inputValue={inputValue}
             onInputChange={(event, newInputValue) => {
