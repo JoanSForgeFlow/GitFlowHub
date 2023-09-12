@@ -16,20 +16,20 @@ dotenv.config();
 
 //Enable CORS
 const whitlelist=[process.env.FRONTEND_URL]
+console.log("Frontend URL from env:", process.env.FRONTEND_URL);
 
-const corsOptions={
-  origin: function(origin,callback){
-    console.log(origin);
-    if (whitlelist.includes(origin)){
-      callback(null,true)
-
-    }else{
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (/\.gitflowhub\.com$/.test(origin)) {
+      callback(null, true)
+    } else {
       callback(new Error('CORS error'))
     }
   }
 }
 
-app.use(cors(corsOptions))
+app.use(cors(corsOptions));
+
 //Routes redirect
 app.use("/", UserRoutes);
 
