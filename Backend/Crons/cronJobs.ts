@@ -165,7 +165,7 @@ export const updatePRReviewStatus = async () => {
   }
 };
 
-const updatePRReviewStatusJob = cron.schedule("0 */6 * * *", updatePRReviewStatus);
+const updatePRReviewStatusJob = cron.schedule("0 */1 * * *", updatePRReviewStatus);
 
 const updatePullRequests = cron.schedule("*/10 * * * *", updateUserPullRequests);
 
