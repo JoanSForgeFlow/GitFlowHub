@@ -3,14 +3,18 @@ import useAuth from "../hooks/useAuth";
 import Header from "../components/Header";
 import { ToastContainer } from "react-toastify";
 import {useEffect} from 'react'
+import { useNavigate } from 'react-router-dom';
 
 const ProtectedRoute = () => {
   const { auth, loading} = useAuth();
   const { username, avatar_url } = auth;
+  const navigate = useNavigate();
+
+  console.log(username)
 
   return (
     <>
-      {!loading &&(
+      {!loading && username?(
         <div>
           <Header username={username} avatar_url={avatar_url} />
           <main className="mt-20">
@@ -29,7 +33,7 @@ const ProtectedRoute = () => {
             theme="dark"
           />
         </div>
-      )}
+      ):(navigate("/"))}
     </>
   );
 };
