@@ -217,7 +217,7 @@ const SignInUser = () => {
         </Link>
         <Link
           className="block text-center mb-5 text-slate-500  text-sm "
-          to="/forget-password"
+          to="/forget-frontend-password"
         >
           I Forgot my password
         </Link>

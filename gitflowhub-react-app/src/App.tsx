@@ -23,8 +23,8 @@ const App: React.FC = () => {
           <Route path="/" element={<AuthLayout />}>
             <Route index element={<LoginUser />} />
             <Route path="sign-in" element={<SignInUser />} />
-            <Route path="forget-password" element={<ForgetPassword />} />
-            <Route path="forget-password/:token" element={<NewPassword />} />
+            <Route path="forget-frontend-password" element={<ForgetPassword />} />
+            <Route path="forget-frontend-password/:token" element={<NewPassword />} />
             <Route path="confirm-frontend-account/:id" element={<ConfirmAccount />} />
           </Route>
           <Route path="/main-page" element={<ProtectedRoute/>}>

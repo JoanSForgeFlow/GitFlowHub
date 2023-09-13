@@ -153,7 +153,7 @@ const newPasswordEmail = async (data) => {
             
             <p>Thank you for contacting us! To reset your password, please use the following link:</p>
             
-            <a href="${FRONTEND_URL}/forget-password/${token}">Reset your password</a>
+            <a href="${FRONTEND_URL}/forget-frontend-password/${token}">Reset your password</a>
             
             <p>If you don't request to reset your password, please ignore this email.</p>
             

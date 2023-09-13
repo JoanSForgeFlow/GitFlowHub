@@ -126,7 +126,7 @@ const LoginUser = () => {
         </Link>
         <Link
           className="block text-center my-5 text-slate-500 uppercase text-sm "
-          to="forget-password"
+          to="forget-frontend-password"
         >
           I forgot my password
         </Link>
