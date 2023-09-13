@@ -103,6 +103,8 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     github_user: "",
   });
 
+  const [authPulls,setAuthPulls]=useState([])
+
   const [loading, setLoading] = useState(true);
   const [spinner, setSpinner] = useState(true);
   const navigate = useNavigate();
@@ -125,7 +127,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
       try {
         const { data } = await axiosClient("/profile", config);
         setAuth(data);
-        navigate("/main-page");
+        // navigate("/main-page");
       } catch (error) {
         setAuth({
           username: "",

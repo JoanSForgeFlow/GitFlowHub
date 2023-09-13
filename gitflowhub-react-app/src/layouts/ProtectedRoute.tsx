@@ -10,7 +10,7 @@ const ProtectedRoute = () => {
 
   return (
     <>
-      {!loading ? (
+      {!loading &&(
         <div>
           <Header username={username} avatar_url={avatar_url} />
           <main className="mt-20">
@@ -29,8 +29,6 @@ const ProtectedRoute = () => {
             theme="dark"
           />
         </div>
-      ) : (
-        <Navigate to="/main-page" />
       )}
     </>
   );
