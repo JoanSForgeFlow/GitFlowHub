@@ -64,14 +64,19 @@ const PRDashboard: React.FC = () => {
 
   useEffect(() => {
     console.log("Running useEffect");
-
+  
     const getUserInfoAndPulls = async () => {
       const userData = await fetchUserInfo();
       setUserInfo(userData);
       const newPulls = await fetchPulls();
-      setPulls(newPulls);
+  
+      if (newPulls === null || newPulls === undefined) {
+        setPulls({});
+      } else {
+        setPulls(newPulls);
+      }
     };
-
+  
     getUserInfoAndPulls();
   }, []);
 
