@@ -15,8 +15,8 @@ import axiosClient from "../config/axiosClient";
 interface AuthContextType {
   auth: AuthData;
   setAuth: Dispatch<SetStateAction<AuthData>>;
-  authPulls: Pull[];
-  setAuthPulls: Dispatch<SetStateAction<Pull[]>>
+  authPulls: Record<number,Pull>
+  setAuthPulls: Dispatch<SetStateAction<Record<number,Pull>>>
   loading: Boolean;
   spinner: Boolean;
   optionUsers: Function;
@@ -42,8 +42,21 @@ interface AuthData {
 }
 
 interface User {
+  id: number;
   user_id: number;
-  username: string;
+  email: string;
+  username: string | null;
+  password: string;
+  token: string | null;
+  confirmed: boolean;
+  location: string | null;
+  language: string | null;
+  timeZone: string | null;
+  image: string | null;
+  github_user: string;
+  login: string;
+  avatar_url: string;
+  company_id: number;
 }
 
 enum Priority {
@@ -63,6 +76,8 @@ interface Pull {
   user_id: number;
   User: User;
   number: number;
+  asigned_user: User;
+  review_status: string;
   priority: Priority;
 }
 

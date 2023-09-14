@@ -48,13 +48,12 @@ interface Pull {
 }
 
 const PRDashboard: React.FC = () => {
-  const [pulls, setPulls] = useState<Record<number, Pull>>({});
+
   const [searchUser, setSearchUser] = useState("");
   const [searchRepo, setSearchRepo] = useState("");
   const [searchTitle, setSearchTitle] = useState("");
   const [expandedRepos, setExpandedRepos] = useState<Set<string>>(new Set());
-  const { fetchPulls, fetchUserInfo, spinner } = useAuth();
-  const { auth } = useContext(AuthContext);
+  const { fetchPulls, fetchUserInfo, spinner,authPulls,setAuthPulls} = useAuth();
   const [userInfo, setUserInfo] = useState<User | null>(null);
   const [userSuggestions, setUserSuggestions] = useState<string[]>([]);
   const [repoSuggestions, setRepoSuggestions] = useState<string[]>([]);
@@ -71,9 +70,10 @@ const PRDashboard: React.FC = () => {
       const newPulls = await fetchPulls();
   
       if (newPulls === null || newPulls === undefined) {
-        setPulls({});
+        setAuthPulls([])
+        
       } else {
-        setPulls(newPulls);
+        setAuthPulls(newPulls)
       }
     };
   
@@ -83,14 +83,14 @@ const PRDashboard: React.FC = () => {
 useEffect(() => {
     console.log("Setting up suggestions based on pulls");
 
-    const uniqueUsers = Array.from(new Set(Object.values(pulls).map(pull => pull.User.github_user)));
-    const uniqueRepos = Array.from(new Set(Object.values(pulls).map(pull => pull.repo_name)));
-    const uniqueTitles = Array.from(new Set(Object.values(pulls).map(pull => pull.title)));
+    const uniqueUsers = Array.from(new Set(Object.values(authPulls).map(pull => pull.User.github_user)));
+    const uniqueRepos = Array.from(new Set(Object.values(authPulls).map(pull => pull.repo_name)));
+    const uniqueTitles = Array.from(new Set(Object.values(authPulls).map(pull => pull.title)));
   
     setUserSuggestions(uniqueUsers);
     setRepoSuggestions(uniqueRepos);
     setTitleSuggestions(uniqueTitles);
-}, [pulls]);
+}, [authPulls]);
 
   const groupByRepository = (pulls: Record<number, Pull>) => {
     const groups: Record<string, Pull[]> = {};
@@ -115,7 +115,7 @@ useEffect(() => {
     });
   };
 
-  const filteredPulls = Object.values(pulls).filter(
+  const filteredPulls = Object.values(authPulls).filter(
     (pull) =>
       pull.User.github_user.toLowerCase().includes(searchUser.toLowerCase()) &&
       pull.repo_name.toLowerCase().includes(searchRepo.toLowerCase()) &&

@@ -3,6 +3,7 @@ import GoIcon from "./GoIcon";
 import DragList from "./DragList";
 import StarRating from './StarRating';
 import AuthContext from "../context/AuthProvider";
+import { type } from "os";
 
 interface User {
   id: number;
@@ -46,7 +47,7 @@ interface PRProps {
 }
 
 const PR: React.FC<PRProps> = ({ pull }) => {
-  const { changePRPriority } = useContext(AuthContext);
+  const { changePRPriority, authPulls,setAuthPulls } = useContext(AuthContext);
   const [localPriority, setLocalPriority] = useState<Priority>(pull.priority);
   const reviewLabel = () => {
     switch (pull.review_status) {
@@ -71,7 +72,11 @@ const PR: React.FC<PRProps> = ({ pull }) => {
     console.log("Changing priority to:", newPriority);
     const updatedPR = await changePRPriority(pull.id, newPriority)
     if (updatedPR) {
+      let updatedList={...authPulls}
+      updatedList[pull.id].priority=newPriority
       setLocalPriority(newPriority);
+      setAuthPulls(updatedList)
+
     } else {
       alert('Hubo un problema al actualizar la prioridad.');
     }
