@@ -38,7 +38,7 @@ const DragList = ({id_PR}) => {
 
   const [asignee, setAsignee] = React.useState<string>("");
   const [inputValue, setInputValue] = React.useState("");
-  const { optionUsers,assignUser,getPR} = useAuth();
+  const { optionUsers,assignUser,getPR,changePRStatus} = useAuth();
 
   useEffect(() => {
     const usersList = async () => {
@@ -77,7 +77,10 @@ const DragList = ({id_PR}) => {
         username: asignee || null,
         id_PR: id_PR
       });
-    }
+  
+      await changePRStatus({ id: id_PR, status: "Not Started" });
+  
+    };
     assignAction();
   };
 
