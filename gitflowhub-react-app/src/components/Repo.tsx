@@ -85,12 +85,14 @@ const Repo: React.FC<RepoProps> = ({
   return (
     <div key={repoName} className="repo-group">
       <h2 onClick={() => handleRepoClick(repoName)} className="repo-title">
-        <i
-          className={`fa ${
-            isExpanded ? "fa-chevron-down" : "fa-chevron-right"
-          }`}
-          style={{ marginRight: "5px" }}
-        ></i>
+      {!autoExpand && (
+          <i
+            className={`fa ${
+              isExpanded ? "fa-chevron-down" : "fa-chevron-right"
+            }`}
+            style={{ marginRight: "5px" }}
+          ></i>
+        )}
 
         <Tooltip title="Pull requests assigned to you">
           <div className="tag text-teal-200">
