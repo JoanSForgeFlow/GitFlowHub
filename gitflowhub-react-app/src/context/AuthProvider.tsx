@@ -15,6 +15,8 @@ import axiosClient from "../config/axiosClient";
 interface AuthContextType {
   auth: AuthData;
   setAuth: Dispatch<SetStateAction<AuthData>>;
+  authPulls: Pull[];
+  setAuthPulls: Dispatch<SetStateAction<Pull[]>>
   loading: Boolean;
   spinner: Boolean;
   optionUsers: Function;
@@ -77,7 +79,9 @@ const AuthContext = createContext<AuthContextType>({
     token: "",
     github_user: "",
   },
+  authPulls:[],
   setAuth: () => {},
+  setAuthPulls:()=>{},
   loading: true,
   spinner: true,
   optionUsers: () => {},
@@ -504,6 +508,8 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
       value={{
         auth,
         setAuth,
+        authPulls,
+        setAuthPulls,
         loading,
         spinner,
         optionUsers,
