@@ -146,6 +146,7 @@ useEffect(() => {
             titleSuggestions={titleSuggestions}
             onPriorityChange={(priority) => setSelectedPriority(priority)}
             selectedPriority={selectedPriority}
+            filteredPulls={filteredPulls}
           />
           {filteredPulls.length === 0 ? (
             <div className="no-prs-container">

@@ -3,10 +3,44 @@ import { useNavigate } from "react-router-dom";
 import SuggestionList from "./SuggestionList";
 import StarRating from './StarRating';
 
+interface User {
+  id: number;
+  email: string;
+  username: string | null;
+  password: string;
+  token: string | null;
+  confirmed: boolean;
+  location: string | null;
+  language: string | null;
+  timeZone: string | null;
+  image: string | null;
+  github_user: string;
+  login: string;
+  avatar_url: string;
+  company_id: number;
+}
+
+
 enum Priority {
   LOW = "LOW",
   MEDIUM = "MEDIUM",
   HIGH = "HIGH",
+}
+
+interface Pull {
+  id: number;
+  title: string;
+  description: string;
+  state: string;
+  created_at: string;
+  html_url: string;
+  repo_name: string;
+  user_id: number;
+  User: User;
+  number: number;
+  asigned_user: User;
+  review_status: string;
+  priority: Priority;
 }
 
 interface SearchBarProps {
@@ -20,6 +54,7 @@ interface SearchBarProps {
   titleSuggestions: string[];
   onPriorityChange: (priority: Priority) => void;
   selectedPriority: Priority;
+  filteredPulls: Pull[];
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({
@@ -33,6 +68,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   titleSuggestions,
   onPriorityChange,
   selectedPriority,
+  filteredPulls,
 }) => {
   const userRef = useRef(null);
   const repoRef = useRef(null);
@@ -81,6 +117,16 @@ const SearchBar: React.FC<SearchBarProps> = ({
     setFilteredRepoSuggestions(repoSuggestions);
     setFilteredTitleSuggestions(titleSuggestions);
   }, [userSuggestions, repoSuggestions, titleSuggestions]);  
+
+  useEffect(() => {
+    const filteredUsers = Array.from(new Set(filteredPulls.map(pull => pull.User.github_user)));
+    const filteredRepos = Array.from(new Set(filteredPulls.map(pull => pull.repo_name)));
+    const filteredTitles = Array.from(new Set(filteredPulls.map(pull => pull.title)));
+
+    setFilteredUserSuggestions(filteredUsers);
+    setFilteredRepoSuggestions(filteredRepos);
+    setFilteredTitleSuggestions(filteredTitles);
+  }, [filteredPulls]);
 
   return (
     <div className="flex justify-end">
