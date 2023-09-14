@@ -15,6 +15,8 @@ import axiosClient from "../config/axiosClient";
 interface AuthContextType {
   auth: AuthData;
   setAuth: Dispatch<SetStateAction<AuthData>>;
+  authPulls: Pull[];
+  setAuthPulls: Dispatch<SetStateAction<Pull[]>>
   loading: Boolean;
   spinner: Boolean;
   optionUsers: Function;
@@ -77,7 +79,9 @@ const AuthContext = createContext<AuthContextType>({
     token: "",
     github_user: "",
   },
+  authPulls:[],
   setAuth: () => {},
+  setAuthPulls:()=>{},
   loading: true,
   spinner: true,
   optionUsers: () => {},
@@ -103,6 +107,8 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     github_user: "",
   });
 
+  const [authPulls,setAuthPulls]=useState([])
+
   const [loading, setLoading] = useState(true);
   const [spinner, setSpinner] = useState(true);
   const navigate = useNavigate();
@@ -125,7 +131,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
       try {
         const { data } = await axiosClient("/profile", config);
         setAuth(data);
-        navigate("/main-page");
+        // navigate("/main-page");
       } catch (error) {
         setAuth({
           username: "",
@@ -502,6 +508,8 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
       value={{
         auth,
         setAuth,
+        authPulls,
+        setAuthPulls,
         loading,
         spinner,
         optionUsers,

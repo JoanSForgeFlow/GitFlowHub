@@ -118,15 +118,15 @@ const UserDashboard = () => {
       {!spinner ? (
         <div>
           <DragDropContext onDragEnd={onDragEnd}>
-            <div className="flex justify-evenly mt-5 ml-8 mr-8">
-              <div className="w-1/3 mr-1 ml-2">
-                <div className="bg-white border-black rounded-t-md mb-1 pb-1 flex justify-center font-bold board-title">
+            <div className="flex justify-evenly  mt-5 ml-8 mr-8">
+              <div className="w-1/3 mr-1 ml-2 ">
+                <div className="bg-white border-black rounded-t-md mb-1 p-2 flex justify-center font-bold board-title">
                   NOT STARTED
                 </div>
                 <Droppable droppableId="Not Started">
                   {(provided, snapshot) => (
                     <div
-                      className={`w-full  bg-white pt-1 border border-black rounded-b-md ${
+                      className={`w-full flex flex-col justify-center items-center bg-white pt-1 border border-black rounded-b-md  ${
                         snapshot.isDraggingOver ? "bg-slate-600" : ""
                       }`}
                       ref={provided.innerRef}
@@ -151,13 +151,13 @@ const UserDashboard = () => {
               </div>
 
               <div className="w-1/3 mr-1 ml-1">
-                <div className="bg-slate-200 border-black rounded-t-md mb-1 pb-1 flex justify-center font-bold board-title">
+                <div className="bg-slate-200 border-black rounded-t-md mb-1 p-2 flex justify-center font-bold board-title">
                 SUGGESTED CHANGES
                 </div>
                 <Droppable droppableId="Suggested Changes">
                   {(provided, snapshot) => (
                     <div
-                      className={`w-full bg-slate-200 pt-1 border border-black rounded-b-md ${
+                      className={`w-full flex flex-col justify-center items-center bg-slate-200 pt-1 border border-black rounded-b-md ${
                         snapshot.isDraggingOver ? "bg-slate-500" : ""
                       }`}
                       ref={provided.innerRef}
@@ -181,13 +181,13 @@ const UserDashboard = () => {
               </div>
 
               <div className="w-1/3 mr-2 ml-1">
-                <div className="bg-slate-400 border-black rounded-t-md mb-1 pb-1 flex justify-center font-bold board-title">
+                <div className="bg-slate-400 border-black rounded-t-md mb-1 p-2 flex justify-center font-bold board-title">
                   APPROVED
                 </div>
                 <Droppable droppableId="PR Approved">
                   {(provided, snapshot) => (
                     <div
-                      className={`w-full bg-slate-400 pt-1 border border-black rounded-b-md ${
+                      className={`w-full flex flex-col justify-center items-center bg-slate-400 pt-1 border border-black rounded-b-md ${
                         snapshot.isDraggingOver ? "bg-slate-500" : ""
                       }`}
                       ref={provided.innerRef}
