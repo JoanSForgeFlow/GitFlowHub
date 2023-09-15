@@ -104,7 +104,7 @@ const Header = ({ username, avatar_url }) => {
                 onClick={handleClickProfile}
               >
                 <span className="material-symbols-outlined mr-2">person</span>
-                Your Profile
+                My Profile
               </div>
 
               <div
@@ -114,7 +114,7 @@ const Header = ({ username, avatar_url }) => {
                 <span className="material-symbols-outlined mr-2">
                   dashboard
                 </span>
-                Your Board
+                My Board
               </div>
 
               <div className="w-full border-b border-gray-600 mt-2 mb-2"></div>
