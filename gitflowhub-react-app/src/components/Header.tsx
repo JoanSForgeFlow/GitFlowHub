@@ -5,25 +5,9 @@ import LogOutModal from "./LogOutModal";
 import "../css/LayoutProtectedRoute.css";
 import useAuth from "../hooks/useAuth";
 import Logo from "./Logo";
+import { User } from "../interfaces/types";
 
 type Anchor = "left";
-
-interface User {
-  id: number;
-  email: string;
-  username: string | null;
-  password: string;
-  token: string | null;
-  confirmed: boolean;
-  location: string | null;
-  language: string | null;
-  timeZone: string | null;
-  image: string | null;
-  github_user: string;
-  login: string;
-  avatar_url: string;
-  company_id: number;
-}
 
 const Header = ({ username, avatar_url }) => {
   const navigate = useNavigate();

@@ -3,44 +3,7 @@ import GoIcon from "./GoIcon";
 import DragList from "./DragList";
 import StarRating from './StarRating';
 import AuthContext from "../context/AuthProvider";
-import { type } from "os";
-
-interface User {
-  id: number;
-  email: string;
-  username: string | null;
-  password: string;
-  token: string | null;
-  confirmed: boolean;
-  location: string | null;
-  language: string | null;
-  timeZone: string | null;
-  image: string | null;
-  github_user: string;
-  login: string;
-  avatar_url: string| null;
-  company_id: number;
-}
-
-enum Priority {
-  LOW = "LOW",
-  MEDIUM = "MEDIUM",
-  HIGH = "HIGH",
-}
-
-interface Pull {
-  id: number;
-  title: string;
-  User: User;
-  html_url: string;
-  state: string;
-  created_at: string;
-  repo_name: string;
-  number: number;
-  asigned_user: User;
-  review_status: string;
-  priority: Priority;
-}
+import { Pull, Priority } from "../interfaces/types";
 
 interface PRProps {
   pull: Pull;

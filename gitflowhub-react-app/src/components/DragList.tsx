@@ -11,23 +11,6 @@ interface Option {
   value: string;
 }
 
-interface User {
-  id: number;
-  email: string;
-  username: string | null;
-  password: string;
-  token: string | null;
-  confirmed: boolean;
-  location: string | null;
-  language: string | null;
-  timeZone: string | null;
-  image: string | null;
-  github_user: string;
-  login: string;
-  avatar_url: string;
-  company_id: number;
-}
-
 const DragList = ({id_PR}) => {
 
   //TODO: asignee has to be checked in db

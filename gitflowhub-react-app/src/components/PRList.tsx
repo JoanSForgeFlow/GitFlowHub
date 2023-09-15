@@ -1,37 +1,7 @@
 import React from "react";
 import GoIcon from "./GoIcon";
 import DragList from "./DragList";
-
-interface User {
-  id: number;
-  email: string;
-  username: string | null;
-  password: string;
-  token: string | null;
-  confirmed: boolean;
-  location: string | null;
-  language: string | null;
-  timeZone: string | null;
-  image: string | null;
-  github_user: string;
-  login: string;
-  avatar_url: string | null;
-  company_id: number;
-}
-
-interface Pull {
-  id: number;
-  title: string;
-  User: User;
-  html_url: string;
-  state: string;
-  created_at: string;
-  repo_name: string;
-  number: number;
-  asigned_user: User;
-  review_status: string;
-  gitflowHubStatus:string;
-}
+import { Pull } from "../interfaces/types";
 
 interface PRProps {
   pull: Pull;

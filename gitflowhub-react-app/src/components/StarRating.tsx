@@ -1,10 +1,5 @@
 import React, { useState } from "react";
-
-enum Priority {
-  LOW = "LOW",
-  MEDIUM = "MEDIUM",
-  HIGH = "HIGH",
-}
+import { Priority } from "../interfaces/types";
 
 interface StarRatingProps {
   className?: string;

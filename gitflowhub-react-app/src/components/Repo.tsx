@@ -2,45 +2,7 @@ import React, { useState } from "react";
 import PR from "./PR";
 import useAuth from "../hooks/useAuth";
 import Tooltip from "@mui/material/Tooltip";
-
-interface User {
-  id: number;
-  email: string;
-  username: string | null;
-  password: string;
-  token: string | null;
-  confirmed: boolean;
-  location: string | null;
-  language: string | null;
-  timeZone: string | null;
-  image: string | null;
-  github_user: string;
-  login: string;
-  avatar_url: string;
-  company_id: number;
-}
-
-enum Priority {
-  LOW = "LOW",
-  MEDIUM = "MEDIUM",
-  HIGH = "HIGH",
-}
-
-interface Pull {
-  id: number;
-  title: string;
-  description: string;
-  state: string;
-  created_at: string;
-  html_url: string;
-  repo_name: string;
-  user_id: number;
-  User: User;
-  number: number;
-  asigned_user: User;
-  review_status: string;
-  priority: Priority;
-}
+import { Pull, Priority } from "../interfaces/types";
 
 interface RepoProps {
   repoName: string;
