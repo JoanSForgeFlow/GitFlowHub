@@ -59,7 +59,7 @@ const DragList = ({ id_PR }) => {
   };
 
   return (
-    <div className="lg:flex lg:w-3/4 md:w-2/3 w-3/4 ">
+    <div className="lg:flex lg:w-3/4 md:w-2/3 w-3/4 mb-1">
       <div
         onClick={handleMouse}
         className="w-2rem mr-3 mt-4 font-bold cursor-pointer"
@@ -68,7 +68,7 @@ const DragList = ({ id_PR }) => {
       </div>
 
       {displayEdit ? (
-        <div className="flex flex-grow justify-center items-center cursor-pointer">
+        <div className="flex flex-grow justify-center items-center cursor-pointer mt-2 ">
           <Autocomplete
             value={asignee}
             onChange={(event, newValue) => {
@@ -81,7 +81,8 @@ const DragList = ({ id_PR }) => {
             }}
             id="controllable-states-demo"
             options={userOptions.map((option) => option.label)}
-            sx={{ width: "150px" }}
+            sx={{ width: "150px"}}
+            size="small"
             renderInput={(params) => <TextField {...params} label="Assignee" />}
           />
 
