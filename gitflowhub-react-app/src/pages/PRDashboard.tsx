@@ -116,7 +116,8 @@ useEffect(() => {
               <div className="no-prs-message">No PRs matched your search</div>
             </div>
           ) : (
-            Object.keys(repoGroups)
+            <div className="w-full bg-gray-300 p-3 border-black rounded-md">
+              {Object.keys(repoGroups)
               .filter(
                 (repoName) =>
                   repoName.toLowerCase().includes(searchRepo.toLowerCase()) &&
@@ -144,7 +145,9 @@ useEffect(() => {
                   autoExpand={autoExpand}
                   isExpanded={expandedRepos.has(repoName)}
                 />
-              ))
+              ))}
+            </div>
+            
           )}
         </div>
       ) : (
