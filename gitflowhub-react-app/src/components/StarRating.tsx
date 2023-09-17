@@ -1,18 +1,40 @@
 import React, { useState } from "react";
-import { Priority } from "../interfaces/types";
+import { toast } from "react-toastify";
+
+enum Priority {
+  LOW = "LOW",
+  MEDIUM = "MEDIUM",
+  HIGH = "HIGH",
+}
 
 interface StarRatingProps {
   className?: string;
   priority: Priority;
   onChange: (newPriority: Priority) => void;
+  pullTitle?:string
 }
 
-const StarRating: React.FC<StarRatingProps> = ({ priority, onChange }) => {
+const StarRating: React.FC<StarRatingProps> = ({ priority, onChange, pullTitle }) => {
   const [currentPriority, setCurrentPriority] = useState<Priority>(priority);
 
   const handleStarClick = (newPriority: Priority) => {
     setCurrentPriority(newPriority);
     onChange(newPriority);
+    if (pullTitle) {
+      toast.success(`Priority of ${pullTitle} changed to ${newPriority}`, {
+        position: "top-right",
+        autoClose: 3500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+      
+    }
+
+
   };
 
   const renderStar = (p: Priority) => {

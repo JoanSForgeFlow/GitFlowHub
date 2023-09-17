@@ -118,8 +118,8 @@ const UserDashboard = () => {
       {!spinner ? (
         <div>
           <DragDropContext onDragEnd={onDragEnd}>
-            <div className="flex justify-evenly  mt-5 ml-8 mr-8">
-              <div className="w-1/3 mr-1 ml-2">
+            <div className="flex flex-col sm:flex-row justify-evenly  mt-5 ml-8 mr-8">
+              <div className="sm:w-1/3 mb-3 sm:mb-0 mr-1 sm:ml-2">
                 <div className="bg-white border-black rounded-t-md mb-1 p-2 flex justify-center font-bold board-title">
                   NOT STARTED
                 </div>
@@ -150,7 +150,7 @@ const UserDashboard = () => {
                 </Droppable>
               </div>
 
-              <div className="w-1/3 mr-1 ml-1">
+              <div className="sm:w-1/3 mr-1 sm:ml-1 mb-3 sm:mb-0">
                 <div className="bg-slate-200 border-black rounded-t-md mb-1 p-2 flex justify-center font-bold board-title">
                 SUGGESTED CHANGES
                 </div>
@@ -180,7 +180,7 @@ const UserDashboard = () => {
                 </Droppable>
               </div>
 
-              <div className="w-1/3 mr-2 ml-1">
+              <div className="sm:w-1/3 mr-1 sm:mr-2 sm:ml-1 mb-3 sm:mb-0">
                 <div className="bg-slate-400 border-black rounded-t-md mb-1 p-2 flex justify-center font-bold board-title">
                   APPROVED
                 </div>
@@ -213,9 +213,9 @@ const UserDashboard = () => {
           </DragDropContext>
 
           <div className="m-8 bg-gray-300 border border-black rounded-md">
-            <div className="flex flex-row items-center m-4 border-b border-gray-400">
+            <div className="flex flex-col sm:flex-row items-center m-4 border-b border-gray-400">
               <p className="ml-3 mr-3 font-bold ">User owner Repo list</p>
-              <div className="w-full lg:w-1/3 flex justify-between mx-3">
+              <div className="w-full lg:w-1/3 flex flex-col sm:flex-row sm:justify-between  mx-3">
                 <p className=" review-label needs-review ">
                   ⚠ Needs Review: {needsReview}
                 </p>

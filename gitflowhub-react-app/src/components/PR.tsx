@@ -75,7 +75,8 @@ const PR: React.FC<PRProps> = ({ pull }) => {
         </div>
         <StarRating 
         priority={localPriority}
-        onChange={handleChangePriority} 
+        onChange={handleChangePriority}
+        pullTitle={pull.title} 
         />
         {reviewLabel()}
         <DragList id_PR={pull.id} />

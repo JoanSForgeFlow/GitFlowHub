@@ -3,6 +3,7 @@
   flex-direction: column;
   align-items: center;
   padding: 20px;
+  
 }
 
 .search-bar {
@@ -85,15 +86,17 @@
 
 .repo-group {
   display: flex;
+  border:1px solid #bbb;
+  border-radius: 5px;
   flex-direction: column;
   align-items: flex-start;
   width: 100%;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.2rem;
 }
 
 .repo-group h2 {
   cursor: pointer;
-  width: 99%;
+  width: 100%;
   background-color: #ddd;
   padding: 10px;
   border-radius: 4px;
@@ -127,7 +130,7 @@
 
 @media screen and (max-width: 768px) {
   .card-list {
-    width: 70%;
+    width: 90%;
   }
 }
 
