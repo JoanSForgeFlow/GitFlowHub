@@ -90,7 +90,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   }, [filteredPulls]);
 
   return (
-    <div className="flex justify-end">
+    <div className="justify-end flex">
       <div className="star-container">
         <StarRating
           priority={selectedPriority}

@@ -3,7 +3,12 @@
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  
+}
+
+@media screen and (max-width: 480px) {
+  .card {
+    padding: 0px;
+  }
 }
 
 .search-bar {
@@ -14,19 +19,27 @@
   margin-bottom: 10px;
   margin-left: auto;
   margin-right: auto;
+  flex-wrap: wrap;
 }
 
 .star-container {
   position: relative;
   display: flex;
   align-items: center;
+  justify-content: center;
   flex-grow: 1;
-  justify-content: flex-start;
   background-color: #ddd;
   border-radius: 12px;
   padding: 2px;
   margin: 10px 0;
-  width: 100px;
+  width: 110px;
+}
+
+
+@media screen and (max-width: 480px) {
+  .star-container {
+    width: 100%;
+  }
 }
 
 .input-with-icon {
@@ -44,6 +57,19 @@
   border-radius: 4px;
   font-size: 1.2em;
   margin: 0 10px;
+  min-width: 300px
+}
+
+@media screen and (max-width: 768px) {
+  .input-field {
+    width: 45%;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .input-field {
+    width: 100%;
+  }
 }
 
 .input-with-icon i {
@@ -122,6 +148,19 @@
 
 .card {
   width: 30%;
+  min-width: 300px
+}
+
+@media screen and (max-width: 768px) {
+  .card {
+    width: 45%;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .card {
+    width: 100%;
+  }
 }
 
 .card-list {
@@ -165,6 +204,28 @@
 
 .card-header-list {
   padding-left: 1rem;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+}
+
+.card-header img,
+.card-header i {
+  margin-right: 0.75rem;
+}
+
+.card-header h3 {
+  flex-grow: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+}
+
+.go-icon {
+  flex-shrink: 0;
 }
 
 .user-info__img, .user-info__img-list {
@@ -284,6 +345,15 @@
 .repo-title {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+}
+
+.title-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  flex-grow: 1;
 }
 
 .repo-name {

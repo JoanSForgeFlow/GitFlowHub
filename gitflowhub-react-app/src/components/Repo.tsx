@@ -77,7 +77,7 @@ const Repo: React.FC<RepoProps> = ({
           </div>
         </Tooltip>
 
-        {repoName}
+        <span className="title-text">{repoName}</span> 
       </h2>
       {(autoExpand || isExpanded) && (
         <div className="pull-cards">
