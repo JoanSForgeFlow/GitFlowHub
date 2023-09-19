@@ -23,25 +23,29 @@ export const updateUserPullRequests = async () => {
       let prsFromGithub = [];
 
       while (true) {
-        await new Promise(resolve => setTimeout(resolve, 5000));
+        await new Promise(resolve => setTimeout(resolve, 3000));
         const url = `https://api.github.com/search/issues?q=author:${user.github_user}+is:pr+is:open&per_page=100&page=${page}`;
-        console.log("API is called once")
+        console.log("API has been called once")
 
-        const {
-          data: { items: prs },
-        } = await axios.get(url, {
+        const response = await axios.get(url, {
           headers: {
             Authorization: `token ${process.env.GITHUB_TOKEN}`,
           },
         });
 
-        if (prs.length === 0) {
+        const prs = response.data.items;
+
+        prsFromGithub = [...prsFromGithub, ...prs];
+        // Examinar el encabezado "Link" para determinar si hay una siguiente página
+        const linkHeader = response.headers.link || "";
+        const hasNextPage = linkHeader.includes('rel="next"');
+        if (!hasNextPage || prs.length === 0) {
           break;
         }
 
-        prsFromGithub = [...prsFromGithub, ...prs];
         page++;
       }
+
 
       // Get all PRs of this user from the database
       const prsFromDb = await prisma.pullRequest.findMany({
