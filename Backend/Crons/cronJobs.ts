@@ -23,7 +23,9 @@ export const updateUserPullRequests = async () => {
       let prsFromGithub = [];
 
       while (true) {
+        await new Promise(resolve => setTimeout(resolve, 5000));
         const url = `https://api.github.com/search/issues?q=author:${user.github_user}+is:pr+is:open&per_page=100&page=${page}`;
+        console.log("API is called once")
 
         const {
           data: { items: prs },
