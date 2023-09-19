@@ -146,6 +146,8 @@ export const updatePRReviewStatus = async () => {
     });
 
     for (let pr of openPRs) {
+      await new Promise(resolve => setTimeout(resolve, 5000));
+      console.log("Updating statys for PR:", pr.title);
       // Call GitHub API to get PR reviews
       const url = `https://api.github.com/repos/${pr.github_org_or_user}/${pr.repo_name}/pulls/${pr.number}/reviews`;
 
@@ -183,7 +185,11 @@ export const updatePRReviewStatus = async () => {
   }
 };
 
-const updatePRReviewStatusJob = cron.schedule("0 2 * * *", updatePRReviewStatus);
+const updatePRReviewStatusJob = cron.schedule("0 2,14 * * *", updatePRReviewStatus, {
+  scheduled: true,
+  timezone: "Europe/Madrid"
+});
+
 
 const updatePullRequests = cron.schedule("*/10 * * * *", updateUserPullRequests);
 
