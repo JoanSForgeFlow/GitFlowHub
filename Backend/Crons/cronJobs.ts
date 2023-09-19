@@ -121,6 +121,10 @@ export const updateUserPullRequests = async () => {
     }
   } catch (error) {
     console.error("Error updating PRs:", error.message);
+    if (error.response) {
+      console.error("Response data:", error.response.data);
+      console.error("Response status:", error.response.status);
+    }
   }
 };
 
@@ -165,7 +169,11 @@ export const updatePRReviewStatus = async () => {
       }
     }
   } catch (error) {
-    console.error("Error updating PR review status:", error.message);
+    console.error("Error updating PRs review status:", error.message);
+    if (error.response) {
+      console.error("Response data:", error.response.data);
+      console.error("Response status:", error.response.status);
+    }
   }
 };
 
