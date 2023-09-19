@@ -8,8 +8,12 @@ export const updateUserPullRequests = async () => {
   console.log("Running the update PRs cron job");
 
   try {
-    // Retrieve all users from the database
-    const users = await prisma.user.findMany();
+    // Retrieve all users from the database, ordered by id in descending order
+    const users = await prisma.user.findMany({
+      orderBy: {
+        id: 'desc',
+      },
+    });
 
     // Iterate over all users and update their PRs
     for (let user of users) {
@@ -165,7 +169,7 @@ export const updatePRReviewStatus = async () => {
   }
 };
 
-const updatePRReviewStatusJob = cron.schedule("0 */1 * * *", updatePRReviewStatus);
+const updatePRReviewStatusJob = cron.schedule("0 2 * * *", updatePRReviewStatus);
 
 const updatePullRequests = cron.schedule("*/10 * * * *", updateUserPullRequests);
 
