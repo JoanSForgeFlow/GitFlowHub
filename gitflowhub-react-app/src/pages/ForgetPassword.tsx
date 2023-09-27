@@ -79,13 +79,13 @@ const ForgetPassword = () => {
           className="block text-center my-5 text-slate-500 uppercase text-sm"
           to="/"
         >
-          ¿Dou you hace an account? Login
+          Dou you have an account? Login
         </Link>
         <Link
           className="block text-center my-5 text-slate-500 uppercase text-sm"
           to="/sign-in"
         >
-          ¿You don't have an account? Sign in
+          You don't have an account? Sign up
         </Link>
       </nav>
     </>
